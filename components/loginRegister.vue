@@ -74,6 +74,7 @@
     Vue.use(ElementUI);
 
     export default {
+        props:['dialogVisible'],
         data() {
 
             var validatePw = (rule, value, callback) => {
@@ -142,8 +143,7 @@
                         {required:true, message: '密保回答不能为空', trigger: 'blur' },
                         {min:1,max:50,message: '长度小于50个字符', trigger: 'blur'}
                     ]
-                },
-                dialogVisible:true
+                }
             }
         },
         methods: {
