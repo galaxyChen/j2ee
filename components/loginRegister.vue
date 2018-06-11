@@ -1,7 +1,8 @@
 <template>
-    <el-dialog title="用户登录注册" :visible.sync="dialogVisible" width="30%" > 
 
-        <el-tabs v-model="query" type="card" @tab-click="handleClick">
+    <el-dialog title="用户登录注册" :visible.sync="visible" @closed='closeDialog' width="30%" > 
+
+        <el-tabs v-model="query" type="card" >
             <el-tab-pane label="登录" name="login"></el-tab-pane>
             <el-tab-pane label="注册" name="register"></el-tab-pane>
 
@@ -54,129 +55,145 @@
 
 
 <style>
-  .el-dropdown {
-    vertical-align: top;
-  }
-  .el-dropdown + .el-dropdown {
-    margin-left: 15px;
-  }
-  .el-icon-arrow-down {
-    font-size: 12px;
-  }
+.el-dropdown {
+  vertical-align: top;
+}
+.el-dropdown + .el-dropdown {
+  margin-left: 15px;
+}
+.el-icon-arrow-down {
+  font-size: 12px;
+}
 </style>
 
 
 <script>
-    import Vue from 'vue';
-    import ElementUI from 'element-ui';
-    import 'element-ui/lib/theme-chalk/index.css';
-  
-    Vue.use(ElementUI);
+// import Vue from 'vue';
+// import ElementUI from 'element-ui';
+// import 'element-ui/lib/theme-chalk/index.css';
 
-    export default {
-        props:['dialogVisible'],
-        data() {
+// Vue.use(ElementUI);
 
-            var validatePw = (rule, value, callback) => {
-                if (value === '') {
-                    callback(new Error('请输入密码'));
-                } else {
-                    if (this.regForm.pw2 !== '') {
-                        this.$refs.regForm.validateField('pw2');
-                    }
-                    callback();
-                }
-            };
-            var validatePw2 = (rule, value, callback) => {
-                if (value === '') {
-                    callback(new Error('请再次输入密码'));
-                } else if (value !== this.regForm.pw) {
-                    callback(new Error('两次输入密码不一致!'));
-                } else {
-                    callback();
-                }
-            };
-            return {
-                loginForm: {
-                    usn: '',
-                    pw: ''
-                },
-                regForm: {
-                    usn: '',
-                    email: '',
-                    pw: '',
-                    pw2: '',
-                    question: '',
-                    answer: ''
-                },
-                query: 'login',
-                loginRules: {
-                    usn:[
-                        {type:'email' ,required:true, message: '请输出正确的邮箱', trigger: 'blur' },
-                        {min:1,max:30,message: '长度小于30个字符', trigger: 'blur'}
-                    ],
-                    pw:[
-                        {required:true, message: '密码不能为空', trigger: 'blur' },
-                        {min:5,max:16,message: '长度在 5 到 16 个字符', trigger: 'blur'}
-                    ]
-                },
-                regRules: {
-                    email:[
-                        {type:'email' ,required:true, message: '请输出正确的邮箱', trigger: 'blur' },
-                        {min:1,max:30,message: '长度小于30个字符', trigger: 'blur'}
-                    ],
-                    usn:[
-                        {required:true, message: '昵称不能为空', trigger: 'blur' },
-                        {min:1,max:20,message: '长度小于20个字符', trigger: 'blur'}
-                    ],
-                    pw:[
-                        {required:true, validator: validatePw, trigger: 'blur' }
-                    ],
-                    pw2:[
-                        { required:true, validator: validatePw2, trigger: 'blur' }
-                    ],
-                    question:[
-                        {required:true, message: '密保问题不能为空', trigger: 'blur' },
-                        {min:1,max:100,message: '长度小于100个字符', trigger: 'blur'}
-                    ],
-                    answer:[
-                        {required:true, message: '密保回答不能为空', trigger: 'blur' },
-                        {min:1,max:50,message: '长度小于50个字符', trigger: 'blur'}
-                    ]
-                }
-            }
-        },
-        methods: {
-            submitForm(formName) {
-                this.$refs[formName].validate((valid)=>{
-                    if(valid) {
-
-                        let data = {
-                            query : this.query
-                        }
-                        if(data.query=='login')
-                            data.data = this.loginForm
-                        else if(data.query=='register')
-                            data.data = this.regForm
-                        console.log(data);
-
-                        this.dialogVisible = false;
-                    } else {
-                        console.log('error');
-                        return false;
-                    }
-                });
-                
-            },
-            handleClick(tab, event) {
-               // console.log(tab, event);
-            },
-            resetForm(formName) {
-               this.$refs[formName].resetFields();
-            },
-            dialogClose(done){
-
-            }
+export default {
+  mounted() {
+    this.$on("openDialog", function() {
+      this.visible = true;
+    });
+    this.$on("closeDialog", function() {
+      this.visible = false;
+    });
+  },
+  data() {
+    var validatePw = (rule, value, callback) => {
+      if (value === "") {
+        callback(new Error("请输入密码"));
+      } else {
+        if (this.regForm.pw2 !== "") {
+          this.$refs.regForm.validateField("pw2");
         }
+        callback();
+      }
+    };
+    var validatePw2 = (rule, value, callback) => {
+      if (value === "") {
+        callback(new Error("请再次输入密码"));
+      } else if (value !== this.regForm.pw) {
+        callback(new Error("两次输入密码不一致!"));
+      } else {
+        callback();
+      }
+    };
+    return {
+      visible: false,
+      loginForm: {
+        usn: "",
+        pw: ""
+      },
+      regForm: {
+        usn: "",
+        email: "",
+        pw: "",
+        pw2: "",
+        question: "",
+        answer: ""
+      },
+      query: "login",
+      loginRules: {
+        usn: [
+          {
+            type: "email",
+            required: true,
+            message: "请输出正确的邮箱",
+            trigger: "blur"
+          },
+          { min: 1, max: 30, message: "长度小于30个字符", trigger: "blur" }
+        ],
+        pw: [
+          { required: true, message: "密码不能为空", trigger: "blur" },
+          { min: 5, max: 16, message: "长度在 5 到 16 个字符", trigger: "blur" }
+        ]
+      },
+      regRules: {
+        email: [
+          {
+            type: "email",
+            required: true,
+            message: "请输出正确的邮箱",
+            trigger: "blur"
+          },
+          { min: 1, max: 30, message: "长度小于30个字符", trigger: "blur" }
+        ],
+        usn: [
+          { required: true, message: "昵称不能为空", trigger: "blur" },
+          { min: 1, max: 20, message: "长度小于20个字符", trigger: "blur" }
+        ],
+        pw: [{ required: true, validator: validatePw, trigger: "blur" }],
+        pw2: [{ required: true, validator: validatePw2, trigger: "blur" }],
+        question: [
+          { required: true, message: "密保问题不能为空", trigger: "blur" },
+          { min: 1, max: 100, message: "长度小于100个字符", trigger: "blur" }
+        ],
+        answer: [
+          { required: true, message: "密保回答不能为空", trigger: "blur" },
+          { min: 1, max: 50, message: "长度小于50个字符", trigger: "blur" }
+        ]
+      }
+    };
+  },
+  methods: {
+    submitForm(formName) {
+
+        function serialize(obj){
+            let result = {}
+            for (let term in obj) {
+                if (obj.hasOwnProperty(term)) {
+                    result[term] = obj[term];
+                }
+            }
+            return result;
+        }
+      this.$refs[formName].validate(valid => {
+        if (valid) {
+          let data = {
+            query: this.query
+          };
+          if (data.query == "login") data.data = serialize(this.loginForm);
+          else if (data.query == "register") data.data = serialize(this.regForm);
+          console.log(data);
+          this.visible = false;
+        } else {
+          console.log("error");
+          return false;
+        }
+      });
+    },
+    resetForm(formName) {
+      this.$refs[formName].resetFields();
+    },
+    closeDialog() {
+      this.$refs["regForm"].resetFields();
+      this.$refs["loginForm"].resetFields();
     }
+  }
+};
 </script>

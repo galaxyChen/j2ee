@@ -1,24 +1,23 @@
 <template>
     <div>
       <el-menu
-        :default-active="activeIndex"
         mode="horizontal"
         @select="handleSelect"
         background-color="#545c64"
         text-color="#fff"
-        active-text-color="#ffd04b"
+        active-text-color='None'
         >
         <el-menu-item index="login" class="NavRight">登录/注册</el-menu-item>
         <el-menu-item index="home" class="NavRight">首页</el-menu-item>
       
       </el-menu>
-      <Login :dialogVisible='dialogVisible'></Login>
+      <Login ref='login' :dialogVisible='dialogVisible'></Login>
     </div>
 </template>
 
 <style>
 .NavRight {
-  float: right;
+  float: right!important;
 }
 </style>
 
@@ -31,7 +30,6 @@ export default {
   },
   data() {
     return {
-      activeIndex: "1",
       dialogVisible: false
     };
   },
@@ -39,7 +37,7 @@ export default {
     handleSelect(key, keyPath) {
       console.log(key, keyPath);
       if (key == "login") {
-        dialogVisible = true;
+        this.$refs.login.$emit('openDialog');
       }
     }
   }
