@@ -8,6 +8,7 @@
         text-color="#fff"
         active-text-color='None'
         >
+        <el-menu-item index="home" class="NavRight">退出登录</el-menu-item>
         <el-menu-item index="home" class="NavRight">个人中心</el-menu-item>
         <el-menu-item index="home" class="NavRight">首页</el-menu-item>
         <el-menu-item index="home" class="NavRight" >欢迎，{{user.name}}</el-menu-item>
