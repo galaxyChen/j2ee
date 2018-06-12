@@ -2,28 +2,37 @@
     <div>
         <NavBar :logined='logined' :user='user'></NavBar>
         <el-col :span="5">
-            <NavLeft></NavLeft>
+            <NavLeft ></NavLeft>
         </el-col>
         <el-col :span='10' :push='3'>
-            <Person :user='user'></Person>
+            <component :is="currentMain" :user='user'></component>
         </el-col>
     </div>
 </template>
 
 <script>
 import NavBar from "~/components/NavTop";
-import NavLeft from "~/components/home/NavLeft"
-import Person from "~/components/home/Person"
+import NavLeft from "~/components/home/NavLeft";
+import Person from "~/components/home/Person";
 export default {
+  mounted(){
+      this.$on('changeTab',function(index,indexPath){
+          let name = ['Person','Location','Transaction','Message']
+          this.currentMain = name[indexPath[0]-0]
+      })
+  },
   components: {
-    NavBar,NavLeft,Person
+    NavBar,
+    NavLeft,
+    Person
   },
   data() {
     return {
-        logined:true,
-        user:{
-            name:'张三'
-        }
+      logined: true,
+      currentMain: "Person",
+      user: {
+        name: "张三"
+      }
     };
   }
 };

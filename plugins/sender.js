@@ -1,6 +1,5 @@
 import Vue from 'vue'
 import axios from 'axios'
-import { resolve } from 'url';
 
 
 function sender() {
@@ -27,9 +26,7 @@ function sender() {
             }
             return response;
         })
-        return new Promise(resolve => {
-            resolve(request)
-        });
+        return request;
     }
 
     function test() {

@@ -8,12 +8,12 @@
                 <el-button type="primary" @click="changeName">修改</el-button>
             </el-form-item>
         </el-form>
-        <h class='person-pwtitle'>修改密码</h>
+        <a class='person-pwtitle'>修改密码</a>
         <el-switch  v-model="changePw"></el-switch>
         <div class='person-change-pw-box'>
             <el-collapse-transition>
                 <el-form v-if='changePw'>
-                    <h class='person-question'>密保问题：{{pw.question}}</h>
+                    <a class='person-question'>密保问题：{{pw.question}}</a>
                     <el-input class='person-input-box' placeholder="密保答案" size='medium'></el-input>
                     <el-input class='person-input-box'  size='medium'>
                         <template slot='prepend'>旧密码</template>
@@ -41,7 +41,7 @@
     .person-question {
         margin-top: 10px;
         margin-bottom: 10px;
-        font-size: 24px;
+        font-size: 20px;
     }
     .person-input-box{
         margin-top: 10px;

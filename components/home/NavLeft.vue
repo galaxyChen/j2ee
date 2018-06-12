@@ -1,8 +1,5 @@
 <template>
-    <el-menu
-        default-active="1"
-        @open="handleOpen"
-        @close="handleClose">
+    <el-menu @select='changeTab' default-active="1">
 
         <el-menu-item index="1">
             <i class="el-icon-star-on"></i>
@@ -37,6 +34,12 @@
 export default {
     data(){
         return {}
+    },
+    methods:{
+        changeTab(index,indexPath){
+            // console.log(index,indexPath)
+            this.$emit('changeTab',index,indexPath)
+        }
     }
 }
 </script>
