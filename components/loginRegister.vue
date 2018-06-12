@@ -8,10 +8,10 @@
 
             <el-form ref="loginForm" status-icon :model="loginForm" :rules="loginRules"  label-width="80px" v-show="query=='login'">
                 <el-form-item label="登录邮箱" prop="usn">
-                    <el-input @input='check' v-model="loginForm.usn"></el-input>
+                    <el-input @input='check("loginForm","usn")' v-model="loginForm.usn"></el-input>
                 </el-form-item>
                 <el-form-item label="密码" prop="pw">
-                    <el-input @input='check' type="password" v-model="loginForm.pw"></el-input>
+                    <el-input @input='check("loginForm","pw")' type="password" v-model="loginForm.pw"></el-input>
                 </el-form-item>
                 <el-form-item>
                     <el-button type="primary" @click="submitForm('loginForm')">确定</el-button>
@@ -21,25 +21,25 @@
 
             <el-form ref="regForm" status-icon :model="regForm"  :rules="regRules"  label-width="80px" v-show="query=='register'">
                 <el-form-item label="注册邮箱" prop="email">
-                    <el-input v-model="regForm.email"></el-input>
+                    <el-input @input='check("regForm","email")'  v-model="regForm.email"></el-input>
                 </el-form-item>
                 <el-form-item label="密码" prop="pw">
-                    <el-input type="password" v-model="regForm.pw"></el-input>
+                    <el-input @input='check("regForm","pw")' type="password" v-model="regForm.pw"></el-input>
                 </el-form-item>
 
                 <el-form-item label="确认密码" prop="pw2"> 
-                    <el-input type="password" v-model="regForm.pw2"></el-input>
+                    <el-input @input='check("regForm","pw2")' type="password" v-model="regForm.pw2"></el-input>
                 </el-form-item>
                 
                 <el-form-item label="昵称" prop="usn">
-                    <el-input v-model="regForm.usn"></el-input>
+                    <el-input @input='check("regForm","usn")' v-model="regForm.usn"></el-input>
                 </el-form-item>
                 <el-form-item label="密保问题" prop="question">
-                    <el-input type="textarea" maxlength=100 v-model="regForm.question" placeholder="不超过100个字符"></el-input>
+                    <el-input @input='check("regForm","question")' type="textarea" maxlength=100 v-model="regForm.question" placeholder="不超过100个字符"></el-input>
                 </el-form-item>
 
                 <el-form-item label="密保回答" prop="answer">
-                    <el-input type="textarea" maxlength=50 v-model="regForm.answer" placeholder="不超过50个字符"></el-input>
+                    <el-input @input='check("regForm","answer")' type="textarea" maxlength=50 v-model="regForm.answer" placeholder="不超过50个字符"></el-input>
                 </el-form-item>
 
                 <el-form-item>
@@ -165,8 +165,11 @@ export default {
     };
   },
   methods: {
-    check(value) {
-      this.$refs.loginForm.validate((valide)=>{})
+    check(formName,item) {
+      console.log(this.$refs[formName])
+      this.$refs[formName].validateField(item)
+      // this.$refs[formName].$refs[item].validate((valide)=>{})
+      // this.$refs.loginForm.validate((valide)=>{})
     },
     submitForm: function(formName) {
       function serialize(obj) {
