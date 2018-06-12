@@ -41,12 +41,17 @@ export default {
           time_limit:'14:39',
           title:'三体',
           img:'',
-          state:'待付款',
+          state:'已完成',
           price:'30',
           mail_price:'10',
           number:'1'
       }]
     };
+  },
+  methods:{
+      handleClick(){
+
+      }
   }
 };
 </script>
