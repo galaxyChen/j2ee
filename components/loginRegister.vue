@@ -1,0 +1,204 @@
+<template>
+
+    <el-dialog title="用户登录注册" :visible.sync="visible" @closed='closeDialog' width="30%" > 
+
+        <el-tabs v-model="query" type="card" >
+            <el-tab-pane label="登录" name="login"></el-tab-pane>
+            <el-tab-pane label="注册" name="register"></el-tab-pane>
+
+            <el-form ref="loginForm" status-icon :model="loginForm" :rules="loginRules"  label-width="80px" v-show="query=='login'">
+                <el-form-item label="登录邮箱" prop="usn">
+                    <el-input @input='check' v-model="loginForm.usn"></el-input>
+                </el-form-item>
+                <el-form-item label="密码" prop="pw">
+                    <el-input @input='check' type="password" v-model="loginForm.pw"></el-input>
+                </el-form-item>
+                <el-form-item>
+                    <el-button type="primary" @click="submitForm('loginForm')">确定</el-button>
+                    <el-button @click="resetForm('loginForm')">重置</el-button>
+                </el-form-item>
+            </el-form>
+
+            <el-form ref="regForm" status-icon :model="regForm"  :rules="regRules"  label-width="80px" v-show="query=='register'">
+                <el-form-item label="注册邮箱" prop="email">
+                    <el-input v-model="regForm.email"></el-input>
+                </el-form-item>
+                <el-form-item label="密码" prop="pw">
+                    <el-input type="password" v-model="regForm.pw"></el-input>
+                </el-form-item>
+
+                <el-form-item label="确认密码" prop="pw2"> 
+                    <el-input type="password" v-model="regForm.pw2"></el-input>
+                </el-form-item>
+                
+                <el-form-item label="昵称" prop="usn">
+                    <el-input v-model="regForm.usn"></el-input>
+                </el-form-item>
+                <el-form-item label="密保问题" prop="question">
+                    <el-input v-model="regForm.question"></el-input>
+                </el-form-item>
+
+                <el-form-item label="密保回答" prop="answer">
+                    <el-input v-model="regForm.answer"></el-input>
+                </el-form-item>
+
+                <el-form-item>
+                    <el-button type="primary" @click="submitForm('regForm')">确定</el-button>
+                    <el-button @click="resetForm('regForm')">重置</el-button>
+                </el-form-item>
+            </el-form>
+            
+        </el-tabs>
+
+    </el-dialog>
+</template>
+
+
+<style>
+.el-dropdown {
+  vertical-align: top;
+}
+.el-dropdown + .el-dropdown {
+  margin-left: 15px;
+}
+.el-icon-arrow-down {
+  font-size: 12px;
+}
+</style>
+
+
+<script>
+// import Vue from 'vue';
+// import ElementUI from 'element-ui';
+// import 'element-ui/lib/theme-chalk/index.css';
+
+// Vue.use(ElementUI);
+
+export default {
+  mounted() {
+    this.$on("openDialog", function() {
+      this.visible = true;
+    });
+    this.$on("closeDialog", function() {
+      this.visible = false;
+    });
+  },
+  data() {
+    var validatePw = (rule, value, callback) => {
+      if (value === "") {
+        callback(new Error("请输入密码"));
+      } else {
+        if (this.regForm.pw2 !== "") {
+          this.$refs.regForm.validateField("pw2");
+        }
+        callback();
+      }
+    };
+    var validatePw2 = (rule, value, callback) => {
+      if (value === "") {
+        callback(new Error("请再次输入密码"));
+      } else if (value !== this.regForm.pw) {
+        callback(new Error("两次输入密码不一致!"));
+      } else {
+        callback();
+      }
+    };
+    return {
+      visible: false,
+      loginForm: {
+        usn: "",
+        pw: ""
+      },
+      regForm: {
+        usn: "",
+        email: "",
+        pw: "",
+        pw2: "",
+        question: "",
+        answer: ""
+      },
+      query: "login",
+      loginRules: {
+        usn: [
+          {
+            type: "email",
+            required: true,
+            message: "请输出正确的邮箱",
+            trigger: "blur"
+          },
+          { min: 1, max: 30, message: "长度小于30个字符", trigger: "blur" }
+        ],
+        pw: [
+          { required: true, message: "密码不能为空", trigger: "blur" },
+          { min: 5, max: 16, message: "长度在 5 到 16 个字符", trigger: "blur" }
+        ]
+      },
+      regRules: {
+        email: [
+          {
+            type: "email",
+            required: true,
+            message: "请输出正确的邮箱",
+            trigger: "blur"
+          },
+          { min: 1, max: 30, message: "长度小于30个字符", trigger: "blur" }
+        ],
+        usn: [
+          { required: true, message: "昵称不能为空", trigger: "blur" },
+          { min: 1, max: 20, message: "长度小于20个字符", trigger: "blur" }
+        ],
+        pw: [{ required: true, validator: validatePw, trigger: "blur" }],
+        pw2: [{ required: true, validator: validatePw2, trigger: "blur" }],
+        question: [
+          { required: true, message: "密保问题不能为空", trigger: "blur" },
+          { min: 1, max: 100, message: "长度小于100个字符", trigger: "blur" }
+        ],
+        answer: [
+          { required: true, message: "密保回答不能为空", trigger: "blur" },
+          { min: 1, max: 50, message: "长度小于50个字符", trigger: "blur" }
+        ]
+      }
+    };
+  },
+  methods: {
+    check(value) {
+      this.$refs.loginForm.validate((valide)=>{})
+    },
+    submitForm: function(formName) {
+      function serialize(obj) {
+        let result = {};
+        for (let term in obj) {
+          if (obj.hasOwnProperty(term)) {
+            result[term] = obj[term];
+          }
+        }
+        return result;
+      }
+      this.$refs[formName].validate(async valid => {
+        if (valid) {
+          let data = {
+            query: this.query
+          };
+          if (data.query == "login") data.data = serialize(this.loginForm);
+          else if (data.query == "register")
+            data.data = serialize(this.regForm);
+          // console.log(data);
+          this.visible = false;
+          let response = await this.$send(data);
+          // console.log(response)
+          console.log(response.then(data => data));
+        } else {
+          console.log("error");
+        }
+      });
+    },
+    resetForm(formName) {
+      this.$refs[formName].resetFields();
+    },
+    closeDialog() {
+      this.$refs["regForm"].resetFields();
+      this.$refs["loginForm"].resetFields();
+    }
+  }
+};
+</script>
