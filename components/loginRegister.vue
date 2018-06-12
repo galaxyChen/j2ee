@@ -35,11 +35,11 @@
                     <el-input v-model="regForm.usn"></el-input>
                 </el-form-item>
                 <el-form-item label="密保问题" prop="question">
-                    <el-input v-model="regForm.question"></el-input>
+                    <el-input type="textarea" maxlength=100 v-model="regForm.question" placeholder="不超过100个字符"></el-input>
                 </el-form-item>
 
                 <el-form-item label="密保回答" prop="answer">
-                    <el-input v-model="regForm.answer"></el-input>
+                    <el-input type="textarea" maxlength=50 v-model="regForm.answer" placeholder="不超过50个字符"></el-input>
                 </el-form-item>
 
                 <el-form-item>
@@ -87,7 +87,11 @@ export default {
     var validatePw = (rule, value, callback) => {
       if (value === "") {
         callback(new Error("请输入密码"));
-      } else {
+      }
+      else if(value.length>16 || value.length <5){
+        callback(new Error("长度在 5 到 16 个字符"));
+      } 
+      else {
         if (this.regForm.pw2 !== "") {
           this.$refs.regForm.validateField("pw2");
         }
