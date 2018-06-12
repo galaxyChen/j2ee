@@ -185,7 +185,8 @@ export default {
           // console.log(data);
           this.visible = false;
           let response = await this.$send(data);
-          console.log(response);
+          // console.log(response)
+          console.log(response.then(data => data));
         } else {
           console.log("error");
         }

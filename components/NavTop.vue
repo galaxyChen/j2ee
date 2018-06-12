@@ -35,10 +35,11 @@ export default {
   },
   methods: {
     handleSelect(key, keyPath) {
-      console.log(key, keyPath);
+      // console.log(key, keyPath);
       if (key == "login") {
-        // this.$send({'test':1})
-        this.$refs.login.$emit('openDialog');
+        let response = this.$send({'query':'login'})
+        console.log(response)
+        // this.$refs.login.$emit('openDialog');
       }
     }
   }
