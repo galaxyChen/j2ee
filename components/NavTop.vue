@@ -37,6 +37,7 @@ export default {
     handleSelect(key, keyPath) {
       console.log(key, keyPath);
       if (key == "login") {
+        // this.$send({'test':1})
         this.$refs.login.$emit('openDialog');
       }
     }

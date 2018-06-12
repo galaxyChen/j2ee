@@ -6,12 +6,12 @@
             <el-tab-pane label="登录" name="login"></el-tab-pane>
             <el-tab-pane label="注册" name="register"></el-tab-pane>
 
-            <el-form ref="loginForm" status-icon  :model="loginForm" :rules="loginRules"  label-width="80px" v-show="query=='login'">
+            <el-form ref="loginForm" status-icon :model="loginForm" :rules="loginRules"  label-width="80px" v-show="query=='login'">
                 <el-form-item label="登录邮箱" prop="usn">
-                    <el-input v-model="loginForm.usn"></el-input>
+                    <el-input @input='check' v-model="loginForm.usn"></el-input>
                 </el-form-item>
                 <el-form-item label="密码" prop="pw">
-                    <el-input type="password" v-model="loginForm.pw"></el-input>
+                    <el-input @input='check' type="password" v-model="loginForm.pw"></el-input>
                 </el-form-item>
                 <el-form-item>
                     <el-button type="primary" @click="submitForm('loginForm')">确定</el-button>
@@ -165,29 +165,33 @@ export default {
     };
   },
   methods: {
-    submitForm(formName) {
-
-        function serialize(obj){
-            let result = {}
-            for (let term in obj) {
-                if (obj.hasOwnProperty(term)) {
-                    result[term] = obj[term];
-                }
-            }
-            return result;
+    check(value) {
+      this.$refs.loginForm.validate((valide)=>{})
+    },
+    submitForm: function(formName) {
+      function serialize(obj) {
+        let result = {};
+        for (let term in obj) {
+          if (obj.hasOwnProperty(term)) {
+            result[term] = obj[term];
+          }
         }
-      this.$refs[formName].validate(valid => {
+        return result;
+      }
+      this.$refs[formName].validate(async valid => {
         if (valid) {
           let data = {
             query: this.query
           };
           if (data.query == "login") data.data = serialize(this.loginForm);
-          else if (data.query == "register") data.data = serialize(this.regForm);
-          console.log(data);
+          else if (data.query == "register")
+            data.data = serialize(this.regForm);
+          // console.log(data);
           this.visible = false;
+          let response = await this.$send(data);
+          console.log(response);
         } else {
           console.log("error");
-          return false;
         }
       });
     },
