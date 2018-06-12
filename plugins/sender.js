@@ -1,12 +1,15 @@
 import Vue from 'vue'
 import axios from 'axios'
+import { resolve } from 'url';
+
 
 function sender() {
     let url = 'http://localhost:3001';
-    async function send(data, success, error) {
+
+    async function send(data) {
         // console.log(data);
         let request = await axios({method: 'post', url: url, data: data}).then((response) => {
-            console.log(response)
+            // console.log(response)
             return response.data
         }).catch((error) => {
             let response = {
@@ -24,7 +27,9 @@ function sender() {
             }
             return response;
         })
-        return request;
+        return new Promise(resolve => {
+            resolve(request)
+        });
     }
 
     function test() {

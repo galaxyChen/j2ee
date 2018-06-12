@@ -1,5 +1,21 @@
 <template>
     <div>
+      <div v-if="logined">
+      <el-menu
+        mode="horizontal"
+        @select="handleSelect"
+        background-color="#545c64"
+        text-color="#fff"
+        active-text-color='None'
+        >
+        <el-menu-item index="home" class="NavRight">个人中心</el-menu-item>
+        <el-menu-item index="home" class="NavRight">首页</el-menu-item>
+        <el-menu-item index="home" class="NavRight" >欢迎，{{user.name}}</el-menu-item>
+      
+      </el-menu>
+      <Login ref='login' :dialogVisible='dialogVisible'></Login>
+    </div>
+    <div v-else>
       <el-menu
         mode="horizontal"
         @select="handleSelect"
@@ -13,11 +29,12 @@
       </el-menu>
       <Login ref='login' :dialogVisible='dialogVisible'></Login>
     </div>
+    </div>
 </template>
 
 <style>
 .NavRight {
-  float: right!important;
+  float: right !important;
 }
 </style>
 
@@ -28,6 +45,7 @@ export default {
   components: {
     Login
   },
+  props: ["logined", "user"],
   data() {
     return {
       dialogVisible: false
@@ -35,10 +53,11 @@ export default {
   },
   methods: {
     handleSelect(key, keyPath) {
-      console.log(key, keyPath);
+      // console.log(key, keyPath);
       if (key == "login") {
-        // this.$send({'test':1})
-        this.$refs.login.$emit('openDialog');
+        let response = this.$send({ query: "login" });
+        console.log(response);
+        // this.$refs.login.$emit('openDialog');
       }
     }
   }
