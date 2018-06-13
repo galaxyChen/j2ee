@@ -26,7 +26,7 @@
             </el-col>
             <el-col class='order-box' :span="4">
                 <el-button class="order-button" size='small' type='danger'>{{button_text}}</el-button>
-                 <a  class="order-button-text">查看详情</a>
+                 <el-button type="text"  class="order-button-text">查看详情</el-button>
                 <!-- <a  class="order-button-text">取消订单</a> -->
             </el-col>
         </el-row>
@@ -81,7 +81,6 @@
     }
     .order-button-text:hover{
         text-decoration: underline;
-        cursor: pointer;
     }
 </style>
 

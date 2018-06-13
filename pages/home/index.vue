@@ -4,7 +4,7 @@
         <el-col :span="5">
             <NavLeft @changeTab='changeTab'></NavLeft>
         </el-col>
-        <component :is="currentMain" :user='user' :type='type'></component>
+        <component  :is="currentMain" :user='user' :type='type'></component>
     </div>
 </template>
 
