@@ -8,6 +8,8 @@
         text-color="#fff"
         active-text-color='None'
         >
+        
+        <el-menu-item index="home" class="NavLeft">二手书交易平台</el-menu-item>
         <el-menu-item index="home" class="NavRight">退出登录</el-menu-item>
         <el-menu-item index="home" class="NavRight">个人中心</el-menu-item>
         <el-menu-item index="home" class="NavRight">首页</el-menu-item>
@@ -24,6 +26,7 @@
         text-color="#fff"
         active-text-color='None'
         >
+        <el-menu-item index="home" class="NavLeft">二手书交易平台</el-menu-item>
         <el-menu-item index="login" class="NavRight">登录/注册</el-menu-item>
         <el-menu-item index="home" class="NavRight">首页</el-menu-item>
       
@@ -36,6 +39,9 @@
 <style>
 .NavRight {
   float: right !important;
+}
+.NavLeft{
+  font-size: 20px;
 }
 </style>
 

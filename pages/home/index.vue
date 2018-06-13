@@ -4,7 +4,7 @@
         <el-col :span="5">
             <NavLeft @changeTab='changeTab'></NavLeft>
         </el-col>
-        <component :is="currentMain" :user='user' :type='type'></component>
+        <component  :is="currentMain" :user='user' :type='type'></component>
     </div>
 </template>
 
@@ -14,13 +14,15 @@ import NavLeft from "~/components/home/NavLeft";
 import Person from "~/components/home/Person";
 import Transaction from "~/components/home/Transaction";
 import AddGoods from"~/components/home/AddGoods"
+import addressBook from '~/components/home/addressBook'
 export default {
   components: {
     NavBar,
     NavLeft,
     Person,
     Transaction,
-    AddGoods
+    AddGoods,
+    addressBook
   },
   data() {
     return {
@@ -35,7 +37,7 @@ export default {
   methods: {
     changeTab(index, indexPath) {
       console.log(index, indexPath);
-      let name = ["Person", "Location", "Transaction", "Message","AddGoods"];
+      let name = ["Person", "addressBook", "Transaction", "Message",'AddGoods'];
       this.currentMain = name[indexPath[0] - 1];
       if (index === "3-1") this.type = 1;
       if (index === "3-2") this.type = 2;
