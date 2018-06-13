@@ -1,5 +1,5 @@
 <template>
-    
+    <div></div>
 </template>
 
 <style scoped>
@@ -8,6 +8,10 @@
 
 <script>
 export default {
-    
+    data(){
+        return {
+            
+        }
+    }
 }
 </script>

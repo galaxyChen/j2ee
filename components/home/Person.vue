@@ -56,7 +56,7 @@
 
     .person-changepw-button{
         margin-top: 20px;
-        margin-left: 530px;
+        float: right;
     }
 </style>
 
