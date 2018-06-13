@@ -13,12 +13,14 @@ import NavBar from "~/components/NavTop";
 import NavLeft from "~/components/home/NavLeft";
 import Person from "~/components/home/Person";
 import Transaction from "~/components/home/Transaction";
+import addressBook from '~/components/home/addressBook'
 export default {
   components: {
     NavBar,
     NavLeft,
     Person,
-    Transaction
+    Transaction,
+    addressBook
   },
   data() {
     return {
@@ -33,7 +35,7 @@ export default {
   methods: {
     changeTab(index, indexPath) {
       console.log(index, indexPath);
-      let name = ["Person", "Location", "Transaction", "Message"];
+      let name = ["Person", "addressBook", "Transaction", "Message"];
       this.currentMain = name[indexPath[0] - 1];
       if (index === "3-1") this.type = 1;
       if (index === "3-2") this.type = 2;
