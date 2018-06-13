@@ -236,7 +236,7 @@ body{
 
   .el-header,.el-footer{
     background-color: #B3C0D1;
-    color: #333;
+    color: #333333;
     /* text-align: center; */
     line-height: 60px;
   }
