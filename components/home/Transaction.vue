@@ -3,9 +3,11 @@
         <el-container class="main-window">
             <el-header>
                 <el-tabs v-model='activeTab' type='card' @tab-click="handleClick">
-                    <el-tab-pane label="进行中" name="buy_doing"></el-tab-pane>
-                    <el-tab-pane label="已完成" name="buy_finish"></el-tab-pane>
                     <el-tab-pane label="全部订单" name="buy_all"></el-tab-pane>
+                    <el-tab-pane label="待付款" name="buy_pay"></el-tab-pane>
+                    <el-tab-pane label="待收货" name="buy_send"></el-tab-pane>
+                    <el-tab-pane label="已完成" name="buy_finish"></el-tab-pane>
+                    <el-tab-pane label="已取消" name="buy_cancel"></el-tab-pane>
                 </el-tabs>
             </el-header>
             <el-main>
@@ -34,14 +36,14 @@ export default {
   props: ["user", "type"],
   data() {
     return {
-      activeTab: "buy_doing",
+      activeTab: "buy_all",
       orderList: [{
           id:'1234567',
           time:'2018-01-08 13:02',
-          time_limit:'14:39',
+          time_limit:'24:14:39',
           title:'三体',
           img:'',
-          state:'已完成',
+          state:'待收货',
           price:'30',
           mail_price:'10',
           number:'1'
