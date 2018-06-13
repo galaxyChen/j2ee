@@ -1,5 +1,5 @@
 <template>
-    <el-col :span='12' :push='1'>
+    <el-col :span='12' :push='1' style="margin-top:30px;">
         <div class='AddGoods-box'>
             <el-form :model="Goods" :rules="rules" ref="Goods" label-width="100px">
                 <el-form-item label="商品标题: " prop="title">
@@ -18,35 +18,35 @@
                      <!-- <el-input  :value='Goods.pubDate'  placeholder='请输入出版日期'></el-input> -->
                     <el-date-picker v-model="Goods.pubDate" type="date" placeholder="选择日期"> </el-date-picker>
                 </el-form-item>
-
                 <el-form-item label="图书类别: " prop="options">
                    <el-cascader class="index-input-box" :options="Goods.options" change-on-select></el-cascader>
                 </el-form-item>
-
                 <el-form-item label="价格: "  prop="price">
                     <el-input :value='Goods.price'  placeholder='请输入商品价格'></el-input>
                 </el-form-item>
                 <el-form-item label="库存数量: " prop="inventory">
                     <el-input  :value='Goods.inventory'  placeholder='请输入库存数量'></el-input>
                 </el-form-item>
-                  
                 <el-form-item label="配送方式: ">
                      <el-radio v-model="radio" label="1">包邮</el-radio>
                      <el-radio v-model="radio" label="2">邮费自理</el-radio>
                 </el-form-item>
                  <el-form-item label="发货地: ">
-                    <!-- 未填写 -->
+                   <mapLinkage @updateArea="updateArea"></mapLinkage>
                 </el-form-item>
-
                  <el-form-item label="商品描述: ">
                       <el-input  type="textarea"  :rows="2"  :value='Goods.dsc' placeholder="请输入商品描述" ></el-input>
                 </el-form-item>
                  <el-form-item label="上传图片: ">
-                   <el-upload  class="upload-pic"  action="https://jsonplaceholder.typicode.com/posts/"  :on-preview="handlePreview"  :on-remove="handleRemove"  :before-remove="beforeRemove" 
-                            
+                    <el-upload class="upload-pic" action="https://jsonplaceholder.typicode.com/posts/"  
+                            show-file-list="true"
+                            :on-preview="handlePreview"   
+                            :on-remove="handleRemove"
+                            :before-remove="beforeRemove" 
                             :limit="1"
                             :on-exceed="handleExceed"
-                            :file-list="fileList">
+                            :file-list="fileList1"
+                            list-type="picture">
                         <el-button size="small" type="primary">点击上传</el-button>
                         <div slot="tip" class="el-upload__tip">只能上传jpg/png文件，且不超过1M</div>
                     </el-upload>
@@ -61,7 +61,11 @@
 </template>
 
 <script >
+import mapLinkage from '~/components/home/mapLinkage'
 export default {
+    components: {
+        mapLinkage
+    },
     data(){
         return{
             radio:'1',
@@ -72,6 +76,7 @@ export default {
                 publisher:'',
                 pubDate:'',
                 price:'',
+                area:'',
             
                 //选择图书类别
                 options: [
@@ -242,7 +247,7 @@ export default {
                 author: [
                     { required: true, message: '作者名不能为空', trigger: 'blur' },
                     { min: 1, max: 30, message: '作者名应在30字内！', trigger: 'blur' }
-                    //应有要求作者姓名不能为数字
+                    //应有要求作者姓名不能为数字->未写
                 ],
                 publisher: [
                     { required: true, message: '出版社名不能为空', trigger: 'blur' },
@@ -265,8 +270,7 @@ export default {
                     {min:0,max: 100,message:'库存量范围为：0-100'}
                 ],
                
-                //商品描述可以为空
-                //图书类别验证未写         
+                //商品描述可以为空       
             },
         
 
@@ -281,6 +285,10 @@ export default {
     },
 
     methods: {
+        //选择发货地地区
+        updateArea(area){
+            this.Goods.area = area
+        },
 
         //上传图片处理操作
         handleRemove(file, fileList) {
@@ -288,6 +296,7 @@ export default {
         },
         handlePreview(file) {
                 console.log(file);
+                 duration: 0;
         },
         handleExceed(files, fileList) {
             this.$message.warning(`当前限制选择 1 个文件，本次选择了 ${files.length} 个文件，共选择了 ${files.length + fileList.length} 个文件`);
@@ -306,10 +315,8 @@ export default {
                 return false;
             }
             });
-        },
-
+        },  
     }
-   
 }
 </script>
 
