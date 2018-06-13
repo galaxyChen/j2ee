@@ -4,7 +4,7 @@
             <div class="header">
                 <el-col class="header-text" :span='6'>下单时间：{{order.time}}</el-col>
                 <el-col class="header-text" :span='6'>订单编号:{{order.id}}</el-col>
-                <el-col class="header-text" :span='5' :push='6'>{{getLimit}}</el-col>
+                <!-- <el-col class="header-text" :span='5' :push='6'>{{getLimit}}</el-col> -->
             </div>
         </el-row>
         <el-row>
