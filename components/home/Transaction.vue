@@ -58,7 +58,8 @@ export default {
           title:'三体',
           img:'',
           state:'待收货',
-          price:'30',
+          price:'40',
+          price_item:'30',
           mail_price:'10',
           number:'1'
       }]
