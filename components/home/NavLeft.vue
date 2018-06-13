@@ -27,6 +27,12 @@
             <i class="el-icon-message"></i>
             <span slot="title">消息管理</span>
         </el-menu-item>
+
+        <el-menu-item index="5">
+            <i class="el-icon-message"></i>
+            <span slot="title">发布商品</span>
+        </el-menu-item>
+
     </el-menu>
 </template>
 
