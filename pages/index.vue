@@ -75,9 +75,9 @@ import SearchBox from "~/components/SearchBox";
 export default {
   data() {
     return {
-      logined: true,
+      logined: false,
       user: {
-        name: "张三"
+        name: ""
       },
       booktitle1: "新东方GRE词汇1",
       booktitle2: "新东方GRE词汇2",
