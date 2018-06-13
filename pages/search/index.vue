@@ -11,10 +11,29 @@
                 <ItemRow v-for="(row,index) in rows" :row='row' :key='index'></ItemRow>
             </el-row>
         </el-main>
+        <el-footer class="footer">
+            <el-pagination
+              class="pager"
+              :page-size="20"
+              layout="prev, pager, next"
+              :total="1000">
+            </el-pagination>
+        </el-footer>
     </el-container>
 </template>
 
 <style scoped>
+.pager{
+  margin: 30px;
+}
+.pager>ui>li{
+  font-size: 20px;
+}
+.footer {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+}
 </style>
 
 <script>
@@ -38,28 +57,28 @@ export default {
           time: "2018-01-01"
         },
         {
-          id: "1",
+          id: "2",
           title: "三体",
           seller: "张三",
           price: "30",
           time: "2018-01-01"
         },
         {
-          id: "1",
+          id: "3",
           title: "三体",
           seller: "张三",
           price: "30",
           time: "2018-01-01"
         },
         {
-          id: "1",
+          id: "4",
           title: "三体",
           seller: "张三",
           price: "30",
           time: "2018-01-01"
         },
         {
-          id: "1",
+          id: "5",
           title: "三体",
           seller: "张三",
           price: "30",
