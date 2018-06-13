@@ -1,19 +1,19 @@
 <template>
     <el-dialog title="添加收货地址" :visible.sync="visible"  width="30%">
 
-        <el-form status-icon :model="addAddressForm" ref="addAddressForm" :rules="addressRule">
+        <el-form status-icon :model="addressItem" ref="addressItem" :rules="addressRule">
 
             <el-form-item label="姓名" prop="usn">
-                <el-input v-model="addAddressForm.usn" ></el-input>
+                <el-input v-model="addressItem.usn" ></el-input>
             </el-form-item>
             <el-form-item label="手机号" prop="contact">
-                <el-input v-model="addAddressForm.contact"></el-input>
+                <el-input v-model="addressItem.contact"></el-input>
             </el-form-item>
 
             <mapLinkage @updateArea="updateArea"></mapLinkage>
 
             <el-form-item label="详细地址" prop="address"> 
-                <el-input v-model="addAddressForm.address"></el-input>
+                <el-input v-model="addressItem.address"></el-input>
             </el-form-item>
 
             <el-form-item>
@@ -41,7 +41,7 @@ export default {
     data() {
         return {
             visible: false,
-            addAddressForm:{
+            addressItem:{
                 usn:'',
                 contact:'',
                 address:'',
@@ -65,22 +65,22 @@ export default {
     },
     methods: {
         check(item){
-            this.$refs['addAddressForm'].validateField(item);
+            this.$refs['addressItem'].validateField(item);
         },
         resetForm() {
         
         },
         submitForm() {
             let newAddress = {
-                usn : this.addAddressForm.usn,
-                contact: this.addAddressForm.contact,
-                address: this.addAddressForm.area+this.addAddressForm.address
+                usn : this.addressItem.usn,
+                contact: this.addressItem.contact,
+                address: this.addressItem.area+this.addressItem.address
             }
             this.visible = false;
             this.$emit('submitForm',newAddress)
         },
         updateArea(area){
-            this.addAddressForm.area = area
+            this.addressItem.area = area
         }
     }
 };
