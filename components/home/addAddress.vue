@@ -25,7 +25,7 @@
     </el-dialog>
 </template>
 <script>
-import mapLinkage from '~/components/mapLinkage'
+import mapLinkage from '~/components/home/mapLinkage'
 export default {
     components: {
         mapLinkage
