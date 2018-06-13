@@ -23,11 +23,16 @@
 
 export default {
 
-    props:["index"],
+    props:["index","item"],
     mounted() {
         this.$on("openDialog", function() {
-            console.log(this.index)
+            //this.addressItem = this.oldAddressItem
+
             this.visible = true;
+
+            this.addressItem.usn = this.item.usn
+            this.addressItem.contact = this.item.contact
+            this.addressItem.address = this.item.address
         });
         this.$on("closeDialog", function() {
             this.visible = false;
@@ -58,7 +63,7 @@ export default {
                 address:this.addressItem.address
             }
             this.visible = false;
-            this.$emit('submitForm',newAddress)
+            this.$emit('submitForm',this.index,newAddress)
         }
     }
 };

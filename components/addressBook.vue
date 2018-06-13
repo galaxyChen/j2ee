@@ -1,15 +1,15 @@
 <template>
 
   <el-container >
-    <newAddress ref='newAddress' @submitForm="addAddressItem" ></newAddress>
+    <addAddress ref='addAddress' @submitForm="addAddressItem" ></addAddress>
     <el-header>
-      收货地址（最多还能存{{mostAddressNum}}条,还能存{{mostAddressNum-addressItems.length}}条）
+      收货地址（最多能存{{mostAddressNum}}条,还能存{{mostAddressNum-addressItems.length}}条）
       <el-button type="text" @click="applyAddAddress">新建地址</el-button>
     </el-header>
     <el-main>
       
       <el-card v-for="(item,index) in addressItems" :key="index" class="text item">
-          <editAddress ref="'editAddress'+index" :index="index"  @submitForm="editAddressItem"></editAddress>
+          <editAddress ref="editAddress" :index="index" :item="item"   @submitForm="editAddressItem"></editAddress>
           <el-container>
 
             <!-- 左侧信息 -->
@@ -93,11 +93,11 @@
 //   Vue.use(ElementUI);
 
 
-import newAddress from '~/components/newAddress'
+import addAddress from '~/components/addAddress'
 import editAddress from '~/components/editAddress'
 export default {
     components: {
-        newAddress,
+        addAddress,
         editAddress
     },
     data() {
@@ -129,20 +129,23 @@ export default {
     methods: {
 
       applyEditAddress(index){
-        let e = 'editAddress'+index
-        this.$refs[e].$emit('openDialog');
+        this.$refs.editAddress[index].$emit('openDialog');
       },
       deleteAddressItem(index){
         this.addressItems.splice(index,1)
       },
       applyAddAddress(){
-        this.$refs.newAddress.$emit('openDialog');
+        this.$refs.addAddress.$emit('openDialog');
       },
       addAddressItem(addressItem){
         this.addressItems.push(addressItem)
       },
-      editAddressItem(obj){
-        this.addressItems[obj.index] = obj.addressItem
+      editAddressItem(index,addressItem){
+
+        this.addressItems[index].address = addressItem.address
+        this.addressItems[index].usn = addressItem.usn
+        this.addressItems[index].contact = addressItem.contact
+  
       },
       changeDefault(index){
         this.defaultItem = index
