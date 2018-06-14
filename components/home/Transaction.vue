@@ -35,6 +35,8 @@
 
 .back-button{
     color: #999;
+    font-size: 30px;
+    margin-top: 16px;
 }
 </style>
 
