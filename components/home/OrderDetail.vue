@@ -1,0 +1,204 @@
+<template>
+    <div class="order-box">
+        <el-row class="header" >
+            <el-col class="header-box" :span='4'>
+                <i class="el-icon-time state-icon">
+                </i>
+                <p class="state-text">待支付</p>
+            </el-col>
+            <el-col class="header-box" :span="4">
+                <p style="margin-top:4px;color:#999;">订单编号</p>
+                <p style="margin-top:4px;">{{order.id}}</p>
+            </el-col>
+            <el-col class="header-box" :span="4">
+                <p style="margin-top:4px;color:#999;">下单时间</p>
+                <p style="margin-top:4px;">{{order.time}}</p>
+            </el-col>
+            <el-col class="header-box" :span="4">
+                <p style="margin-top:4px;color:#999;">付款截止</p>
+                <p style="margin-top:4px;">{{order.time_limit}}</p>
+            </el-col>
+            <el-col class="header-box" :span="3" >
+                <el-button type="danger">立即付款</el-button>
+            </el-col>
+            <el-col class="header-box" :span="3" :push='1'>
+                <el-button type="pain" style='color:rgb(26, 188, 156)'>取消订单</el-button>
+            </el-col>
+        </el-row>
+        <el-row class="step">
+            <el-steps align-center class="step-line" :space="200" :active="1" finish-status="success">
+                <el-step title="提交订单"></el-step>
+                <el-step title="付款成功"></el-step>
+                <el-step title="商家发货"></el-step>
+                <el-step title="确认收货"></el-step>
+                <el-step title="交易完成"></el-step>
+            </el-steps>
+        </el-row>
+
+        <el-row class="order-detail">
+            <div style='font-size:16px;color:#999;padding:14px'>商品信息</div>
+              <el-table
+                :data="tableData"
+                style="width: 100%">
+                <el-table-column
+                    label="商品信息"
+                    width="300">
+                    <template slot-scope="scope">
+                        <el-col :span='12'>
+                            <div>
+                                <img class='order-img' src='~/static/book.png'/>
+                            </div>
+                        </el-col>
+                        <el-col :span='12'>
+                            <h4 class="order-detail-text">{{scope.row.title}}</h4>
+                        </el-col>
+                    </template>
+                </el-table-column>
+
+                <el-table-column label="数量" prop='number'>
+                </el-table-column>
+                <el-table-column label="邮费" prop='mail_price'>
+                </el-table-column>
+                <el-table-column label="单价" prop='price_item'>
+                </el-table-column>
+                <el-table-column label="总价" prop='price'>
+                </el-table-column>
+                
+            </el-table>
+        </el-row>
+        <el-row>
+            <div style='font-size:16px;color:#999;padding:14px;'> 收货信息</div>
+            <el-card >
+                <div  class="text item">
+                    收货人:李四{{order.recievier}}
+                </div>
+                <div  class="text item">
+                    联系方式:15588888888{{order.phone}}
+                </div>
+                <div  class="text item">
+                    收货地址:广州大学城华南理工大学{{order.location}}
+                </div>
+            </el-card>
+        </el-row>
+        <el-row class="order-summary">
+            <el-row class='order-summary-text' >
+                <el-col :span='4' :push='15'>
+                    商品件数：
+                </el-col>
+                <el-col style='color:red;' :span='4' :push='15'>
+                    ￥1
+                </el-col>
+            </el-row>
+            <el-row class='order-summary-text'>
+                <el-col :span='4' :push='15'>
+                    商品总价：
+                </el-col>
+                <el-col style='color:red;' :span='4' :push='15'>
+                    ￥30
+                </el-col>
+            </el-row>
+            <el-row class='order-summary-text'>
+                <el-col :span='4' :push='15'>
+                    运费：
+                </el-col>
+                <el-col style='color:red;' :span='4' :push='15'>
+                    ￥0
+                </el-col>
+            </el-row>
+            <el-row class='order-summary-text'>
+                <el-col :span='4' :push='15'>
+                    支付总额：
+                </el-col>
+                <el-col style='color:red;' :span='4' :push='15'>
+                    ￥30
+                </el-col>
+            </el-row>       
+        </el-row>
+    </div>
+</template>
+
+<style scoped>
+.header {
+  border-width: 1px;
+  border-color: rgba(228, 228, 228, 1);
+  border-style: solid;
+  background-color: rgba(249, 249, 249, 1);
+  height: 120px;
+
+  display: flex;
+}
+
+.order-box {
+  border-width: 2px;
+  border-color: rgba(228, 228, 228, 1);
+  border-style: solid;
+}
+
+.order-detail {
+  margin-top: 30px;
+}
+
+.order-detail-text {
+  margin-top: 40px;
+  margin-left: 20px;
+  font-size: 18px;
+}
+
+.order-img {
+  width: 90px;
+  height: 120px;
+  margin: 10px;
+  vertical-align: text-top;
+}
+
+.text {
+  font-size: 14px;
+}
+
+.item {
+  padding: 18px 0;
+}
+
+.step {
+  margin-top: 30px;
+}
+
+.state-icon {
+  font-size: 36px;
+  color: rgb(26, 188, 156);
+}
+.state-text {
+  font-size: 20px;
+  color: rgb(26, 188, 156);
+}
+.header-box {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  text-align: center;
+}
+.order-summary{
+    text-align: right;
+}
+.order-summary-text {
+    margin-top: 20px;
+}
+
+.order-summary-text:last-child {
+    margin-bottom: 20px;
+}
+</style>
+
+<script>
+export default {
+  props: ["order"],
+  data() {
+    return {};
+  },
+  computed: {
+    tableData() {
+      return [this.order];
+    }
+  }
+};
+</script>
