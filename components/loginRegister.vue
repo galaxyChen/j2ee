@@ -68,11 +68,7 @@
 
 
 <script>
-// import Vue from 'vue';
-// import ElementUI from 'element-ui';
-// import 'element-ui/lib/theme-chalk/index.css';
-
-// Vue.use(ElementUI);
+import Cookies from 'js-cookie'
 
 export default {
   mounted() {
@@ -82,6 +78,8 @@ export default {
     this.$on("closeDialog", function() {
       this.visible = false;
     });
+    Cookies.set('name','user');
+    console.log(Cookies.get('name'))
   },
   data() {
     var validatePw = (rule, value, callback) => {
@@ -168,8 +166,6 @@ export default {
     check(formName,item) {
       console.log(this.$refs[formName])
       this.$refs[formName].validateField(item)
-      // this.$refs[formName].$refs[item].validate((valide)=>{})
-      // this.$refs.loginForm.validate((valide)=>{})
     },
     submitForm: function(formName) {
       function serialize(obj) {
@@ -189,11 +185,17 @@ export default {
           if (data.query == "login") data.data = serialize(this.loginForm);
           else if (data.query == "register")
             data.data = serialize(this.regForm);
-          // console.log(data);
+          console.log(data);
           this.visible = false;
           let response = await this.$send(data);
-          // console.log(response)
-          console.log(response.then(data => data));
+          response.then(data=>{
+            if (data.status===1){
+              
+            } else {
+              console.log("error")
+              this.$message.error('错了哦，这是一条错误消息');
+            }
+          })
         } else {
           console.log("error");
         }
