@@ -69,7 +69,7 @@ export default {
         },
         resetForm() {
             this.$refs['addressItem'].resetFields()
-            this.$refs.map.test()
+            this.$refs.map.init()
         },
         submitForm() {
             let newAddress = {
@@ -85,6 +85,7 @@ export default {
         },
         closeDialog() {
             this.$refs["addressItem"].resetFields();
+            this.$refs.map.init()
         }
     }
 };

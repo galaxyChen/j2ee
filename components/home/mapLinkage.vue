@@ -1215,7 +1215,7 @@
 //                 console.log(city);
 //                 console.log(this.selectCity)
             },
-            test: function(){
+            init: function(){
                 
                 this.selectProv = ''
                 this.selectCity = ''
