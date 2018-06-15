@@ -35,11 +35,11 @@
                     <el-input @input='check("regForm","usn")' v-model="regForm.usn"></el-input>
                 </el-form-item>
                 <el-form-item label="密保问题" prop="question">
-                    <el-input @input='check("regForm","question")'  maxlength=100 v-model="regForm.question" placeholder="不超过100个字符"></el-input>
+                    <el-input @input='check("regForm","question")' type="textarea" maxlength=100 v-model="regForm.question" placeholder="不超过100个字符"></el-input>
                 </el-form-item>
 
                 <el-form-item label="密保回答" prop="answer">
-                    <el-input @input='check("regForm","answer")'  maxlength=50 v-model="regForm.answer" placeholder="不超过50个字符"></el-input>
+                    <el-input @input='check("regForm","answer")' type="textarea" maxlength=50 v-model="regForm.answer" placeholder="不超过50个字符"></el-input>
                 </el-form-item>
 
                 <el-form-item>
@@ -188,7 +188,7 @@ export default {
           if (data.query == "login") data.data = serialize(this.loginForm);
           else if (data.query == "register")
             data.data = serialize(this.regForm);
-            
+
           console.log("test")
 
           if(data.query=="login")
