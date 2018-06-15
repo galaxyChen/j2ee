@@ -185,7 +185,6 @@ export default {
           if (data.query == "login") data.data = serialize(this.loginForm);
           else if (data.query == "register")
             data.data = serialize(this.regForm);
-          console.log(data);
           this.visible = false;
           let response = await this.$send(data);
           response.then(data=>{
