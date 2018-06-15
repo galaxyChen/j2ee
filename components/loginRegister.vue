@@ -192,6 +192,15 @@ export default {
           // console.log(data);
           this.visible = false;
           let response = await this.$send(data);
+
+          //前后对接
+          response.then(data=>{
+            if(data.status){
+              
+            }
+
+          })
+
           // console.log(response)
           console.log(response.then(data => data));
         } else {
