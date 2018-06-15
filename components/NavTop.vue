@@ -31,7 +31,7 @@
         <el-menu-item index="home" class="NavRight">首页</el-menu-item>
       
       </el-menu>
-      <Login ref='login' :dialogVisible='dialogVisible'></Login>
+      <Login ref='login' @Login="changeLogined"  :dialogVisible='dialogVisible'></Login>
     </div>
     </div>
 </template>
@@ -66,6 +66,11 @@ export default {
         // console.log(response);
         this.$refs.login.$emit('openDialog');
       }
+    },
+    changeLogined(user){
+      this.logined = true;
+      console.log(user);
+      this.user = user;
     }
   }
 };

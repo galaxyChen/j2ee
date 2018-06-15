@@ -68,11 +68,7 @@
 
 
 <script>
-// import Vue from 'vue';
-// import ElementUI from 'element-ui';
-// import 'element-ui/lib/theme-chalk/index.css';
-
-// Vue.use(ElementUI);
+import Cookies from 'js-cookie'
 
 export default {
   mounted() {
@@ -82,6 +78,8 @@ export default {
     this.$on("closeDialog", function() {
       this.visible = false;
     });
+    Cookies.set('name','user');
+    console.log(Cookies.get('name'))
   },
   data() {
     var validatePw = (rule, value, callback) => {
@@ -168,8 +166,6 @@ export default {
     check(formName,item) {
       console.log(this.$refs[formName])
       this.$refs[formName].validateField(item)
-      // this.$refs[formName].$refs[item].validate((valide)=>{})
-      // this.$refs.loginForm.validate((valide)=>{})
     },
     submitForm: function(formName) {
       function serialize(obj) {
@@ -189,24 +185,49 @@ export default {
           if (data.query == "login") data.data = serialize(this.loginForm);
           else if (data.query == "register")
             data.data = serialize(this.regForm);
-          // console.log(data);
-          this.visible = false;
           let response = await this.$send(data);
 
-          //前后对接
-          response.then(data=>{
-            if(data.status){
-              
+          if(data.query=="login")
+            this.applyLogin(response)
+          else if(data.query == "register"){
+            if(this.applyRegister(response)){
+              let newData = {
+                query :"login",
+                usn : data.usn,
+                pw :data.pw
+              }
+              response = await this.$send(data);
+              this.applyLogin(response)
             }
-
-          })
-
-          // console.log(response)
-          console.log(response.then(data => data));
+          }
+        
         } else {
           console.log("error");
         }
       });
+    },
+    applyLogin(response){
+      if (response.status===1){
+        console.log("login success")
+        this.$emit("Login",response.name)
+        Cookies.set('user_id',response.user_id);
+        Cookies.set('name',response.name);
+        Cookies.set('session_id',response.session_id);
+        this.visible = false;
+      } else {
+        console.log("error")
+        this.$message.error('错了哦，这是一条登录错误消息');
+      }  
+    },
+    applyRegister(response){
+      if (response.status===1){
+        console.log("register success")
+        return true;
+      } else {
+        console.log("error")
+        this.$message.error('错了哦，这是一条注册错误消息');
+        return false;
+      }  
     },
     resetForm(formName) {
       this.$refs[formName].resetFields();

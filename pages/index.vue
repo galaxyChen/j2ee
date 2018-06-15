@@ -22,7 +22,7 @@
             <hr style="margin-top:-50px;">
 
             <div class="goods" >
-                <img src="../assets/2.jpg">1
+                <img class='goods-img' src="../assets/2.jpg">1
                 <div style="margin-top:-100px;"> 
                     <p style="margin-top:-50px;margin-left:10px;">{{booktitle1}}</p>
                     <p style="margin-top:-100px;margin-left:10px;">价格： {{price1}}</p>
@@ -33,7 +33,7 @@
             </div>
 
             <div class="goods">
-                <img src="../assets/3.jpg">2
+                <img class='goods-img' src="../assets/3.jpg">2
                 <div style="margin-top:-100px;">
                     <p style="margin-top:-50px;margin-left:10px;">{{booktitle2}}</p>
                     <p style="margin-top:-100px;margin-left:10px;">价格： {{price2}}</p>
@@ -44,7 +44,7 @@
             </div>
 
             <div class="goods" >
-                <img src="../assets/4.jpg">3
+                <img class='goods-img' src="../assets/4.jpg">3
                 <div style="margin-top:-100px;">
                     <p style="margin-top:-50px;margin-left:10px;">{{booktitle3}}</p>
                     <p style="margin-top:-100px;margin-left:10px;">价格： {{price3}}</p>
@@ -55,7 +55,7 @@
             </div>
 
             <div class="goods">
-                <img src="../assets/5.jpg">4
+                <img class='goods-img' src="../assets/5.jpg">4
                 <div style="margin-top:-100px;">
                     <p style="margin-top:-50px;margin-left:10px;">{{booktitle4}}</p>
                     <p style="margin-top:-100px;margin-left:10px;">价格： {{price4}}</p>
@@ -163,5 +163,9 @@ body > .el-container {
 
   border-style: dashed;
   border-color: #e9eef3;
+}
+.goods-img{
+  width: 120px;
+  height: 160px;
 }
 </style>
