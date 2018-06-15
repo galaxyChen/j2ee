@@ -1214,7 +1214,13 @@
             getCity: function (city) {
 //                 console.log(city);
 //                 console.log(this.selectCity)
-            }
+            },
+            init: function(){
+                
+                this.selectProv = ''
+                this.selectCity = ''
+                this.citys = []
+            }
 
         },
         mounted: function () {
@@ -1223,6 +1229,7 @@
         updated: function () {
             let area = this.selectProv+this.selectCity
             this.$emit('updateArea',area)
-        }
+        },
+
     }
 </script>

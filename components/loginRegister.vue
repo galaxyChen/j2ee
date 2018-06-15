@@ -185,20 +185,50 @@ export default {
           if (data.query == "login") data.data = serialize(this.loginForm);
           else if (data.query == "register")
             data.data = serialize(this.regForm);
-          this.visible = false;
           let response = await this.$send(data);
-          response.then(data=>{
-            if (data.status===1){
-              
-            } else {
-              console.log("error")
-              this.$message.error('错了哦，这是一条错误消息');
+
+          if(data.query=="login")
+            this.applyLogin(response)
+          else if(data.query == "register"){
+            if(this.applyRegister(response)){
+              let newData = {
+                query :"login",
+                usn : data.usn,
+                pw :data.pw
+              }
+              response = await this.$send(data);
+              this.applyLogin(response)
             }
-          })
+          }
+        
         } else {
           console.log("error");
         }
       });
+    },
+    applyLogin(response){
+      if (response.status===1){
+        console.log("login success")
+        Cookies.set('user_id',response.user_id);
+        Cookies.set('name',response.name);
+        Cookies.set('session_id',response.session_id);
+        this.$emit("logined")
+
+        this.visible = false;
+      } else {
+        console.log("error")
+        this.$message.error('错了哦，这是一条登录错误消息');
+      }  
+    },
+    applyRegister(response){
+      if (response.status===1){
+        console.log("register success")
+        return true;
+      } else {
+        console.log("error")
+        this.$message.error('错了哦，这是一条注册错误消息');
+        return false;
+      }  
     },
     resetForm(formName) {
       this.$refs[formName].resetFields();

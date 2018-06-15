@@ -1,5 +1,5 @@
 <template>
-    <el-dialog title="添加收货地址" :visible.sync="visible"  width="30%">
+    <el-dialog title="添加收货地址" :visible.sync="visible"  @closed='closeDialog'  width="30%">
 
         <el-form status-icon :model="addressItem" ref="addressItem" :rules="addressRule">
 
@@ -9,8 +9,8 @@
             <el-form-item label="手机号" prop="contact">
                 <el-input v-model="addressItem.contact"></el-input>
             </el-form-item>
-
-            <mapLinkage @updateArea="updateArea"></mapLinkage>
+            
+            <mapLinkage ref="map" @updateArea="updateArea"></mapLinkage>
 
             <el-form-item label="详细地址" prop="address"> 
                 <el-input v-model="addressItem.address"></el-input>
@@ -68,7 +68,8 @@ export default {
             this.$refs['addressItem'].validateField(item);
         },
         resetForm() {
-        
+            this.$refs['addressItem'].resetFields()
+            this.$refs.map.init()
         },
         submitForm() {
             let newAddress = {
@@ -81,6 +82,10 @@ export default {
         },
         updateArea(area){
             this.addressItem.area = area
+        },
+        closeDialog() {
+            this.$refs["addressItem"].resetFields();
+            this.$refs.map.init()
         }
     }
 };

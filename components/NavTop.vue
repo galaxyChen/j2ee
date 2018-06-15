@@ -31,7 +31,7 @@
         <el-menu-item index="index" class="NavRight">首页</el-menu-item>
       
       </el-menu>
-      <Login ref='login' :dialogVisible='dialogVisible'></Login>
+      <Login ref='login' @logined="logined"  :dialogVisible='dialogVisible'></Login>
     </div>
     </div>
 </template>
@@ -85,10 +85,11 @@ export default {
       }
     },
     logined(){
+      console.log("haha")
       let name = Cookies.get('name')
       if (name){
         this.user.name = name;
-        this.logined = true;
+        this.login = true;
       }
     },
     async signout(){
