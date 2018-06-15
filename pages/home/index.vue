@@ -1,11 +1,8 @@
 <template>
-    <div>
-        <NavBar :logined='logined' :user='user'></NavBar>
-        <el-col :span="5">
-            <NavLeft @changeTab='changeTab'></NavLeft>
-        </el-col>
-        <component  :is="currentMain" :user='user' :type='type'></component>
-    </div>
+      <el-alert
+        title="请先登录"
+        type="error">
+      </el-alert>
 </template>
 
 <script>
@@ -24,14 +21,13 @@ export default {
     AddGoods,
     addressBook
   },
+  mounted(){
+      console.log(this.$router.params)
+  },
   data() {
     return {
       type: 1,
-      logined: true,
-      currentMain: "Person",
-      user: {
-        name: "张三"
-      }
+      currentMain: "Person"
     };
   },
   methods: {

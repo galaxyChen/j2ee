@@ -16,7 +16,7 @@
           <el-menu-item index="welcome" class="NavRight" >欢迎，{{user.name}}</el-menu-item>
         
         </el-menu>
-        <Login @logined='logined' ref='login' :dialogVisible='dialogVisible'></Login>
+        <Login ref='login' :dialogVisible='dialogVisible'></Login>
       </div>
     <div v-else>
       <el-menu
@@ -52,6 +52,24 @@ import Cookies from 'js-cookie'
 export default {
   mounted(){
     //预登录
+    let user_id = Cookies.get('user_id')
+    if (user_id){
+      let data = {
+        query:'check',
+        data:{
+          user_id:user_id,
+          session_id:Cookies.get('session_id')
+        }
+      }
+      let check = this.$send(data)
+      check.then(response=>{
+        if (response.status===1){
+          this.login = true;
+          this.user.name = Cookies.get('name')
+          this.user.user_id = Cookies.get('user_id')
+        }
+      })
+    }
   },
   components: {
     Login

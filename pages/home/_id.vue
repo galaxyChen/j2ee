@@ -24,6 +24,9 @@ export default {
     AddGoods,
     addressBook
   },
+  mounted(){
+    console.log(this.$route.params)
+  },
   data() {
     return {
       type: 1,
@@ -43,10 +46,6 @@ export default {
       if (index === "3-2") this.type = 2;
     }
   },
-  validate ({ params }) {
-    console.log(params)
-    // Must be a number
-    return /^\d+$/.test(params.id)
-  }
+
 };
 </script>
