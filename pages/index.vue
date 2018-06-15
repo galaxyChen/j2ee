@@ -1,6 +1,6 @@
 <template>
 <div>
-  <NavTop :logined='logined' :user='user'></NavTop>
+  <NavTop></NavTop>
 
     <el-main>
         <el-carousel :interval="4000" type="card" height="320px">
@@ -75,10 +75,6 @@ import SearchBox from "~/components/SearchBox";
 export default {
   data() {
     return {
-      logined: false,
-      user: {
-        name: ""
-      },
       booktitle1: "新东方GRE词汇1",
       booktitle2: "新东方GRE词汇2",
       booktitle3: "新东方GRE词汇3",

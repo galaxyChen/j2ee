@@ -209,10 +209,11 @@ export default {
     applyLogin(response){
       if (response.status===1){
         console.log("login success")
-        this.$emit("Login",response.name)
         Cookies.set('user_id',response.user_id);
         Cookies.set('name',response.name);
         Cookies.set('session_id',response.session_id);
+        this.$emit("logined")
+
         this.visible = false;
       } else {
         console.log("error")
