@@ -3,8 +3,8 @@ import axios from 'axios'
 
 
 function sender() {
-    let url = 'http://localhost:3001';
-
+    // let url = 'http://localhost:3001';
+    let url = 'http://192.168.43.185:8080/BookStore'
     async function send(data) {
         // console.log(data);
         let request = await axios({method: 'post', url: url, data: data}).then((response) => {
