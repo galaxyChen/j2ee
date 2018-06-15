@@ -85,7 +85,6 @@ export default {
       }
     },
     logined(){
-      console.log("haha")
       let name = Cookies.get('name')
       if (name){
         this.user.name = name;

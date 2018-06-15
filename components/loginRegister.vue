@@ -35,11 +35,11 @@
                     <el-input @input='check("regForm","usn")' v-model="regForm.usn"></el-input>
                 </el-form-item>
                 <el-form-item label="密保问题" prop="question">
-                    <el-input @input='check("regForm","question")' type="textarea" maxlength=100 v-model="regForm.question" placeholder="不超过100个字符"></el-input>
+                    <el-input @input='check("regForm","question")'  maxlength=100 v-model="regForm.question" placeholder="不超过100个字符"></el-input>
                 </el-form-item>
 
                 <el-form-item label="密保回答" prop="answer">
-                    <el-input @input='check("regForm","answer")' type="textarea" maxlength=50 v-model="regForm.answer" placeholder="不超过50个字符"></el-input>
+                    <el-input @input='check("regForm","answer")'  maxlength=50 v-model="regForm.answer" placeholder="不超过50个字符"></el-input>
                 </el-form-item>
 
                 <el-form-item>
@@ -177,36 +177,37 @@ export default {
         }
         return result;
       }
+      
       this.$refs[formName].validate(async valid => {
+        
         if (valid) {
           let data = {
             query: this.query
           };
+          
           if (data.query == "login") data.data = serialize(this.loginForm);
           else if (data.query == "register")
             data.data = serialize(this.regForm);
-          let response = await this.$send(data);
+            
+          console.log("test")
 
           if(data.query=="login")
-            this.applyLogin(response)
-          else if(data.query == "register"){
-            if(this.applyRegister(response)){
-              let newData = {
-                query :"login",
-                usn : data.usn,
-                pw :data.pw
-              }
-              response = await this.$send(data);
-              this.applyLogin(response)
-            }
-          }
+            this.applyLogin(data)
+
+          else if(data.query == "register")
+            this.applyLogin(data)
         
         } else {
           console.log("error");
         }
       });
     },
-    applyLogin(response){
+
+
+    async applyLogin(data){
+
+      let response = await this.$send(data);
+
       if (response.status===1){
         console.log("login success")
         Cookies.set('user_id',response.user_id);
@@ -218,16 +219,22 @@ export default {
       } else {
         console.log("error")
         this.$message.error('错了哦，这是一条登录错误消息');
-      }  
+      } 
+ 
     },
-    applyRegister(response){
+    async applyRegister(data){
+      
       if (response.status===1){
         console.log("register success")
-        return true;
+        let newData = {
+          query :"login",
+          usn : data.usn,
+          pw :data.pw
+        }
+        this.applyLogin(newData)
       } else {
         console.log("error")
         this.$message.error('错了哦，这是一条注册错误消息');
-        return false;
       }  
     },
     resetForm(formName) {
