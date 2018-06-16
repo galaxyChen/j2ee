@@ -90,8 +90,13 @@ export default {
     NavTop,
     SearchBox
   },
-  mounted: function() {
+  mounted: async function() {
     this.$sendTest();
+    let data = {
+      query:'check'
+    }
+    let response = await this.$axios.send(data)
+    console.log(response)
   },
   methods: {
     changeValue(value) {

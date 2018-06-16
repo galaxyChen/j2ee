@@ -61,7 +61,7 @@ export default {
           session_id:Cookies.get('session_id')
         }
       }
-      let check = this.$send(data)
+      let check = this.$axios.send(data)
       check.then(response=>{
         if (response.status===1){
           this.login = true;

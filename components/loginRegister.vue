@@ -78,7 +78,7 @@ export default {
     this.$on("closeDialog", function() {
       this.visible = false;
     });
-
+    
   },
   data() {
     var validatePw = (rule, value, callback) => {
