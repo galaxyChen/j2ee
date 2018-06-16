@@ -1,7 +1,5 @@
 export default function ({$axios, redirect}) {
     $axios.onRequest(config => {
-        console.log(config.url)
-        console.log('Making request to ' + config.url)
     })
 
     $axios.send = async function (data) {

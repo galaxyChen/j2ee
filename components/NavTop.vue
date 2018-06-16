@@ -40,7 +40,7 @@
 .NavRight {
   float: right !important;
 }
-.NavLeft{
+.NavLeft {
   font-size: 20px;
 }
 </style>
@@ -48,27 +48,27 @@
 
 <script>
 import Login from "~/components/loginRegister";
-import Cookies from 'js-cookie'
+import Cookies from "js-cookie";
 export default {
-  mounted(){
+  mounted() {
     //预登录
-    let user_id = Cookies.get('user_id')
-    if (user_id){
+    let user_id = Cookies.get("user_id");
+    if (user_id) {
       let data = {
-        query:'check',
-        data:{
-          user_id:user_id,
-          session_id:Cookies.get('session_id')
+        query: "check",
+        data: {
+          user_id: user_id,
+          session_id: Cookies.get("session_id")
         }
-      }
-      let check = this.$axios.send(data)
-      check.then(response=>{
-        if (response.status===1){
+      };
+      let check = this.$axios.send(data);
+      check.then(response => {
+        if (response.status === 1) {
           this.login = true;
-          this.user.name = Cookies.get('name')
-          this.user.user_id = Cookies.get('user_id')
+          this.user.name = Cookies.get("name");
+          this.user.user_id = Cookies.get("user_id");
         }
-      })
+      });
     }
   },
   components: {
@@ -76,59 +76,78 @@ export default {
   },
   data() {
     return {
-      login:false,
-      user:{
-        name:'张三',
-        user_id:'1'
+      login: false,
+      user: {
+        name: "张三",
+        user_id: "1"
       },
       dialogVisible: false
     };
   },
   methods: {
-    handleSelect(key, keyPath) {
-      console.log(key,keyPath)
+    async handleSelect(key, keyPath) {
+      console.log(key, keyPath);
       if (key === "login") {
-        this.$refs.login.$emit('openDialog');
+        this.$refs.login.$emit("openDialog");
       }
-      if (key === "home"){
-        let user_id = Cookies.get('user_id')
-        if (user_id){
-          this.$router.push({path:`/home/${user_id}`})
-        } else {
-          this.$message.error('操作失败!请重新登录');
+
+      if (key === "home") {
+        let user_id = Cookies.get("user_id");
+        let session_id = Cookies.get("session_id");
+        if (user_id && session_id) {
+          let data = {
+            query: "check",
+            data: {
+              user_id: user_id,
+              session_id: session_id
+            }
+          };
+          let check = await this.$axios.send(data);
+          if (check.status === 1) {
+            this.$router.push({ path: `/home/` });
+          } else {
+            this.$message.error("操作失败!请重新登录");
+            Cookies.remove("name");
+            Cookies.remove("user_id");
+            Cookies.remove("session_id");
+            this.login = false;
+            this.user = {};
+            this.$router.push({ path: "/" });
+          }
         }
       }
-      if (key==='index'){
-        this.$router.push({path:'/'})
+
+      if (key === "index") {
+        this.$router.push({ path: "/" });
       }
     },
-    logined(){
-      console.log("haha")
-      let name = Cookies.get('name')
-      if (name){
+    logined() {
+      console.log("haha");
+      let name = Cookies.get("name");
+      if (name) {
         this.user.name = name;
         this.login = true;
       }
     },
-    async signout(){
-      console.log('sign out')
-      let user_id = Cookies.get('user_id')
+    async signout() {
+      console.log("sign out");
+      let user_id = Cookies.get("user_id");
       let data = {
-        query:'signout',
-        data:{
-          user_id:user_id
+        query: "signout",
+        data: {
+          user_id: user_id
         }
+      };
+      let response = await this.$axios.send(data);
+      if (response.status === 0) {
+        this.$message.error(""+response.err);
       }
-      let response = await this.$send(data)
-      if (response.status===1){
-        Cookies.remove('name')
-        Cookies.remove('user_id')
-        Cookies.remove('session_id')
-        this.login = false;
-        this.user = {}
-      } else {
-          this.$message.error('操作失败!'+response.err);
-      }
+      Cookies.remove("name");
+      Cookies.remove("user_id");
+      Cookies.remove("session_id");
+      this.login = false;
+      this.user = {};
+      this.$router.push({ path: "/" });
     }
   }
 };

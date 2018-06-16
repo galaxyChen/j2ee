@@ -6,12 +6,12 @@
             <el-tab-pane label="登录" name="login"></el-tab-pane>
             <el-tab-pane label="注册" name="register"></el-tab-pane>
 
-            <el-form ref="loginForm" status-icon :model="loginForm" :rules="loginRules"  label-width="80px" v-show="query=='login'">
+            <el-form  ref="loginForm" status-icon :model="loginForm" :rules="loginRules"  label-width="80px" v-show="query=='login'">
                 <el-form-item label="登录邮箱" prop="usn">
-                    <el-input @input='check("loginForm","usn")' v-model="loginForm.usn"></el-input>
+                    <el-input  @input='check("loginForm","usn")' v-model="loginForm.usn"></el-input>
                 </el-form-item>
                 <el-form-item label="密码" prop="pw">
-                    <el-input @input='check("loginForm","pw")' type="password" v-model="loginForm.pw"></el-input>
+                    <el-input  @input='check("loginForm","pw")' type="password" v-model="loginForm.pw"></el-input>
                 </el-form-item>
                 <el-form-item>
                     <el-button type="primary" @click="submitForm('loginForm')">确定</el-button>
@@ -19,12 +19,12 @@
                 </el-form-item>
             </el-form>
 
-            <el-form ref="regForm" status-icon :model="regForm"  :rules="regRules"  label-width="80px" v-show="query=='register'">
+            <el-form  ref="regForm" status-icon :model="regForm"  :rules="regRules"  label-width="80px" v-show="query=='register'">
                 <el-form-item label="注册邮箱" prop="email">
-                    <el-input @input='check("regForm","email")'  v-model="regForm.email"></el-input>
+                    <el-input  @input='check("regForm","email")'  v-model="regForm.email"></el-input>
                 </el-form-item>
                 <el-form-item label="密码" prop="pw">
-                    <el-input @input='check("regForm","pw")' type="password" v-model="regForm.pw"></el-input>
+                    <el-input  @input='check("regForm","pw")' type="password" v-model="regForm.pw"></el-input>
                 </el-form-item>
 
                 <el-form-item label="确认密码" prop="pw2"> 
@@ -167,6 +167,7 @@ export default {
       this.$refs[formName].validateField(item)
     },
     submitForm: function(formName) {
+      console.log("login"+formName)
       function serialize(obj) {
         let result = {};
         for (let term in obj) {
@@ -184,7 +185,7 @@ export default {
           if (data.query == "login") data.data = serialize(this.loginForm);
           else if (data.query == "register")
             data.data = serialize(this.regForm);
-          let response = await this.$send(data);
+          let response = await this.$axios.send(data);
 
           if(data.query=="login")
             this.applyLogin(response)
@@ -193,9 +194,9 @@ export default {
               let newData = {
                 query :"login",
                 usn : data.usn,
-                pw :data.pw
+                pw : data.pw
               }
-              response = await this.$send(data);
+              let response = await this.$axios.send(newData);
               this.applyLogin(response)
             }
           }
@@ -216,7 +217,7 @@ export default {
         this.visible = false;
       } else {
         console.log("error")
-        this.$message.error('错了哦，这是一条登录错误消息');
+        this.$message.error('发生错误：'+response.err);
       }  
     },
     applyRegister(response){
@@ -225,7 +226,7 @@ export default {
         return true;
       } else {
         console.log("error")
-        this.$message.error('错了哦，这是一条注册错误消息');
+        this.$message.error('发生错误：'+response.err);
         return false;
       }  
     },

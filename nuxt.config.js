@@ -57,7 +57,7 @@ module.exports = {
   proxy: [
     [
       '/api', {
-        target: 'http://loacalhost:3001/'
+        target: 'http://localhost:3001/'
       }
     ]
   ]
