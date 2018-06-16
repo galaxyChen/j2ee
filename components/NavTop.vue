@@ -51,6 +51,8 @@ import Login from "~/components/loginRegister";
 import Cookies from "js-cookie";
 export default {
   mounted() {
+    //事件注册
+    this.$on('changeName',this.changeName)
     //预登录
     let user_id = Cookies.get("user_id");
     if (user_id) {
@@ -85,6 +87,10 @@ export default {
     };
   },
   methods: {
+    changeName(){
+      let name = Cookies.get('name')
+      this.user.name = name;
+    },
     async handleSelect(key, keyPath) {
       console.log(key, keyPath);
       if (key === "login") {

@@ -22,6 +22,9 @@
                         <el-input v-model='newpw' class='person-input-box'  size='medium'>
                             <template slot='prepend'>新密码</template>
                         </el-input>
+                        <el-input v-model='newpw2' class='person-input-box'  size='medium'>
+                            <template slot='prepend'>重复新密码</template>
+                        </el-input>
                         <el-button @click="changepPw" class="person-changepw-button" type="primary">确认修改</el-button>
                     </el-form>
                 </el-collapse-transition>
@@ -91,7 +94,8 @@ export default {
       name: "",
       answer: "",
       oldpw: "",
-      newpw: ""
+      newpw: "",
+      newpw2: ""
     };
   },
   methods: {
@@ -107,26 +111,43 @@ export default {
           this.change = !this.change;
           return;
         }
-        let user_id = Cookies.get("user_id");
-        let session_id = Cookies.get("session_id");
-        let data = {
-          query: "changeName",
-          data: {
-            user_id: user_id,
-            new_name: newName,
-            session_id: session_id
-          }
-        };
-        let response = await this.$axios.send(data);
-        console.log(response);
-        if (response.status == 1) {
-          this.name = newName;
-          Cookies.set("name", newName);
-        } else if (response.status == -1) {
-          this.signout();
-        } else {
-          this.$message.error("发生错误：" + response.err);
-        }
+        this.$confirm("确认修改用户名为" + newName + "吗？", "提示", {
+          confirmButtonText: "确定",
+          cancelButtonText: "取消",
+          type: "warning"
+        })
+          .then(() => {
+            let user_id = Cookies.get("user_id");
+            let session_id = Cookies.get("session_id");
+            let data = {
+              query: "changeName",
+              data: {
+                user_id: user_id,
+                new_name: newName,
+                session_id: session_id
+              }
+            };
+            return this.$axios.send(data);
+          })
+          .then(response => {
+            if (response.status == 1) {
+              this.name = newName;
+              Cookies.set("name", newName);
+              this.change = !this.change;
+              this.$message({
+                type: "success",
+                message: "修改成功!"
+              });
+              this.$emit("changeName");
+            } else if (response.status == -1) {
+              this.signout();
+            } else {
+              this.$message.error("发生错误：" + response.err);
+              let oldName = Cookies.get("name");
+              this.change = !this.change;
+              this.name = oldName;
+            }
+          });
       }
     },
     signout() {
@@ -135,6 +156,48 @@ export default {
       Cookies.remove("user_id");
       Cookies.remove("session_id");
       this.$router.push({ path: "/" });
+    },
+    async changepPw() {
+      console.log(this.answer);
+      console.log(this.oldpw);
+      console.log(this.newpw);
+      let answer = this.answer;
+      let oldpw = this.oldpw;
+      let newpw = this.newpw;
+      let newpw2 = this.newpw2;
+      if (answer === "") {
+        this.$message.error("密保答案为空");
+        return;
+      }
+      if (newpw != newpw2) {
+        this.$message.error("两次新密码输入不一致！");
+        return;
+      }
+      let user_id = Cookies.get("user_id");
+      let session_id = Cookies.get("session_id");
+      let data = {
+        query: "changePassword",
+        data: {
+          user_id: user_id,
+          pw: oldpw,
+          new_pw: newpw,
+          session_id: session_id
+        }
+      };
+      let response = await this.$axios.send(data);
+      if (response.status == 1) {
+        this.$message({
+          message:'修改成功！',
+          type:'success'
+        })
+      } else if (response.status == -1) {
+        this.signout();
+      } else {
+        this.$message.error("修改失败!" + response.err);
+        let oldName = Cookies.get("name");
+        this.change = !this.change;
+        this.name = oldName;
+      }
     }
   },
   computed: {
