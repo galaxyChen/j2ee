@@ -90,7 +90,12 @@ export default {
         callback(new Error("长度在 5 到 16 个字符"));
       } 
       else {
-        if (this.regForm.pw2 !== "") {
+        let p = /[0-9]/ ;
+        let p1 = /[a-zA-Z]/i
+        if(!p.test(value)){
+          callback(new Error("密码至少包含数字和字母"));
+        }
+        else if (this.regForm.pw2 !== "") {
           this.$refs.regForm.validateField("pw2");
         }
         callback();
@@ -210,9 +215,9 @@ export default {
 
       if (response.status===1){
         console.log("login success")
-        Cookies.set('user_id',response.user_id);
-        Cookies.set('name',response.name);
-        Cookies.set('session_id',response.session_id);
+        Cookies.set('user_id',response.data.user_id);
+        Cookies.set('name',response.data.name);
+        Cookies.set('session_id',response.data.session_id);
         this.$emit("logined")
 
         this.visible = false;

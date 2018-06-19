@@ -102,28 +102,15 @@ export default {
     addAddress,
     editAddress
   },
+  mounted(){
+    this.getAddress();
+  },
   data() {
     return {
       mostAddressNum: 10,
       defaultItem: 0,
       newDialogVisble: false,
-      addressItems: [
-        {
-          usn: "Foo",
-          contact: "110",
-          address: "scut"
-        },
-        {
-          usn: "Bar",
-          contact: "120",
-          address: "China"
-        },
-        {
-          usn: "merlin",
-          contact: "518",
-          address: "avalon"
-        }
-      ]
+      addressItems: []
     };
   },
   methods: {
@@ -137,7 +124,17 @@ export default {
       this.$refs.addAddress.$emit("openDialog");
     },
     addAddressItem(addressItem) {
-      this.addressItems.push(addressItem);
+      // this.addressItems.push(addressItem);
+      let data = {
+        query : "addAddress",
+        data :{
+          user_id:'',
+          session_id : '',
+          name : "",
+          phone : ""
+        }
+      }
+
     },
     editAddressItem(index, addressItem) {
       this.addressItems[index].address = addressItem.address;
@@ -146,6 +143,20 @@ export default {
     },
     changeDefault(index) {
       this.defaultItem = index;
+    },
+    async getAddress(){
+      let data = {
+        query : "getAddress",
+        data : {
+          user_id : '',
+          session_id : ''
+        }
+      }
+      let response = await this.$send(data);
+      if(response.status===1){
+        this.addressItems =  response.data.addresses
+      }
+
     }
   }
 };
