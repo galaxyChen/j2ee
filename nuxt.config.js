@@ -56,8 +56,8 @@ module.exports = {
   },
   proxy: [
     [
-      '/BookStore/', {
-        target: 'http://192.168.20.46:8080/'
+      '/api', {
+        target: 'http://localhost:3001'
       }
     ]
   ]
