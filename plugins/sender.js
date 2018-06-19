@@ -3,8 +3,7 @@ import axios from 'axios'
 
 
 function sender() {
-    let url = 'http://localhost:3001';
-
+    let url = 'http://localhost:3001/api';
     async function send(data) {
         // console.log(data);
         let request = await axios({method: 'post', url: url, data: data}).then((response) => {

@@ -1,6 +1,6 @@
 <template>
 <div>
-  <NavTop :logined='logined' :user='user'></NavTop>
+  <NavTop></NavTop>
 
     <el-main>
         <el-carousel :interval="4000" type="card" height="320px">
@@ -22,7 +22,7 @@
             <hr style="margin-top:-50px;">
 
             <div class="goods" >
-                <img class='goods-img' src="../assets/2.jpg">1
+                <img class='goods-img' src="../assets/2.jpg">
                 <div style="margin-top:-100px;"> 
                     <p style="margin-top:-50px;margin-left:10px;">{{booktitle1}}</p>
                     <p style="margin-top:-100px;margin-left:10px;">价格： {{price1}}</p>
@@ -33,7 +33,7 @@
             </div>
 
             <div class="goods">
-                <img class='goods-img' src="../assets/3.jpg">2
+                <img class='goods-img' src="../assets/3.jpg">
                 <div style="margin-top:-100px;">
                     <p style="margin-top:-50px;margin-left:10px;">{{booktitle2}}</p>
                     <p style="margin-top:-100px;margin-left:10px;">价格： {{price2}}</p>
@@ -44,7 +44,7 @@
             </div>
 
             <div class="goods" >
-                <img class='goods-img' src="../assets/4.jpg">3
+                <img class='goods-img' src="../assets/4.jpg">
                 <div style="margin-top:-100px;">
                     <p style="margin-top:-50px;margin-left:10px;">{{booktitle3}}</p>
                     <p style="margin-top:-100px;margin-left:10px;">价格： {{price3}}</p>
@@ -55,7 +55,7 @@
             </div>
 
             <div class="goods">
-                <img class='goods-img' src="../assets/5.jpg">4
+                <img class='goods-img' src="../assets/5.jpg">
                 <div style="margin-top:-100px;">
                     <p style="margin-top:-50px;margin-left:10px;">{{booktitle4}}</p>
                     <p style="margin-top:-100px;margin-left:10px;">价格： {{price4}}</p>
@@ -75,10 +75,6 @@ import SearchBox from "~/components/SearchBox";
 export default {
   data() {
     return {
-      logined: false,
-      user: {
-        name: ""
-      },
       booktitle1: "新东方GRE词汇1",
       booktitle2: "新东方GRE词汇2",
       booktitle3: "新东方GRE词汇3",
@@ -94,9 +90,7 @@ export default {
     NavTop,
     SearchBox
   },
-  mounted: function() {
-    this.$sendTest();
-  },
+  
   methods: {
     changeValue(value) {
       console.log(value);

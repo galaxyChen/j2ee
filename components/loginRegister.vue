@@ -6,12 +6,12 @@
             <el-tab-pane label="登录" name="login"></el-tab-pane>
             <el-tab-pane label="注册" name="register"></el-tab-pane>
 
-            <el-form ref="loginForm" status-icon :model="loginForm" :rules="loginRules"  label-width="80px" v-show="query=='login'">
+            <el-form  ref="loginForm" status-icon :model="loginForm" :rules="loginRules"  label-width="80px" v-show="query=='login'">
                 <el-form-item label="登录邮箱" prop="usn">
-                    <el-input @input='check("loginForm","usn")' v-model="loginForm.usn"></el-input>
+                    <el-input  @input='check("loginForm","usn")' v-model="loginForm.usn"></el-input>
                 </el-form-item>
                 <el-form-item label="密码" prop="pw">
-                    <el-input @input='check("loginForm","pw")' type="password" v-model="loginForm.pw"></el-input>
+                    <el-input  @input='check("loginForm","pw")' type="password" v-model="loginForm.pw"></el-input>
                 </el-form-item>
                 <el-form-item>
                     <el-button type="primary" @click="submitForm('loginForm')">确定</el-button>
@@ -22,12 +22,12 @@
                 </el-form-item>
             </el-form>
 
-            <el-form ref="regForm" status-icon :model="regForm"  :rules="regRules"  label-width="80px" v-show="query=='register'">
+            <el-form  ref="regForm" status-icon :model="regForm"  :rules="regRules"  label-width="80px" v-show="query=='register'">
                 <el-form-item label="注册邮箱" prop="email">
-                    <el-input @input='check("regForm","email")'  v-model="regForm.email"></el-input>
+                    <el-input  @input='check("regForm","email")'  v-model="regForm.email"></el-input>
                 </el-form-item>
                 <el-form-item label="密码" prop="pw">
-                    <el-input @input='check("regForm","pw")' type="password" v-model="regForm.pw"></el-input>
+                    <el-input  @input='check("regForm","pw")' type="password" v-model="regForm.pw"></el-input>
                 </el-form-item>
 
                 <el-form-item label="确认密码" prop="pw2"> 
@@ -71,7 +71,7 @@
 
 
 <script>
-import Cookies from 'js-cookie'
+import Cookies from "js-cookie";
 
 export default {
   mounted() {
@@ -81,18 +81,14 @@ export default {
     this.$on("closeDialog", function() {
       this.visible = false;
     });
-    Cookies.set('name','user');
-    console.log(Cookies.get('name'))
   },
   data() {
     var validatePw = (rule, value, callback) => {
       if (value === "") {
         callback(new Error("请输入密码"));
-      }
-      else if(value.length>16 || value.length <5){
+      } else if (value.length > 16 || value.length < 5) {
         callback(new Error("长度在 5 到 16 个字符"));
-      } 
-      else {
+      } else {
         if (this.regForm.pw2 !== "") {
           this.$refs.regForm.validateField("pw2");
         }
@@ -166,11 +162,12 @@ export default {
     };
   },
   methods: {
-    check(formName,item) {
-      console.log(this.$refs[formName])
-      this.$refs[formName].validateField(item)
+    check(formName, item) {
+      console.log(this.$refs[formName]);
+      this.$refs[formName].validateField(item);
     },
     submitForm: function(formName) {
+      console.log("login" + formName);
       function serialize(obj) {
         let result = {};
         for (let term in obj) {
@@ -188,21 +185,50 @@ export default {
           if (data.query == "login") data.data = serialize(this.loginForm);
           else if (data.query == "register")
             data.data = serialize(this.regForm);
-          console.log(data);
-          this.visible = false;
-          let response = await this.$send(data);
-          response.then(data=>{
-            if (data.status===1){
-              
-            } else {
-              console.log("error")
-              this.$message.error('错了哦，这是一条错误消息');
+          let response = await this.$axios.send(data);
+
+          if (data.query == "login") this.applyLogin(response);
+          else if (data.query == "register") {
+            if (this.applyRegister(response)) {
+              let newData = {
+                query: "login",
+                data: {
+                  usn: data.data.email,
+                  pw: data.data.pw
+                }
+              };
+              let response = await this.$axios.send(newData);
+              this.applyLogin(response);
             }
-          })
+          }
         } else {
           console.log("error");
         }
       });
+    },
+    applyLogin(response) {
+      if (response.status === 1) {
+        console.log("login success");
+        Cookies.set("user_id", response.data.user_id);
+        Cookies.set("name", response.data.name);
+        Cookies.set("session_id", response.data.session_id);
+        this.$emit("logined");
+
+        this.visible = false;
+      } else {
+        console.log("error");
+        this.$message.error("发生错误：" + response.err);
+      }
+    },
+    applyRegister(response) {
+      if (response.status === 1) {
+        console.log("register success");
+        return true;
+      } else {
+        console.log("error");
+        this.$message.error("发生错误：" + response.err);
+        return false;
+      }
     },
     resetForm(formName) {
       this.$refs[formName].resetFields();
