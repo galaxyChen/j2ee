@@ -3,10 +3,10 @@
         <el-form v-model="addressItem" ref="addressItem">
 
             <el-form-item label="姓名">
-                <el-input v-model="addressItem.usn"></el-input>
+                <el-input v-model="addressItem.name"></el-input>
             </el-form-item>
             <el-form-item label="手机号">
-                <el-input v-model="addressItem.contact"></el-input>
+                <el-input v-model="addressItem.phone"></el-input>
             </el-form-item>
             <el-form-item label="详细地址">
                 <el-input v-model="addressItem.address"></el-input>
@@ -30,8 +30,8 @@ export default {
 
             this.visible = true;
 
-            this.addressItem.usn = this.item.usn
-            this.addressItem.contact = this.item.contact
+            this.addressItem.name = this.item.name
+            this.addressItem.phone = this.item.phone
             this.addressItem.address = this.item.address
         });
         this.$on("closeDialog", function() {
@@ -43,8 +43,8 @@ export default {
             visible: false,
 
             addressItem:{
-                usn:'',
-                contact:'',
+                name:'',
+                phone:'',
                 address:'',
                 address1:''
             }
@@ -58,8 +58,8 @@ export default {
         },
         submitForm() {
             let newAddress = {
-                usn : this.addressItem.usn,
-                contact: this.addressItem.contact,
+                name : this.addressItem.name,
+                phone: this.addressItem.phone,
                 address:this.addressItem.address
             }
             this.visible = false;

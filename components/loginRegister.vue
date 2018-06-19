@@ -82,7 +82,7 @@ export default {
   },
   data() {
     var validatePw = (rule, value, callback) => {
-      if (value === "") {
+      if (value == "") {
         callback(new Error("请输入密码"));
       }
       else if(value.length>16 || value.length <5){
@@ -101,7 +101,7 @@ export default {
       }
     };
     var validatePw2 = (rule, value, callback) => {
-      if (value === "") {
+      if (value == "") {
         callback(new Error("请再次输入密码"));
       } else if (value !== this.regForm.pw) {
         callback(new Error("两次输入密码不一致!"));
@@ -193,16 +193,6 @@ export default {
           if (data.query == "login") data.data = serialize(this.loginForm);
           else if (data.query == "register")
             data.data = serialize(this.regForm);
-<<<<<<< HEAD
-
-          console.log("test")
-
-          if(data.query=="login")
-            this.applyLogin(data)
-
-          else if(data.query == "register")
-            this.applyLogin(data)
-=======
           let response = await this.$axios.send(data);
 
           if(data.query=="login")
@@ -211,14 +201,17 @@ export default {
             if(this.applyRegister(response)){
               let newData = {
                 query :"login",
-                usn : data.usn,
-                pw : data.pw
+                data:{
+                  
+                  usn : data.data.email,
+                  pw : data.data.pw
+                }
+
               }
               let response = await this.$axios.send(newData);
               this.applyLogin(response)
             }
           }
->>>>>>> e0c305d98e6712e2b96ab973aef38d86120f595b
         
         } else {
           console.log("error");
@@ -229,9 +222,8 @@ export default {
 
     async applyLogin(data){
 
-      let response = await this.$send(data);
-
-      if (response.status===1){
+      let response = await this.$axios.send(data);
+      if (response.status==1){
         console.log("login success")
         Cookies.set('user_id',response.data.user_id);
         Cookies.set('name',response.data.name);
@@ -241,18 +233,12 @@ export default {
         this.visible = false;
       } else {
         console.log("error")
-<<<<<<< HEAD
-        this.$message.error('错了哦，这是一条登录错误消息');
-      } 
- 
-=======
         this.$message.error('发生错误：'+response.err);
       }  
->>>>>>> e0c305d98e6712e2b96ab973aef38d86120f595b
     },
     async applyRegister(data){
       
-      if (response.status===1){
+      if (response.status==1){
         console.log("register success")
         let newData = {
           query :"login",
@@ -262,12 +248,8 @@ export default {
         this.applyLogin(newData)
       } else {
         console.log("error")
-<<<<<<< HEAD
-        this.$message.error('错了哦，这是一条注册错误消息');
-=======
         this.$message.error('发生错误：'+response.err);
         return false;
->>>>>>> e0c305d98e6712e2b96ab973aef38d86120f595b
       }  
     },
     resetForm(formName) {

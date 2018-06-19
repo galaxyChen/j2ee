@@ -127,16 +127,10 @@ export default {
         this.$router.push({ path: "/" });
       }
     },
-<<<<<<< HEAD
-    logined(){
-      let name = Cookies.get('name')
-      if (name){
-=======
     logined() {
       console.log("haha");
       let name = Cookies.get("name");
       if (name) {
->>>>>>> e0c305d98e6712e2b96ab973aef38d86120f595b
         this.user.name = name;
         this.login = true;
       }

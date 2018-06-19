@@ -21,7 +21,7 @@
                   收货人：{{item.usn}}
                 </div>
                 <div class="cardItem">
-                  联系方式：{{item.contact}}
+                  联系方式：{{item.phone}}
                 </div>
                 <div class="cardItem">
                   收货地址：{{item.address}}
@@ -139,7 +139,7 @@ export default {
     editAddressItem(index, addressItem) {
       this.addressItems[index].address = addressItem.address;
       this.addressItems[index].usn = addressItem.usn;
-      this.addressItems[index].contact = addressItem.contact;
+      this.addressItems[index].phone = addressItem.phone;
     },
     changeDefault(index) {
       this.defaultItem = index;
@@ -152,9 +152,13 @@ export default {
           session_id : ''
         }
       }
-      let response = await this.$send(data);
+      let response = await this.$axios.send(data)
       if(response.status===1){
+
         this.addressItems =  response.data.addresses
+      }
+      else{
+        this.$message.error('发生错误：'+response.err);
       }
 
     }

@@ -3,11 +3,11 @@
 
         <el-form status-icon :model="addressItem" ref="addressItem" :rules="addressRule">
 
-            <el-form-item label="姓名" prop="usn">
-                <el-input v-model="addressItem.usn" ></el-input>
+            <el-form-item label="姓名" prop="name">
+                <el-input v-model="addressItem.name" ></el-input>
             </el-form-item>
-            <el-form-item label="手机号" prop="contact">
-                <el-input v-model="addressItem.contact"></el-input>
+            <el-form-item label="手机号" prop="phone">
+                <el-input v-model="addressItem.phone"></el-input>
             </el-form-item>
             
             <mapLinkage ref="map" @updateArea="updateArea"></mapLinkage>
@@ -42,17 +42,17 @@ export default {
         return {
             visible: false,
             addressItem:{
-                usn:'',
-                contact:'',
+                name:'',
+                phone:'',
                 address:'',
                 area:''
             },
             addressRule:{
-                usn: [
+                name: [
                     { required: true, message: "收货人不能为空", trigger: "blur" },
                     { min: 1, max: 16, message: "长度小于16个字符", trigger: "blur" }
                 ],
-                contact:[
+                phone:[
                     { required: true, message: "联系方式不能为空", trigger: "blur" },
                     { min: 8, max: 15, message: "长度在 8 到 15 个字符", trigger: "blur" }
                 ],
@@ -73,8 +73,8 @@ export default {
         },
         submitForm() {
             let newAddress = {
-                usn : this.addressItem.usn,
-                contact: this.addressItem.contact,
+                name : this.addressItem.name,
+                phone: this.addressItem.phone,
                 address: this.addressItem.area+this.addressItem.address
             }
             this.visible = false;
