@@ -17,6 +17,9 @@
                     <el-button type="primary" @click="submitForm('loginForm')">确定</el-button>
                     <el-button @click="resetForm('loginForm')">重置</el-button>
                 </el-form-item>
+                <el-form-item>
+                  <el-button type="text">忘记密码</el-button>
+                </el-form-item>
             </el-form>
 
             <el-form ref="regForm" status-icon :model="regForm"  :rules="regRules"  label-width="80px" v-show="query=='register'">
