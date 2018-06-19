@@ -8,6 +8,7 @@ export default function ({$axios, redirect}) {
         if (URL!=undefined){
             url = URL
         }
+        console.log(url)
         let request = await $axios
             .post(url, data)
             .then((response) => {
