@@ -77,7 +77,7 @@ export default {
         session_id: session_id
       }
     };
-    let response = await this.$axios.send(data);
+    let response = await this.$axios.send(data,'/BookStore/personalCenter/');
     if (response.status === 1) {
       this.question = response.data.question;
     } else if (response.status === -1) {

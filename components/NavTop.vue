@@ -55,7 +55,7 @@ export default {
     this.$on('changeName',this.changeName)
     //预登录
     let user_id = Cookies.get("user_id");
-    if (user_id) {
+    if (user_id!=undefined) {
       let data = {
         query: "check",
         data: {

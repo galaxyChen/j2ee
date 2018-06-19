@@ -2,9 +2,14 @@ export default function ({$axios, redirect}) {
     $axios.onRequest(config => {
     })
 
-    $axios.send = async function (data) {
+    $axios.send = async function (data,URL) {
+        console.log(data)
+        let url = '/BookStore/'
+        if (URL!=undefined){
+            url = URL
+        }
         let request = await $axios
-            .post('/api', data)
+            .post(url, data)
             .then((response) => {
                 // console.log(response)
                 return response.data
