@@ -110,7 +110,7 @@ export default {
           };
           let check = await this.$axios.send(data);
           if (check.status === 1) {
-            this.$router.push({ path: `/home/` });
+            this.$router.push({ path: `/home/${user_id}` });
           } else {
             this.$message.error("操作失败!请重新登录");
             Cookies.remove("name");

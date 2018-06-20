@@ -2,13 +2,13 @@
   <div class="search-box" style="text-align:center;" >
       <el-row :gutter="20" style="border-radius:4px; min-height: 36px;">
           <el-col :span="14" style="margin-left:10%;padding:10px;">
-                      <el-input class="index-input-box" placeholder="请输入内容"  prefix-icon="el-icon-search" ></el-input>
+                      <el-input v-model="search_content" class="index-input-box" placeholder="请输入内容"  prefix-icon="el-icon-search" ></el-input>
           </el-col>
           <el-col :span="4" style="padding-top:8px;height:36px;">
               <el-cascader class="index-input-box" :options="options" change-on-select @change='changeValue'></el-cascader>
           </el-col>
           <el-col :span="2" style="padding:10px;"> 
-                      <el-button size='small' class="index-input-box" type="primary"  >搜 索 </el-button>
+                      <el-button @click='getSearch' size='small' class="index-input-box" type="primary"  >搜 索 </el-button>
               </el-col>
       </el-row> 
   </div>
@@ -24,7 +24,13 @@
 export default {
   data() {
     return {
+      search_content:'',
       options: [
+        //全部
+        {
+          value: "全部",
+          label: "全部"
+        },
         //小说 -> 其子分类
         {
           value: "xiaoshuo",
@@ -179,6 +185,9 @@ export default {
   methods: {
     changeValue(value) {
       console.log(value);
+    },
+    getSearch(){
+
     }
   }
 };
