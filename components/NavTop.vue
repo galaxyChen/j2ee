@@ -54,13 +54,13 @@ export default {
     //事件注册
     this.$on('changeName',this.changeName)
     //预登录
-    let user_id = Cookies.get("user_id");
-    if (user_id!=undefined) {
+    let userId = Cookies.get("userId");
+    if (userId!=undefined) {
       let data = {
         query: "check",
         data: {
-          user_id: user_id,
-          session_id: Cookies.get("session_id")
+          userId: userId,
+          sessionId: Cookies.get("sessionId")
         }
       };
       let check = this.$axios.send(data);
@@ -68,7 +68,7 @@ export default {
         if (response.status === 1) {
           this.login = true;
           this.user.name = Cookies.get("name");
-          this.user.user_id = Cookies.get("user_id");
+          this.user.userId = Cookies.get("userId");
         }
       });
     }
@@ -81,7 +81,7 @@ export default {
       login: false,
       user: {
         name: "张三",
-        user_id: "1"
+        userId: "1"
       },
       dialogVisible: false
     };
@@ -98,24 +98,24 @@ export default {
       }
 
       if (key === "home") {
-        let user_id = Cookies.get("user_id");
-        let session_id = Cookies.get("session_id");
-        if (user_id && session_id) {
+        let userId = Cookies.get("userId");
+        let sessionId = Cookies.get("sessionId");
+        if (userId && sessionId) {
           let data = {
             query: "check",
             data: {
-              user_id: user_id,
-              session_id: session_id
+              userId: userId,
+              sessionId: sessionId
             }
           };
           let check = await this.$axios.send(data);
           if (check.status === 1) {
-            this.$router.push({ path: `/home/${user_id}` });
+            this.$router.push({ path: `/home/${userId}` });
           } else {
             this.$message.error("操作失败!请重新登录");
             Cookies.remove("name");
-            Cookies.remove("user_id");
-            Cookies.remove("session_id");
+            Cookies.remove("userId");
+            Cookies.remove("sessionId");
             this.login = false;
             this.user = {};
             this.$router.push({ path: "/" });
@@ -137,11 +137,11 @@ export default {
     },
     async signout() {
       console.log("sign out");
-      let user_id = Cookies.get("user_id");
+      let userId = Cookies.get("userId");
       let data = {
         query: "signout",
         data: {
-          user_id: user_id
+          userId: userId
         }
       };
       let response = await this.$axios.send(data);
@@ -149,8 +149,8 @@ export default {
         this.$message.error(""+response.err);
       }
       Cookies.remove("name");
-      Cookies.remove("user_id");
-      Cookies.remove("session_id");
+      Cookies.remove("userId");
+      Cookies.remove("sessionId");
       this.login = false;
       this.user = {};
       this.$router.push({ path: "/" });

@@ -209,9 +209,9 @@ export default {
     applyLogin(response) {
       if (response.status === 1) {
         console.log("login success");
-        Cookies.set("user_id", response.data.user_id);
+        Cookies.set("userId", response.data.userId);
         Cookies.set("name", response.data.name);
-        Cookies.set("session_id", response.data.session_id);
+        Cookies.set("sessionId", response.data.sessionId);
         this.$emit("logined");
 
         this.visible = false;

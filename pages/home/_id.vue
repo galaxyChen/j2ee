@@ -26,22 +26,22 @@ export default {
     addressBook
   },
   async mounted() {
-    let user_id = Cookies.get("user_id");
-    let session_id = Cookies.get("session_id");
-    if (user_id && session_id) {
+    let userId = Cookies.get("userId");
+    let sessionId = Cookies.get("sessionId");
+    if (userId && sessionId) {
         let data = {
         query: "check",
         data: {
-            user_id: user_id,
-            session_id: session_id
+            userId: userId,
+            sessionId: sessionId
         }
         };
         let check = await this.$axios.send(data);
         if (check.status != 1) {
             this.$message.error("操作失败!请重新登录");
             Cookies.remove("name");
-            Cookies.remove("user_id");
-            Cookies.remove("session_id");
+            Cookies.remove("userId");
+            Cookies.remove("sessionId");
             this.login = false;
             this.user = {};
             this.$router.push({ path: "/" });

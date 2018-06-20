@@ -76,9 +76,9 @@ app.post('/BookStore/', function (req, res) {
         let response = {
             status: 1, //1是登录成功，0是登录失败
             data: {
-                user_id: 1, //该用户的用户id
+                userId: 1, //该用户的用户id
                 name: 'tester', //该用户的昵称
-                session_id: 'asdfghjkl', //登录成功的时候返回这次登录的session_id
+                sessionId: 'asdfghjkl', //登录成功的时候返回这次登录的sessionId
             },
             err: '数据库访问失败', //登录失败的时候返回出错原因
         };
