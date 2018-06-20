@@ -37,6 +37,10 @@ app.post('/BookStore/', function (req, res) {
         console.log(typeof data.img)
     }
 
+    if (data['query']=='signout'){
+      res.json({status:1})
+    }
+
     if (data['query']=='getRecent'){
         let response = {
             status:1,

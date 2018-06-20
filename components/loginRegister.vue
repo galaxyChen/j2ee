@@ -194,8 +194,8 @@ export default {
               let newData = {
                 query: "login",
                 data: {
-                  usn: data.data.email,
-                  pw: data.data.pw
+                  email: data.data.email,
+                  password: data.data.password
                 }
               };
               let response = await this.$axios.send(newData);
