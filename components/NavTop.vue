@@ -112,13 +112,7 @@ export default {
           if (check.status === 1) {
             this.$router.push({ path: `/home/${userId}` });
           } else {
-            this.$message.error("操作失败!请重新登录");
-            Cookies.remove("name");
-            Cookies.remove("userId");
-            Cookies.remove("sessionId");
-            this.login = false;
-            this.user = {};
-            this.$router.push({ path: "/" });
+            this.signout()
           }
         }
       }
@@ -129,9 +123,9 @@ export default {
     },
     logined() {
       console.log("haha");
-      let name = Cookies.get("name");
-      if (name) {
-        this.user.name = name;
+      let userName = Cookies.get("userName");
+      if (userName) {
+        this.user.userName = userName;
         this.login = true;
       }
     },
@@ -148,7 +142,7 @@ export default {
       if (response.status === 0) {
         this.$message.error(""+response.err);
       }
-      Cookies.remove("name");
+      Cookies.remove("userName");
       Cookies.remove("userId");
       Cookies.remove("sessionId");
       this.login = false;
