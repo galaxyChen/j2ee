@@ -1,10 +1,10 @@
 <template>
     <div>
-        <NavTop :logine='logined'></NavTop>
+        <NavTop></NavTop>
         <el-row>
             <el-col :span='12'>
                 <div>
-                    <img class='item-img' src='~/static/book.png'/>
+                    <img class='item-img' :src='item.pictureAddress'/>
                 </div>
             </el-col>
             <el-col :span='9'>
@@ -73,8 +73,20 @@ import Detail from '~/components/item/Detail'
 import Describe from '~/components/item/Describe'
 import Question from '~/components/item/Question'
 export default {
-    mounted(){
+    async mounted(){
         console.log(this.$route.params.id)
+        let data = {
+            query:'getItemDetail',
+            data:{
+                itemId:this.$route.params.id
+            }
+        }
+        let response = await this.$axios.send(data)
+        if (response.status==1){
+            this.item = response.data.product;
+        } else {
+            this.$message.error("发生错误："+response.err)
+        }
     },
     components:{
         NavTop,
@@ -84,22 +96,10 @@ export default {
     },
     data(){
         return {
-            logined:false,
             number:1,
             activeTab:'detail',
             currentComponent:'Describe',
-            item:{
-                title:"三体",
-                author:"刘慈欣",
-                publisher:"重庆出版社",
-                publish_date:"2008.1.1",
-                seller:'张三',
-                mail_free:"是",
-                date:"2018.1.1",
-                price:15,
-                store:2,
-                describe:"全新三体，未拆封"
-            }
+            item:{}
         }
     },
     methods:{

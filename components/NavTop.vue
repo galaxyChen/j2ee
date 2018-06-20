@@ -13,7 +13,7 @@
           <el-menu-item @click="signout" index="signout" class="NavRight">退出登录</el-menu-item>
           <el-menu-item index="home" class="NavRight">个人中心</el-menu-item>
           <el-menu-item index="index" class="NavRight">首页</el-menu-item>
-          <el-menu-item index="welcome" class="NavRight" >欢迎，{{user.userName}}</el-menu-item>
+          <el-menu-item index="welcome" class="NavRight" >欢迎，{{userName}}</el-menu-item>
         
         </el-menu>
         <Login ref='login' :dialogVisible='dialogVisible'></Login>
@@ -67,8 +67,8 @@ export default {
       check.then(response => {
         if (response.status === 1) {
           this.login = true;
-          this.user.userName = Cookies.get("userName");
-          this.user.userId = Cookies.get("userId");
+          this.userName = Cookies.get("userName");
+          this.userId = Cookies.get("userId");
         }
       });
     }
@@ -79,17 +79,16 @@ export default {
   data() {
     return {
       login: false,
-      user: {
-        nauserNameme: "张三",
-        userId: "1"
-      },
+      userName:'',
+      userId:'',
       dialogVisible: false
     };
   },
   methods: {
-    changeName(){
-      let userName = Cookies.get('userName')
-      this.user.userName = userName;
+    changeName(newName){
+      console.log('navtop')
+      console.log(newName)
+      this.userName = newName;
     },
     async handleSelect(key, keyPath) {
       console.log(key, keyPath);
@@ -125,7 +124,7 @@ export default {
       console.log("haha");
       let userName = Cookies.get("userName");
       if (userName) {
-        this.user.userName = userName;
+        this.userName = userName;
         this.login = true;
       }
     },

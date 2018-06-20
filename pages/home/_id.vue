@@ -73,8 +73,9 @@ export default {
       if (index === "3-1") this.type = 1;
       if (index === "3-2") this.type = 2;
     },
-    changeName(){
-      this.$refs.navtop.$emit('changeName')
+    changeName(newName){
+      console.log('index')
+      this.$refs.navtop.$emit('changeName',newName)
     }
   }
 };

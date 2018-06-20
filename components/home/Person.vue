@@ -14,8 +14,6 @@
             <div class='person-change-pw-box'>
                 <el-collapse-transition>
                     <el-form v-if='changePw'>
-                        <a class='person-question'>密保问题：{{question}}</a>
-                        <el-input v-model='answer' class='person-input-box' placeholder="密保答案" size='medium'></el-input>
                         <el-input type='password' v-model='oldpw' class='person-input-box'  size='medium'>
                             <template slot='prepend'>旧密码</template>
                         </el-input>
@@ -67,30 +65,14 @@
 <script>
 import Cookies from "js-cookie";
 export default {
-  async mounted() {
-    let userId = Cookies.get("userId");
-    let sessionId = Cookies.get("sessionId");
-    let data = {
-      query: "getPwQuestion",
-      data: {
-        userId: userId,
-        sessionId: sessionId
-      }
-    };
-    let response = await this.$axios.send(data);
-    if (response.status === 1) {
-      this.question = response.data.question;
-    } else if (response.status === -1) {
-      this.signout();
-    } else {
-      this.$message.error("发生错误：" + response.err);
-    }
+  mounted() {
+    
   },
   data() {
     return {
       change: true,
       changePw: false,
-      question: "你的生日是?",
+      securityQuestion: "你的生日是?",
       name: "",
       answer: "",
       oldpw: "",
@@ -123,7 +105,7 @@ export default {
               query: "changeName",
               data: {
                 userId: userId,
-                new_name: newName,
+                newName: newName,
                 sessionId: sessionId
               }
             };
@@ -132,18 +114,18 @@ export default {
           .then(response => {
             if (response.status == 1) {
               this.name = newName;
-              Cookies.set("name", newName);
+              Cookies.set("userName", newName);
               this.change = !this.change;
               this.$message({
                 type: "success",
                 message: "修改成功!"
               });
-              this.$emit("changeName");
+              this.$emit("changeName",newName);
             } else if (response.status == -1) {
               this.signout();
             } else {
               this.$message.error("发生错误：" + response.err);
-              let oldName = Cookies.get("name");
+              let oldName = Cookies.get("userName");
               this.change = !this.change;
               this.name = oldName;
             }
@@ -152,7 +134,7 @@ export default {
     },
     signout() {
       this.$message.error("登录过期!请重新登录");
-      Cookies.remove("name");
+      Cookies.remove("userName");
       Cookies.remove("userId");
       Cookies.remove("sessionId");
       this.$router.push({ path: "/" });
@@ -161,14 +143,9 @@ export default {
       console.log(this.answer);
       console.log(this.oldpw);
       console.log(this.newpw);
-      let answer = this.answer;
       let oldpw = this.oldpw;
       let newpw = this.newpw;
       let newpw2 = this.newpw2;
-      if (answer === "") {
-        this.$message.error("密保答案为空");
-        return;
-      }
       if (newpw != newpw2) {
         this.$message.error("两次新密码输入不一致！");
         return;
@@ -179,8 +156,8 @@ export default {
         query: "changePassword",
         data: {
           userId: userId,
-          pw: oldpw,
-          new_pw: newpw,
+          password: oldpw,
+          newPassword: newpw,
           sessionId: sessionId
         }
       };
@@ -194,7 +171,7 @@ export default {
         this.signout();
       } else {
         this.$message.error("修改失败!" + response.err);
-        let oldName = Cookies.get("name");
+        let oldName = Cookies.get("userName");
         this.change = !this.change;
         this.name = oldName;
       }
@@ -202,7 +179,7 @@ export default {
   },
   computed: {
     user_name() {
-      let name = Cookies.get("name");
+      let name = Cookies.get("userName");
       return name;
     }
   }

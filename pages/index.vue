@@ -70,7 +70,7 @@ export default {
   
   methods: {
     lookDetail(item_id){
-      console.log(item_id)
+      // console.log(item_id)
       this.$router.push({ path: `/item/${item_id}` })
     }
   },
