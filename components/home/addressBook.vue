@@ -129,8 +129,8 @@ export default {
         let data = {
           query : "deleteAddress",
           data :{
-            user_id:'',
-            session_id : '',
+            userId:'',
+            sessionId : '',
             address_id : this.addressItems[index].address_id
           }
         }
@@ -155,8 +155,8 @@ export default {
       let data = {
         query : "addAddress",
         data :{
-          user_id:'',
-          session_id : '',
+          userId:'',
+          sessionId : '',
           name : addressItem.name,
           phone : addressItem.phone,
           address : addressItem.address
@@ -178,8 +178,8 @@ export default {
       let data = {
         query : "editAddress",
         data :{
-          user_id:'',
-          session_id : '',
+          userId:'',
+          sessionId : '',
           name : addressItem.name,
           phone : addressItem.phone,
           address : addressItem.address,
@@ -202,8 +202,8 @@ export default {
       let data = {
         query : "getAddress",
         data : {
-          user_id : '',
-          session_id : ''
+          userId : '',
+          sessionId : ''
         }
       }
       let response = await this.$axios.send(data)

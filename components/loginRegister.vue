@@ -7,11 +7,11 @@
             <el-tab-pane label="注册" name="register"></el-tab-pane>
 
             <el-form  ref="loginForm" status-icon :model="loginForm" :rules="loginRules"  label-width="80px" v-show="query=='login'">
-                <el-form-item label="登录邮箱" prop="usn">
-                    <el-input  @input='check("loginForm","usn")' v-model="loginForm.usn"></el-input>
+                <el-form-item label="登录邮箱" prop="email">
+                    <el-input  @input='check("loginForm","email")' v-model="loginForm.email"></el-input>
                 </el-form-item>
-                <el-form-item label="密码" prop="pw">
-                    <el-input  @input='check("loginForm","pw")' type="password" v-model="loginForm.pw"></el-input>
+                <el-form-item label="密码" prop="password">
+                    <el-input  @input='check("loginForm","password")' type="password" v-model="loginForm.password"></el-input>
                 </el-form-item>
                 <el-form-item>
                     <el-button type="primary" @click="submitForm('loginForm')">确定</el-button>
@@ -23,23 +23,23 @@
                 <el-form-item label="注册邮箱" prop="email">
                     <el-input  @input='check("regForm","email")'  v-model="regForm.email"></el-input>
                 </el-form-item>
-                <el-form-item label="密码" prop="pw">
-                    <el-input  @input='check("regForm","pw")' type="password" v-model="regForm.pw"></el-input>
+                <el-form-item label="密码" prop="password">
+                    <el-input  @input='check("regForm","password")' type="password" v-model="regForm.password"></el-input>
                 </el-form-item>
 
-                <el-form-item label="确认密码" prop="pw2"> 
-                    <el-input @input='check("regForm","pw2")' type="password" v-model="regForm.pw2"></el-input>
+                <el-form-item label="确认密码" prop="password2"> 
+                    <el-input @input='check("regForm","password2")' type="password" v-model="regForm.password2"></el-input>
                 </el-form-item>
                 
-                <el-form-item label="昵称" prop="usn">
-                    <el-input @input='check("regForm","usn")' v-model="regForm.usn"></el-input>
+                <el-form-item label="昵称" prop="userName">
+                    <el-input @input='check("regForm","userName")' v-model="regForm.userName"></el-input>
                 </el-form-item>
-                <el-form-item label="密保问题" prop="question">
-                    <el-input @input='check("regForm","question")' type="textarea" maxlength=100 v-model="regForm.question" placeholder="不超过100个字符"></el-input>
+                <el-form-item label="密保问题" prop="securityQuestion">
+                    <el-input @input='check("regForm","securityQuestion")' type="textarea" maxlength=100 v-model="regForm.securityQuestion" placeholder="不超过100个字符"></el-input>
                 </el-form-item>
 
-                <el-form-item label="密保回答" prop="answer">
-                    <el-input @input='check("regForm","answer")' type="textarea" maxlength=50 v-model="regForm.answer" placeholder="不超过50个字符"></el-input>
+                <el-form-item label="密保回答" prop="securityAnswer">
+                    <el-input @input='check("regForm","securityAnswer")' type="textarea" maxlength=50 v-model="regForm.securityAnswer" placeholder="不超过50个字符"></el-input>
                 </el-form-item>
 
                 <el-form-item>
@@ -114,25 +114,20 @@ export default {
         password: ""
       },
       regForm: {
-        usn: "",
+        userName: "",
         email: "",
-        pw: "",
-        pw2: "",
-        question: "",
-        answer: ""
+        password: "",
+        password2: "",
+        securityQuestion: "",
+        securityAnswer: ""
       },
       query: "login",
       loginRules: {
-        usn: [
-          {
-            type: "email",
-            required: true,
-            message: "请输出正确的邮箱",
-            trigger: "blur"
-          },
+        email: [
+          { type: "email", required: true, message: "请输出正确的邮箱", trigger: "blur" },
           { min: 1, max: 30, message: "长度小于30个字符", trigger: "blur" }
         ],
-        pw: [
+        password: [
           { required: true, message: "密码不能为空", trigger: "blur" },
           { min: 5, max: 16, message: "长度在 5 到 16 个字符", trigger: "blur" }
         ]
@@ -147,17 +142,17 @@ export default {
           },
           { min: 1, max: 30, message: "长度小于30个字符", trigger: "blur" }
         ],
-        usn: [
+        userName: [
           { required: true, message: "昵称不能为空", trigger: "blur" },
           { min: 1, max: 20, message: "长度小于20个字符", trigger: "blur" }
         ],
-        pw: [{ required: true, validator: validatePw, trigger: "blur" }],
-        pw2: [{ required: true, validator: validatePw2, trigger: "blur" }],
-        question: [
+        password: [{ required: true, validator: validatePw, trigger: "blur" }],
+        password2: [{ required: true, validator: validatePw2, trigger: "blur" }],
+        securityQuestion: [
           { required: true, message: "密保问题不能为空", trigger: "blur" },
           { min: 1, max: 100, message: "长度小于100个字符", trigger: "blur" }
         ],
-        answer: [
+        securityAnswer: [
           { required: true, message: "密保回答不能为空", trigger: "blur" },
           { min: 1, max: 50, message: "长度小于50个字符", trigger: "blur" }
         ]

@@ -68,13 +68,13 @@
 import Cookies from "js-cookie";
 export default {
   async mounted() {
-    let user_id = Cookies.get("user_id");
-    let session_id = Cookies.get("session_id");
+    let userId = Cookies.get("userId");
+    let sessionId = Cookies.get("sessionId");
     let data = {
       query: "getPwQuestion",
       data: {
-        user_id: user_id,
-        session_id: session_id
+        userId: userId,
+        sessionId: sessionId
       }
     };
     let response = await this.$axios.send(data);
@@ -117,14 +117,14 @@ export default {
           type: "warning"
         })
           .then(() => {
-            let user_id = Cookies.get("user_id");
-            let session_id = Cookies.get("session_id");
+            let userId = Cookies.get("userId");
+            let sessionId = Cookies.get("sessionId");
             let data = {
               query: "changeName",
               data: {
-                user_id: user_id,
+                userId: userId,
                 new_name: newName,
-                session_id: session_id
+                sessionId: sessionId
               }
             };
             return this.$axios.send(data);
@@ -153,8 +153,8 @@ export default {
     signout() {
       this.$message.error("登录过期!请重新登录");
       Cookies.remove("name");
-      Cookies.remove("user_id");
-      Cookies.remove("session_id");
+      Cookies.remove("userId");
+      Cookies.remove("sessionId");
       this.$router.push({ path: "/" });
     },
     async changepPw() {
@@ -173,15 +173,15 @@ export default {
         this.$message.error("两次新密码输入不一致！");
         return;
       }
-      let user_id = Cookies.get("user_id");
-      let session_id = Cookies.get("session_id");
+      let userId = Cookies.get("userId");
+      let sessionId = Cookies.get("sessionId");
       let data = {
         query: "changePassword",
         data: {
-          user_id: user_id,
+          userId: userId,
           pw: oldpw,
           new_pw: newpw,
-          session_id: session_id
+          sessionId: sessionId
         }
       };
       let response = await this.$axios.send(data);

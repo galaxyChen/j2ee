@@ -78,7 +78,7 @@ app.post('/BookStore/', function (req, res) {
             data: {
                 userId: 1, //该用户的用户id
                 userName: 'tester', //该用户的昵称
-                sessionId: 'asdfghjkl', //登录成功的时候返回这次登录的session_id
+                sessionId: 'asdfghjkl', //登录成功的时候返回这次登录的sessionId
             },
             err: '数据库访问失败', //登录失败的时候返回出错原因
         };
