@@ -81,7 +81,7 @@ export default {
   },
   data() {
     var validatePw = (rule, value, callback) => {
-      if (value === "") {
+      if (value == "") {
         callback(new Error("请输入密码"));
       } else if (value.length > 16 || value.length < 5) {
         callback(new Error("长度在 5 到 16 个字符"));
@@ -93,7 +93,7 @@ export default {
       }
     };
     var validatePw2 = (rule, value, callback) => {
-      if (value === "") {
+      if (value == "") {
         callback(new Error("请再次输入密码"));
       } else if (value !== this.regForm.pw) {
         callback(new Error("两次输入密码不一致!"));
@@ -174,11 +174,14 @@ export default {
         }
         return result;
       }
+      
       this.$refs[formName].validate(async valid => {
+        
         if (valid) {
           let data = {
             query: this.query
           };
+          
           if (data.query == "login") data.data = serialize(this.loginForm);
           else if (data.query == "register")
             data.data = serialize(this.regForm);
