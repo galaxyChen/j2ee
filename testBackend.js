@@ -77,7 +77,7 @@ app.post('/BookStore/', function (req, res) {
             status: 1, //1是登录成功，0是登录失败
             data: {
                 userId: 1, //该用户的用户id
-                name: 'tester', //该用户的昵称
+                userName: 'tester', //该用户的昵称
                 sessionId: 'asdfghjkl', //登录成功的时候返回这次登录的sessionId
             },
             err: '数据库访问失败', //登录失败的时候返回出错原因
@@ -90,52 +90,129 @@ app.post('/BookStore/', function (req, res) {
             status:1,
             err:"数据库访问失败"
         }
-        res.json(response)
+
+    
+
+    // console.log(response)
+    res.json(response)
+  }
+  var addresses= [
+    {
+      name: "Foo",
+      phone: "110",
+      address: "scut",
+      default:true,
+      address_id:111
+    },
+    {
+      name: "Limith",
+      phone: "120",
+      address: "China",
+      default:false,
+      address_id:222
+    },
+    {
+      name: "merlin",
+      phone: "518",
+      address: "avalon",
+      default:false,
+      address_id:333
     }
-    if (data['query'] == 'check'){
-        let response = {
-            status:1
+  ]
+  
+  if (data['query']=='getAddress'){
+    response = {
+      status:1,//1是成功，0是失败
+      data :{
+        addresses :addresses
+      }
+
+    }
+    // console.log(response)
+    res.json(response)
+  }
+
+  if (data['query']=='addAddress'){
+    let newAddress = {
+      name:data.data['name'],
+      phone:data.data['phone'],
+      address:data.data['address'],
+      default:false,
+      address_id:888
+    }
+    addresses.push(newAddress)
+    console.log(addresses)
+    response = {
+      status:1,//1是成功，0是失败
+      err :'',
+      data :{
+        addresses :addresses
+      }
+
+    }
+    // console.log(response)
+    res.json(response)
+  }
+
+  if (data['query']=='deleteAddress'){
+
+    let address_id = data.data.address_id
+    function isDelete(element){
+      return element.address_id!=address_id
+    }
+    addresses = addresses.filter(isDelete)
+    console.log(addresses)
+    response = {
+      status:1,//1是成功，0是失败
+      err :'',
+      data :{
+        addresses :addresses
+      }
+
+    }
+    // console.log(response)
+    res.json(response)
+  }
+
+  if (data['query']=='editAddress'){
+
+    let address_id = data.data.address_id;
+
+    addresses.forEach(element => {
+      if(element.address_id==data.data.address_id){
+        element.name = data.data.name
+        element.phone = data.data.phone,
+        element.address = data.data.address,
+        element.default = data.data.default
+      }
+    });
+    console.log(addresses)
+    response = {
+      status:1,//1是成功，0是失败
+      err :'',
+      data :{
+        addresses :addresses
+      }
+
+    }
+    // console.log(response)
+    res.json(response)
+  }
+
+
+  if (data['query']=='register'){
+    response = {
+        status:1,//1是登录成功，0是登录失败
+        data :{
+            user_id:1,//该用户的用户id
+            name:'tester',//该用户的昵称
+            session_id:'asdfghjkl',//登录成功的时候返回这次登录的session_id
+            err:'',//登录失败的时候返回出错原因
         }
-        res.json(response)
+
     }
-    if (data['query']=='signout'){
-        let response = {
-            status:1,
-            err:"连接失败"
-        }
-        res.json(response)
-    }
-    if (data['query']=='getPwQuestion'){
-        let response = {
-            status:1,
-            data:{
-                question:"你的名字是？"
-            }
-        }
-        
-        res.json(response)
-    }
-    if (data['query']=='changePassword'){
-        let response = {
-            status:1
-        }
-        if (data['data']['pw']=='1') response['status'] = 1;
-        if (data['data']['pw']=='2') response['status'] = 0;
-        if (data['data']['pw']=='3') response['status'] = -1;
-        response['err'] = '未知错误'
-        res.json(response)
-    }
-    if (data['query']=='changeName'){
-        let response = {
-            status:1
-        }
-        
-        if (data['data']['new_name']=='1') response['status'] = 1;
-        if (data['data']['new_name']=='2') response['status'] = 0;
-        if (data['data']['new_name']=='3') response['status'] = -1;
-        response['err'] = '未知错误'
-        res.json(response)
-    }
+    res.json(response)
+  }
 });
 
 app.listen(3001);
