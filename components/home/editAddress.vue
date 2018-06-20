@@ -94,13 +94,24 @@ export default {
             this.$refs.map.init()
         },
         submitForm() {
-            let newAddress = {
-                recipentName : this.addressItem.recipentName,
-                phoneNumber: this.addressItem.phoneNumber,
-                addressDetail:this.addressItem.area+this.addressItem.addressDetail
-            }
-            this.visible = false;
-            this.$emit('submitForm',this.index,newAddress)
+
+            this.$refs['addressItem'].validate(async valid => {
+        
+                if (valid) {
+                    let newAddress = {
+                        recipentName : this.addressItem.recipentName,
+                        phoneNumber: this.addressItem.phoneNumber,
+                        addressDetail:this.addressItem.area+this.addressItem.addressDetail
+                    }
+                    this.visible = false;
+                    this.$emit('submitForm',this.index,newAddress)
+                }
+                else{
+                    console.log("error");
+                }
+
+            });
+
         },
         updateArea(area){
             this.addressItem.area = area

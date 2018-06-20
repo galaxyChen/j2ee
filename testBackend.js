@@ -4,7 +4,29 @@ var app = express();
 var multer  = require('multer')
 var upload = multer({ dest: 'uploads/' })
 
-
+var addresses= [
+  {
+    recipentName: "Foo",
+    phoneNumber: "110",
+    addressDetail: "scut",
+    isDefaultAddress:true,
+    addressId:111
+  },
+  {
+    recipentName: "Lilith",
+    phoneNumber: "120",
+    addressDetail: "China",
+    isDefaultAddress:false,
+    addressId:222
+  },
+  {
+    recipentName: "merlin",
+    phoneNumber: "518",
+    addressDetail: "avalon",
+    isDefaultAddress:false,
+    addressId:333
+  }
+]
 app.use(express.static('uploads'));
 
 app.get('/', function (req, res) {
@@ -100,29 +122,7 @@ app.post('/BookStore/', function (req, res) {
     // console.log(response)
     res.json(response)
   }
-  var addresses= [
-    {
-      recipentName: "Foo",
-      phoneNumber: "110",
-      addressDetail: "scut",
-      default:true,
-      addressId:111
-    },
-    {
-      recipentName: "Limith",
-      phoneNumber: "120",
-      addressDetail: "China",
-      default:false,
-      addressId:222
-    },
-    {
-      recipentName: "merlin",
-      phoneNumber: "518",
-      addressDetail: "avalon",
-      default:false,
-      addressId:333
-    }
-  ]
+
   
   if (data['query']=='getAddress'){
     response = {
