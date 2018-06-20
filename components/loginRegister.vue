@@ -68,7 +68,7 @@
 
 
 <script>
-import Cookies from 'js-cookie'
+import Cookies from "js-cookie";
 
 export default {
   mounted() {
@@ -78,23 +78,15 @@ export default {
     this.$on("closeDialog", function() {
       this.visible = false;
     });
-    
   },
   data() {
     var validatePw = (rule, value, callback) => {
       if (value == "") {
         callback(new Error("请输入密码"));
-      }
-      else if(value.length>16 || value.length <5){
+      } else if (value.length > 16 || value.length < 5) {
         callback(new Error("长度在 5 到 16 个字符"));
-      } 
-      else {
-        let p = /[0-9]/ ;
-        let p1 = /[a-zA-Z]/i
-        if(!p.test(value)){
-          callback(new Error("密码至少包含数字和字母"));
-        }
-        else if (this.regForm.pw2 !== "") {
+      } else {
+        if (this.regForm.pw2 !== "") {
           this.$refs.regForm.validateField("pw2");
         }
         callback();
@@ -167,12 +159,12 @@ export default {
     };
   },
   methods: {
-    check(formName,item) {
-      console.log(this.$refs[formName])
-      this.$refs[formName].validateField(item)
+    check(formName, item) {
+      console.log(this.$refs[formName]);
+      this.$refs[formName].validateField(item);
     },
     submitForm: function(formName) {
-      console.log("login"+formName)
+      console.log("login" + formName);
       function serialize(obj) {
         let result = {};
         for (let term in obj) {
@@ -195,62 +187,48 @@ export default {
             data.data = serialize(this.regForm);
           let response = await this.$axios.send(data);
 
-          if(data.query=="login")
-            this.applyLogin(response)
-          else if(data.query == "register"){
-            if(this.applyRegister(response)){
+          if (data.query == "login") this.applyLogin(response);
+          else if (data.query == "register") {
+            if (this.applyRegister(response)) {
               let newData = {
-                query :"login",
-                data:{
-                  
-                  usn : data.data.email,
-                  pw : data.data.pw
+                query: "login",
+                data: {
+                  usn: data.data.email,
+                  pw: data.data.pw
                 }
-
-              }
+              };
               let response = await this.$axios.send(newData);
-              this.applyLogin(response)
+              this.applyLogin(response);
             }
           }
-        
         } else {
           console.log("error");
         }
       });
     },
-
-
-    async applyLogin(data){
-
-      let response = await this.$axios.send(data);
-      if (response.status==1){
-        console.log("login success")
-        Cookies.set('user_id',response.data.user_id);
-        Cookies.set('name',response.data.name);
-        Cookies.set('session_id',response.data.session_id);
-        this.$emit("logined")
+    applyLogin(response) {
+      if (response.status === 1) {
+        console.log("login success");
+        Cookies.set("user_id", response.data.user_id);
+        Cookies.set("name", response.data.name);
+        Cookies.set("session_id", response.data.session_id);
+        this.$emit("logined");
 
         this.visible = false;
       } else {
-        console.log("error")
-        this.$message.error('发生错误：'+response.err);
-      }  
+        console.log("error");
+        this.$message.error("发生错误：" + response.err);
+      }
     },
-    async applyRegister(data){
-      
-      if (response.status==1){
-        console.log("register success")
-        let newData = {
-          query :"login",
-          usn : data.usn,
-          pw :data.pw
-        }
-        this.applyLogin(newData)
+    applyRegister(response) {
+      if (response.status === 1) {
+        console.log("register success");
+        return true;
       } else {
-        console.log("error")
-        this.$message.error('发生错误：'+response.err);
+        console.log("error");
+        this.$message.error("发生错误：" + response.err);
         return false;
-      }  
+      }
     },
     resetForm(formName) {
       this.$refs[formName].resetFields();

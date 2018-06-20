@@ -47,18 +47,16 @@ module.exports = {
     }
   },
   plugins: [
-    '@/plugins/element-ui', '@/plugins/sender','~/plugins/axios'
+    '@/plugins/element-ui', '@/plugins/sender', '~/plugins/axios'
   ],
   css: ['element-ui/lib/theme-chalk/index.css'],
   modules: ['@nuxtjs/axios'],
-  axios:{
-    proxy:true,
+  axios: {
+    proxy: true
   },
   proxy: [
-    [
-      '/api', {
-        target: 'http://localhost:3001/'
-      }
-    ]
+    'http://localhost:3001/BookStore/',
+    'http://localhost:3001/upload/',
+    // 'http://192.168.20.46:8080/BookStore/test/'
   ]
 }

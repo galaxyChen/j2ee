@@ -1,10 +1,10 @@
 <template>
     <div>
-        <NavBar :logined='logined' :user='user'></NavBar>
+        <NavBar ref='navtop' :logined='logined' :user='user'></NavBar>
         <el-col :span="5">
             <NavLeft @changeTab='changeTab'></NavLeft>
         </el-col>
-        <component  :is="currentMain" :user='user' :type='type'></component>
+        <component @changeName='changeName' :is="currentMain" :user='user' :type='type'></component>
     </div>
 </template>
 
@@ -51,6 +51,9 @@ export default {
       this.currentMain = name[indexPath[0] - 1];
       if (index === "3-1") this.type = 1;
       if (index === "3-2") this.type = 2;
+    },
+    changeName(){
+      this.$refs.navtop.$emit('changeName')
     }
   }
 };

@@ -16,13 +16,13 @@
                     <el-form v-if='changePw'>
                         <a class='person-question'>密保问题：{{question}}</a>
                         <el-input v-model='answer' class='person-input-box' placeholder="密保答案" size='medium'></el-input>
-                        <el-input v-model='oldpw' class='person-input-box'  size='medium'>
+                        <el-input type='password' v-model='oldpw' class='person-input-box'  size='medium'>
                             <template slot='prepend'>旧密码</template>
                         </el-input>
-                        <el-input v-model='newpw' class='person-input-box'  size='medium'>
+                        <el-input type='password' v-model='newpw' class='person-input-box'  size='medium'>
                             <template slot='prepend'>新密码</template>
                         </el-input>
-                        <el-input v-model='newpw2' class='person-input-box'  size='medium'>
+                        <el-input type='password' v-model='newpw2' class='person-input-box'  size='medium'>
                             <template slot='prepend'>重复新密码</template>
                         </el-input>
                         <el-button @click="changepPw" class="person-changepw-button" type="primary">确认修改</el-button>
