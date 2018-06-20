@@ -83,10 +83,16 @@ export default {
     var validatePw = (rule, value, callback) => {
       if (value == "") {
         callback(new Error("请输入密码"));
-      } else if (value.length > 16 || value.length < 5) {
-        callback(new Error("长度在 5 到 16 个字符"));
-      } else {
-        if (this.regForm.pw2 !== "") {
+      } 
+      else if (value.length > 16 || value.length < 6) {
+        callback(new Error("长度在 6 到 16 个字符"));
+      } 
+      else {
+        let p = /^(?=.*\d)(?=.*[a-zA-Z])(?=.*[_])[\da-zA-Z_]+/;
+        if(!p.test(value)){
+          callback(new Error("最少包含数字、字母和下划线"))
+        }
+        else if (this.regForm.pw2 !== "") {
           this.$refs.regForm.validateField("pw2");
         }
         callback();
@@ -104,8 +110,8 @@ export default {
     return {
       visible: false,
       loginForm: {
-        usn: "",
-        pw: ""
+        email: "",
+        password: ""
       },
       regForm: {
         usn: "",
@@ -209,9 +215,9 @@ export default {
     applyLogin(response) {
       if (response.status === 1) {
         console.log("login success");
-        Cookies.set("user_id", response.data.user_id);
-        Cookies.set("name", response.data.name);
-        Cookies.set("session_id", response.data.session_id);
+        Cookies.set("userId", response.data.userId);
+        Cookies.set("userName", response.data.userName);
+        Cookies.set("sessionId", response.data.sessionId);
         this.$emit("logined");
 
         this.visible = false;

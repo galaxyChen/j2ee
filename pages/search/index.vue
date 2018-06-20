@@ -41,6 +41,12 @@ import SearchBox from "~/components/SearchBox";
 import NavTop from "~/components/NavTop";
 import ItemRow from "~/components/search/ItemRow";
 export default {
+  mounted(){
+    console.log(this.$route.params)
+    this.text = this.$route.params.text;
+    this.tag = this.$route.params.tag;
+    this.doSearch()
+  },
   components: {
     SearchBox,
     NavTop,
@@ -48,6 +54,8 @@ export default {
   },
   data() {
     return {
+      text:'',
+      tag:['全部'],
       itemList: [
         {
           id: "1",
@@ -105,6 +113,18 @@ export default {
         result.push(JSON.parse(JSON.stringify(temp)));
       }
       return result;
+    }
+  },
+  methods:{
+    async doSearch(){
+      let data = {
+        query:'search',
+        data:{
+          text:text,
+          tag:tag
+        }
+      }
+    let response = await this.$axios.send(data)
     }
   }
 };
