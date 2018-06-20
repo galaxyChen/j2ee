@@ -18,13 +18,13 @@
 
               <div class="leftCard">
                 <div class="cardItem">
-                  收货人：{{item.name}}
+                  收货人：{{item.recipentName}}
                 </div>
                 <div class="cardItem">
-                  联系方式：{{item.phone}}
+                  联系方式：{{item.phoneNumber}}
                 </div>
                 <div class="cardItem">
-                  收货地址：{{item.address}}
+                  收货地址：{{item.addressDetail}}
                 </div>
               </div>
 
@@ -131,7 +131,7 @@ export default {
           data :{
             userId:'',
             sessionId : '',
-            address_id : this.addressItems[index].address_id
+            addressId : this.addressItems[index].addressId
           }
         }
         let response = await this.$axios.send(data)
@@ -157,9 +157,9 @@ export default {
         data :{
           userId:'',
           sessionId : '',
-          name : addressItem.name,
-          phone : addressItem.phone,
-          address : addressItem.address
+          recipentName : addressItem.recipentName,
+          phoneNumber : addressItem.phoneNumber,
+          addressDetail : addressItem.addressDetail
         }
       }
       let response = await this.$axios.send(data)
@@ -172,19 +172,19 @@ export default {
     },
     async editAddressItem(index, addressItem) {
       // this.addressItems[index].address = addressItem.address;
-      // this.addressItems[index].name = addressItem.name;
-      // this.addressItems[index].phone = addressItem.phone;
+      // this.addressItems[index].recipentName = addressItem.recipentName;
+      // this.addressItems[index].phoneNumber = addressItem.phoneNumber;
       
       let data = {
         query : "editAddress",
         data :{
           userId:'',
           sessionId : '',
-          name : addressItem.name,
-          phone : addressItem.phone,
-          address : addressItem.address,
-          default : this.addressItems[index].default,
-          address_id : this.addressItems[index].address_id
+          recipentName : addressItem.recipentName,
+          phoneNumber : addressItem.phoneNumber,
+          addressDetail : addressItem.addressDetail,
+          isDefaultAddress : this.addressItems[index].isDefaultAddress,
+          addressId : this.addressItems[index].addressId
         }
       }
       let response = await this.$axios.send(data)
