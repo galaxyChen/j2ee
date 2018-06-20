@@ -141,7 +141,7 @@ export default {
           {  
             validator:(rule,value,callback)=>{
               if(value==''){
-                callback(new Error("昵称不能为空"))
+                callback(new Error("请输入昵称"))
               }
               else if(value.length>20){
                 callback(new Error("长度不超过20个字"))
@@ -160,12 +160,12 @@ export default {
         password: [{ required: true, validator: validatePw, trigger: "blur" }],
         password2: [{ required: true, validator: validatePw2, trigger: "blur" }],
         securityQuestion: [
-          { required: true, message: "密保问题不能为空", trigger: "blur" },
-          { min: 1, max: 100, message: "长度小于100个字符", trigger: "blur" }
+          { required: true, message: "请输入密保问题", trigger: "blur" },
+          { min: 1, max: 100, message: "长度小于100个字", trigger: "blur" }
         ],
         securityAnswer: [
-          { required: true, message: "密保回答不能为空", trigger: "blur" },
-          { min: 1, max: 50, message: "长度小于50个字符", trigger: "blur" }
+          { required: true, message: "请输入密保回答", trigger: "blur" },
+          { min: 1, max: 50, message: "长度小于50个字", trigger: "blur" }
         ]
       }
     };

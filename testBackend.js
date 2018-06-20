@@ -4,6 +4,8 @@ var app = express();
 var multer  = require('multer')
 var upload = multer({ dest: 'uploads/' })
 
+
+
 var addresses= [
   {
     recipentName: "Foo",
@@ -25,6 +27,40 @@ var addresses= [
     addressDetail: "avalon",
     isDefaultAddress:false,
     addressId:333
+  }
+]
+var tableData= [
+  {
+    information:'merlin',
+    price: 518,
+    nums:1,
+
+    quantity:10,
+    itemState:1
+  }, 
+  {
+    information:'lilith',
+    price: 518,
+    nums:1,
+
+    quantity:15,
+    itemState:1
+  }, 
+  {
+    information:'bb',
+    price: 518,
+    nums:1,
+
+    quantity:20,
+    itemState:1
+  }, 
+  {
+    information:'aa',
+    price: 518,
+    nums:1,
+
+    quantity:8,
+    itemState:1
   }
 ]
 app.use(express.static('uploads'));
@@ -208,15 +244,27 @@ app.post('/BookStore/', function (req, res) {
     response = {
         status:1,//1是登录成功，0是登录失败
         data :{
-            user_id:1,//该用户的用户id
-            name:'tester',//该用户的昵称
-            session_id:'asdfghjkl',//登录成功的时候返回这次登录的session_id
+            userId:1,//该用户的用户id
+            userName:'tester',//该用户的昵称
+            sessionId:'asdfghjkl',//登录成功的时候返回这次登录的session_id
             err:'',//登录失败的时候返回出错原因
         }
 
     }
     res.json(response)
   }
+
+  if(data['query']=='getShoppingCarList'){
+    response = {
+      status:1,//1是登录成功，0是登录失败
+      data :{
+        shoppingCarList : tableData
+      },
+      err :''
+    }
+    res.json(response)
+  }
+
 });
 
 app.listen(3001);

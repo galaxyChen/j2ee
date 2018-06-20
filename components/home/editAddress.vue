@@ -48,7 +48,7 @@ export default {
     data() {
         var validPhone = (rule,value,callback)=>{
             if(value==""){
-                callback(new Error("联系方式不能为空"));
+                callback(new Error("请输入手机号"));
             }
             else{
                 let p = /^1[3|4|5|7|8][0-9]\d{8}$/;
@@ -71,15 +71,15 @@ export default {
             },
             addressRule:{
                 recipentName: [
-                    { required: true, message: "收货人不能为空", trigger: "blur" },
-                    { min: 1, max: 16, message: "长度小于16个字符", trigger: "blur" }
+                    { required: true, message: "请输入姓名", trigger: "blur" },
+                    { min: 1, max: 15, message: "长度不超过15个字符", trigger: "blur" }
                 ],
                 phoneNumber:[
-                    { validator:validPhone , message:"请输入正确的手机号",trigger:"blur" }
+                    { validator:validPhone ,trigger:"blur" }
                 ],
                 addressDetail:[
-                    { required: true, message: "地址不能为空", trigger: "blur" },
-                    { min: 1, max: 50, message: "长度小于50个字符", trigger: "blur" }
+                    { required: true, message: "请输入详细地址", trigger: "blur" },
+                    { min: 1, max: 50, message: "长度不超过50个字符", trigger: "blur" }
                 ],
             }
         
