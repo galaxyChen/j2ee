@@ -14,9 +14,10 @@
         <el-footer class="footer">
             <el-pagination
               class="pager"
-              :page-size="20"
+              :page-size="10"
               layout="prev, pager, next"
-              :total="1000">
+              :total="size"
+              :current-page.sync='current'>
             </el-pagination>
         </el-footer>
     </el-container>
@@ -57,8 +58,9 @@ export default {
       text: "",
       tag: ["全部"],
       itemList: [
-        
-      ]
+      ],
+      size:0,
+      current:1
     };
   },
   computed: {
@@ -86,12 +88,22 @@ export default {
       let data = {
         query: "search",
         data: {
-          itemTitle: this.text,
+          name: this.text,
+          pageNo:this.current,
+          itemsPerPage:10,
           bookCategory: this.tag
         }
       };
       let response = await this.$axios.send(data);
       this.itemList = response.data.item_list;
+      this.size = response.data.size;
+    }
+  },
+  watch:{
+    '$route'(to,from){
+      this.text = to.query.text;
+      this.tag = to.query.tag;
+      this.doSearch()
     }
   }
 };

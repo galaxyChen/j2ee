@@ -65,7 +65,7 @@ export default {
       };
       let check = this.$axios.send(data);
       check.then(response => {
-        if (response.status === 1) {
+        if (response.status == 1) {
           this.login = true;
           this.userName = Cookies.get("userName");
           this.userId = Cookies.get("userId");
@@ -108,7 +108,7 @@ export default {
             }
           };
           let check = await this.$axios.send(data);
-          if (check.status === 1) {
+          if (check.status == 1) {
             this.$router.push({ path: `/home/${userId}` });
           } else {
             this.signout()

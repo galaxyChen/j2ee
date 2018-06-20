@@ -200,7 +200,7 @@ export default {
           else if (data.query == "register")
             data.data = serialize(this.regForm);
           let response = await this.$axios.send(data);
-
+          console.log(response)
           if (data.query == "login") this.applyLogin(response);
           else if (data.query == "register") {
             if (this.applyRegister(response)) {
