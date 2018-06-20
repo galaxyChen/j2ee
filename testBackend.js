@@ -4,7 +4,29 @@ var app = express();
 var multer  = require('multer')
 var upload = multer({ dest: 'uploads/' })
 
-
+var addresses= [
+  {
+    recipentName: "Foo",
+    phoneNumber: "110",
+    addressDetail: "scut",
+    isDefaultAddress:true,
+    addressId:111
+  },
+  {
+    recipentName: "Lilith",
+    phoneNumber: "120",
+    addressDetail: "China",
+    isDefaultAddress:false,
+    addressId:222
+  },
+  {
+    recipentName: "merlin",
+    phoneNumber: "518",
+    addressDetail: "avalon",
+    isDefaultAddress:false,
+    addressId:333
+  }
+]
 app.use(express.static('uploads'));
 
 app.get('/', function (req, res) {
@@ -100,29 +122,7 @@ app.post('/BookStore/', function (req, res) {
     // console.log(response)
     res.json(response)
   }
-  var addresses= [
-    {
-      name: "Foo",
-      phone: "110",
-      address: "scut",
-      default:true,
-      address_id:111
-    },
-    {
-      name: "Limith",
-      phone: "120",
-      address: "China",
-      default:false,
-      address_id:222
-    },
-    {
-      name: "merlin",
-      phone: "518",
-      address: "avalon",
-      default:false,
-      address_id:333
-    }
-  ]
+
   
   if (data['query']=='getAddress'){
     response = {
@@ -138,11 +138,11 @@ app.post('/BookStore/', function (req, res) {
 
   if (data['query']=='addAddress'){
     let newAddress = {
-      name:data.data['name'],
-      phone:data.data['phone'],
-      address:data.data['address'],
+      recipentName:data.data['recipentName'],
+      phoneNumber:data.data['phoneNumber'],
+      addressDetail:data.data['addressDetail'],
       default:false,
-      address_id:888
+      addressId:888
     }
     addresses.push(newAddress)
     console.log(addresses)
@@ -154,15 +154,15 @@ app.post('/BookStore/', function (req, res) {
       }
 
     }
-    // console.log(response)
+    console.log(response)
     res.json(response)
   }
 
   if (data['query']=='deleteAddress'){
 
-    let address_id = data.data.address_id
+    let addressId = data.data.addressId
     function isDelete(element){
-      return element.address_id!=address_id
+      return element.addressId!=addressId
     }
     addresses = addresses.filter(isDelete)
     console.log(addresses)
@@ -180,14 +180,14 @@ app.post('/BookStore/', function (req, res) {
 
   if (data['query']=='editAddress'){
 
-    let address_id = data.data.address_id;
+    let addressId = data.data.addressId;
 
     addresses.forEach(element => {
-      if(element.address_id==data.data.address_id){
-        element.name = data.data.name
-        element.phone = data.data.phone,
-        element.address = data.data.address,
-        element.default = data.data.default
+      if(element.addressId==data.data.addressId){
+        element.recipentName = data.data.recipentName
+        element.phoneNumber = data.data.phoneNumber,
+        element.addressDetail = data.data.addressDetail,
+        element.isDefaultAddress = data.data.isDefaultAddress
       }
     });
     console.log(addresses)

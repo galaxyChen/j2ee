@@ -3,17 +3,17 @@
 
         <el-form status-icon :model="addressItem" ref="addressItem" :rules="addressRule">
 
-            <el-form-item label="姓名" prop="name">
-                <el-input @input='check("name")' v-model="addressItem.name" ></el-input>
+            <el-form-item label="姓名" prop="recipentName">
+                <el-input @input='check("recipentName")' v-model="addressItem.recipentName" ></el-input>
             </el-form-item>
-            <el-form-item label="手机号" prop="phone">
-                <el-input  @input='check("phone")' v-model="addressItem.phone"></el-input>
+            <el-form-item label="手机号" prop="phoneNumber">
+                <el-input  @input='check("phoneNumber")' v-model="addressItem.phoneNumber"></el-input>
             </el-form-item>
             
             <mapLinkage ref="map" @updateArea="updateArea"></mapLinkage>
 
-            <el-form-item label="详细地址" prop="address"> 
-                <el-input @input='check("address")'  v-model="addressItem.address"></el-input>
+            <el-form-item label="详细地址" prop="addressDetail"> 
+                <el-input @input='check("addressDetail")'  v-model="addressItem.addressDetail"></el-input>
             </el-form-item>
 
             <el-form-item>
@@ -37,9 +37,9 @@ export default {
 
             this.visible = true;
 
-            this.addressItem.name = this.item.name
-            this.addressItem.phone = this.item.phone
-            this.addressItem.address = this.item.address
+            this.addressItem.recipentName = this.item.recipentName
+            this.addressItem.phoneNumber = this.item.phoneNumber
+            this.addressItem.addressDetail = this.item.addressDetail
         });
         this.$on("closeDialog", function() {
             this.visible = false;
@@ -64,20 +64,20 @@ export default {
             visible: false,
 
             addressItem:{
-                name:'',
-                phone:'',
-                address:'',
+                recipentName:'',
+                phoneNumber:'',
+                addressDetail:'',
                 area:''
             },
             addressRule:{
-                name: [
+                recipentName: [
                     { required: true, message: "收货人不能为空", trigger: "blur" },
                     { min: 1, max: 16, message: "长度小于16个字符", trigger: "blur" }
                 ],
-                phone:[
+                phoneNumber:[
                     { validator:validPhone , message:"请输入正确的手机号",trigger:"blur" }
                 ],
-                address:[
+                addressDetail:[
                     { required: true, message: "地址不能为空", trigger: "blur" },
                     { min: 1, max: 50, message: "长度小于50个字符", trigger: "blur" }
                 ],
@@ -94,13 +94,24 @@ export default {
             this.$refs.map.init()
         },
         submitForm() {
-            let newAddress = {
-                name : this.addressItem.name,
-                phone: this.addressItem.phone,
-                address:this.addressItem.area+this.addressItem.address
-            }
-            this.visible = false;
-            this.$emit('submitForm',this.index,newAddress)
+
+            this.$refs['addressItem'].validate(async valid => {
+        
+                if (valid) {
+                    let newAddress = {
+                        recipentName : this.addressItem.recipentName,
+                        phoneNumber: this.addressItem.phoneNumber,
+                        addressDetail:this.addressItem.area+this.addressItem.addressDetail
+                    }
+                    this.visible = false;
+                    this.$emit('submitForm',this.index,newAddress)
+                }
+                else{
+                    console.log("error");
+                }
+
+            });
+
         },
         updateArea(area){
             this.addressItem.area = area
