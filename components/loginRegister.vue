@@ -18,7 +18,7 @@
                     <el-button @click="resetForm('loginForm')">重置</el-button>
                 </el-form-item>
                 <el-form-item>
-                  <el-button type="text">忘记密码</el-button>
+                  <el-button type="text" @click="ForgetPw" style="margin-left:70%">忘记密码</el-button>
                 </el-form-item>
             </el-form>
 
@@ -236,6 +236,9 @@ export default {
     closeDialog() {
       this.$refs["regForm"].resetFields();
       this.$refs["loginForm"].resetFields();
+    },
+    ForgetPw(){
+       this.$router.push({ path: `/ForgetPw/` });
     }
   }
 };

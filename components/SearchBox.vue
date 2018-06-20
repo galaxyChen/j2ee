@@ -25,152 +25,157 @@ export default {
   data() {
     return {
       options: [
+        //全部
+        {
+          value:"全部",
+          label:"全部"
+        },
         //小说 -> 其子分类
         {
-          value: "xiaoshuo",
+          value: "小说",
           label: "小说",
           children: [
             {
-              value: "zhongguoxiaoshuo",
+              value: "中国小说",
               label: "中国小说"
             },
             {
-              value: "waiguoxiaohshuo",
+              value: "外国小说",
               label: "外国小说"
             },
             {
-              value: "xuanyituili",
+              value: "悬疑小说",
               label: "悬疑推理"
             },
             {
-              value: "wuxiaxiaoshuo",
+              value: "武侠小说",
               label: "武侠小说"
             },
             {
-              value: "qita",
+              value: "其他",
               label: "其他"
             }
           ]
         },
         //文艺 -> 其子分类
         {
-          value: "wenyi",
+          value: "文艺",
           label: "文艺",
           children: [
             {
-              value: "wenxue",
+              value: "文学",
               label: "文学"
             },
             {
-              value: "zhuanji",
+              value: "传记",
               label: "传记"
             },
             {
-              value: "yishu",
+              value: "艺术",
               label: "艺术"
             },
             {
-              value: "sheying",
+              value: "摄影",
               label: "摄影"
             }
           ]
         },
         //童书 -> 其子分类。童书有：科普、绘本、文学、其他；
         {
-          value: "tongshu",
+          value: "童书",
           label: "童书",
           children: [
             {
-              value: "kepu",
+              value: "科普",
               label: "科普"
             },
             {
-              value: "huiben",
+              value: "绘本",
               label: "绘本"
             },
             {
-              value: "wenxue",
+              value: "文学",
               label: "文学"
             },
             {
-              value: "qita",
+              value: "其他",
               label: "其他"
             }
           ]
         },
         //教育 -> 其子分类。教育下有：教材、外语、考试、中小学教辅、工具书
         {
-          value: "jiaoyu",
+          value: "教育",
           label: "教育",
           children: [
             {
-              value: "jiaocai",
+              value: "教材",
               label: "教材"
             },
             {
-              value: "waiyu",
+              value: "外语",
               label: "外语"
             },
             {
-              value: "kaoshi",
+              value: "考试",
               label: "考试"
             },
             {
-              value: "zhongxiaoxuejiaofu",
+              value: "中小学教辅",
               label: "中小学教辅"
             },
             {
-              value: "gongjushu",
+              value: "工具书",
               label: "工具书"
             }
           ]
         },
         //人文社科 -> 其子分类。人文社科有：历史、古籍、哲学/宗教、文化、政治/军事、法律、社会、科学、心理学；
         {
-          value: "renwensheke",
+          value: "人文社科",
           label: "人文社科",
           children: [
             {
-              value: "lishi",
+              value: "历史",
               label: "历史"
             },
             {
-              value: "guji",
+              value: "古籍",
               label: "古籍"
             },
             {
-              value: "zhexue/zongjiao",
+              value: "哲学/宗教",
               label: "哲学/宗教"
             },
             {
-              value: "wenhua",
+              value: "文化",
               label: "文化"
             },
             {
-              value: "zhengzhi/junshi",
+              value: "政治/军事",
               label: "政治/军事"
             },
             {
-              value: "falv",
+              value: "法律",
               label: "法律"
             },
             {
-              value: "shehui",
+              value: "社会",
               label: "社会"
             },
             {
-              value: "kexue",
+              value: "科学",
               label: "科学"
             },
             {
-              value: "xinlixue",
+              value: "心理学",
               label: "心理学"
             }
           ]
         },
         //其他
         {
-          value: "qita",
+          value: "其他",
           label: "其他"
         }
       ]
