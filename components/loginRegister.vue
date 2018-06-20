@@ -92,8 +92,8 @@ export default {
         if(!p.test(value)){
           callback(new Error("最少包含数字、字母和下划线"))
         }
-        else if (this.regForm.pw2 !== "") {
-          this.$refs.regForm.validateField("pw2");
+        else if (this.regForm.password2 !== "") {
+          this.$refs.regForm.validateField("password2");
         }
         callback();
       }
@@ -101,7 +101,7 @@ export default {
     var validatePw2 = (rule, value, callback) => {
       if (value == "") {
         callback(new Error("请再次输入密码"));
-      } else if (value !== this.regForm.pw) {
+      } else if (value !== this.regForm.password) {
         callback(new Error("两次输入密码不一致!"));
       } else {
         callback();
@@ -169,6 +169,8 @@ export default {
       function serialize(obj) {
         let result = {};
         for (let term in obj) {
+          if (term=='password2')
+            continue;
           if (obj.hasOwnProperty(term)) {
             result[term] = obj[term];
           }

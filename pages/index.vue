@@ -22,14 +22,14 @@
             <hr style="margin-top:-50px;">
             <div
             v-for="book in newBooks"
-            :key='book.item_id'
+            :key='"recent"+book.itemId'
             class="goods" >
-                  <img class='goods-img' :src="book.url">
+                  <img class='goods-img' :src="book.pictureAddress">
                   <div style="margin-top:-100px;"> 
-                      <p style="margin-top:-50px;margin-left:10px;">{{book.item_name}}</p>
-                      <p style="margin-top:-100px;margin-left:10px;">价格： {{book.item_price}}</p>
+                      <p style="margin-top:-50px;margin-left:10px;">{{book.itemTitle}}</p>
+                      <p style="margin-top:-100px;margin-left:10px;">价格： {{book.price}}</p>
                       <div style="margin-top:-100px;margin-left:10px;">
-                          <el-button type="primary" @click='lookDetail(book.item_id)'>查看详情</el-button>
+                          <el-button type="primary" @click='lookDetail(book.itemId)'>查看详情</el-button>
                       </div>
                   </div>
               </div>
@@ -53,7 +53,7 @@ export default {
     }
     let response = await this.$axios.send(data);
     if (response.status==1){
-      this.newBooks = response.data.item_list;
+      this.newBooks = response.data.products;
     } else {
       this.$message.error("发生错误："+response.err)
     }
