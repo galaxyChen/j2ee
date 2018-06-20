@@ -26,6 +26,27 @@ export default {
     addressBook
   },
   mounted() {
+    let user_id = Cookies.get("user_id");
+    let session_id = Cookies.get("session_id");
+    if (user_id && session_id) {
+        let data = {
+        query: "check",
+        data: {
+            user_id: user_id,
+            session_id: session_id
+        }
+        };
+        let check = await this.$axios.send(data);
+        if (check.status != 1) {
+            this.$message.error("操作失败!请重新登录");
+            Cookies.remove("name");
+            Cookies.remove("user_id");
+            Cookies.remove("session_id");
+            this.login = false;
+            this.user = {};
+            this.$router.push({ path: "/" });
+        } 
+    }
     // console.log(this.$route.params);
   },
   data() {
