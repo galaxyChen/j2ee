@@ -13,7 +13,7 @@
           </el-carousel>
 
           <!-- 搜索框组件 -->
-          <SearchBox class="search-box"></SearchBox>
+          <SearchBox ref = 'searchbox' class="search-box"></SearchBox>
           
 
           <!-- 新书上架组件 -->
@@ -47,7 +47,9 @@ export default {
   async mounted(){
     let data = {
       query:'getRecent',
-      data:{}
+      data:{
+        number:5
+      }
     }
     let response = await this.$axios.send(data);
     if (response.status==1){
@@ -67,13 +69,10 @@ export default {
   },
   
   methods: {
-    changeValue(value) {
-      console.log(value);
-    },
     lookDetail(item_id){
-    console.log(item_id)
-    this.$router.push({ path: `/item/${item_id}` })
-  }
+      console.log(item_id)
+      this.$router.push({ path: `/item/${item_id}` })
+    }
   },
 };
 </script>

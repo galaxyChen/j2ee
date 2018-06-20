@@ -25,7 +25,7 @@ export default {
     AddGoods,
     addressBook
   },
-  mounted() {
+  async mounted() {
     let user_id = Cookies.get("user_id");
     let session_id = Cookies.get("session_id");
     if (user_id && session_id) {
