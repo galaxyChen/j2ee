@@ -129,7 +129,6 @@
           this.updateTotalPay()
         },
         updateTotalPay(){
-
           let tmp = 0
           this.tableData.forEach(element => {
 

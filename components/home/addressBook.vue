@@ -18,7 +18,7 @@
 
               <div class="leftCard">
                 <div class="cardItem">
-                  收货人：{{item.usn}}
+                  收货人：{{item.name}}
                 </div>
                 <div class="cardItem">
                   联系方式：{{item.phone}}
@@ -117,29 +117,71 @@ export default {
     applyEditAddress(index) {
       this.$refs.editAddress[index].$emit("openDialog");
     },
-    deleteAddressItem(index) {
-      this.addressItems.splice(index, 1);
+    async deleteAddressItem(index) {
+      // this.addressItems.splice(index, 1);
+      let data = {
+        query : "deleteAddress",
+        data :{
+          user_id:'',
+          session_id : '',
+          address_id : this.addressItems[index].address_id
+        }
+      }
+      let response = await this.$axios.send(data)
+      if(response.status===1){
+        this.addressItems =  response.data.addresses
+      }
+      else{
+        this.$message.error('发生错误：'+response.err);
+      }
     },
     applyAddAddress() {
       this.$refs.addAddress.$emit("openDialog");
     },
-    addAddressItem(addressItem) {
+    async addAddressItem(addressItem) {
       // this.addressItems.push(addressItem);
       let data = {
         query : "addAddress",
         data :{
           user_id:'',
           session_id : '',
-          name : "",
-          phone : ""
+          name : addressItem.name,
+          phone : addressItem.phone,
+          address : addressItem.address
         }
       }
-
+      let response = await this.$axios.send(data)
+      if(response.status===1){
+        this.addressItems =  response.data.addresses
+      }
+      else{
+        this.$message.error('发生错误：'+response.err);
+      }
     },
-    editAddressItem(index, addressItem) {
-      this.addressItems[index].address = addressItem.address;
-      this.addressItems[index].usn = addressItem.usn;
-      this.addressItems[index].phone = addressItem.phone;
+    async editAddressItem(index, addressItem) {
+      // this.addressItems[index].address = addressItem.address;
+      // this.addressItems[index].name = addressItem.name;
+      // this.addressItems[index].phone = addressItem.phone;
+      
+      let data = {
+        query : "editAddress",
+        data :{
+          user_id:'',
+          session_id : '',
+          name : addressItem.name,
+          phone : addressItem.phone,
+          address : addressItem.address,
+          default : this.addressItems[index].default,
+          address_id : this.addressItems[index].address_id
+        }
+      }
+      let response = await this.$axios.send(data)
+      if(response.status===1){
+        this.addressItems =  response.data.addresses
+      }
+      else{
+        this.$message.error('发生错误：'+response.err);
+      }
     },
     changeDefault(index) {
       this.defaultItem = index;
@@ -154,7 +196,6 @@ export default {
       }
       let response = await this.$axios.send(data)
       if(response.status===1){
-
         this.addressItems =  response.data.addresses
       }
       else{
