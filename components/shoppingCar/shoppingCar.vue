@@ -68,14 +68,14 @@
       return {
         tableData: [
           {
-            information:'bb',
+            information:'merlin',
             price: 518,
             nums:1,
             check:false,
             ID:0
           }, 
           {
-            information:'bb',
+            information:'lilith',
             price: 518,
             nums:1,
             check:false,
@@ -89,7 +89,7 @@
             ID:2
           }, 
           {
-            information:'bb',
+            information:'aa',
             price: 518,
             nums:1,
             check:false,
@@ -102,6 +102,7 @@
     },
     methods:{
         submitBill(){
+            this.updateTotalPay()
             console.log(this.tableData)
         },
         selectChange(index){
@@ -122,8 +123,26 @@
             this.updateTotalPay()
         },
         deleteItem(index){
-          this.tableData.splice(index,1)
-          this.updateTotalPay()
+          this.$confirm( '商品将从购物车中移除，是否继续？' ,'提示' ,{
+            confirmButtonText: '确定',
+            cancelButtonText: '取消',
+            type: 'warning'
+          }).then( ()=>{
+            this.$message({
+              type: 'success',
+              message: '删除成功!'
+            });
+
+            this.tableData.splice(index,1)
+            this.updateTotalPay()
+
+          }).catch( ()=>{
+            this.$message({
+            type: 'info',
+            message: '已取消删除'
+          });   
+          })
+
         },
         changeNums(){
           this.updateTotalPay()

@@ -8,7 +8,7 @@
 
 
 <script>
-import shoppingCar from '~/components/shoppingCar'
+import shoppingCar from '~/components/shoppingCar/shoppingCar'
 import Cookies from "js-cookie";
 import NavBar from "~/components/NavTop";
 export default {

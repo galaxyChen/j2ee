@@ -117,23 +117,35 @@ export default {
     applyEditAddress(index) {
       this.$refs.editAddress[index].$emit("openDialog");
     },
-    async deleteAddressItem(index) {
+    deleteAddressItem(index) {
       // this.addressItems.splice(index, 1);
-      let data = {
-        query : "deleteAddress",
-        data :{
-          user_id:'',
-          session_id : '',
-          address_id : this.addressItems[index].address_id
+      this.$confirm( '该地址项将被移除，是否继续？' ,'提示' ,{
+            confirmButtonText: '确定',
+            cancelButtonText: '取消',
+            type: 'warning'
+      }).then( async ()=>{
+        this.$message({type: 'success',message: '删除成功!'});
+
+        let data = {
+          query : "deleteAddress",
+          data :{
+            user_id:'',
+            session_id : '',
+            address_id : this.addressItems[index].address_id
+          }
         }
-      }
-      let response = await this.$axios.send(data)
-      if(response.status===1){
-        this.addressItems =  response.data.addresses
-      }
-      else{
-        this.$message.error('发生错误：'+response.err);
-      }
+        let response = await this.$axios.send(data)
+        if(response.status===1){
+          this.addressItems =  response.data.addresses
+        }
+        else{
+          this.$message.error('发生错误：'+response.err);
+        }
+
+      }).catch( ()=>{
+        this.$message({type: 'info', message: '已取消删除'});   
+      })
+
     },
     applyAddAddress() {
       this.$refs.addAddress.$emit("openDialog");
