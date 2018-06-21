@@ -1,15 +1,20 @@
 <template>
 <div>
   <el-table ref="Table" :data="tableData"  style="width: 100%" @selection-change="handleSelectionChange"  >
-    <el-table-column type="selection"  prop="check">
+    <el-table-column type="selection"  >
         <template slot-scope="scope">
-            <el-checkbox v-model="scope.row.check" @change="selectChange(scope.$index)"></el-checkbox>
+            <el-checkbox v-model="scope.row.chosen" @change="selectChange(scope.$index)"></el-checkbox>
         </template>
     </el-table-column>
     <el-table-column label="商品信息" align="center">
         <template slot-scope="scope">
             <p>{{scope.row.information}}</p>
         </template>
+    </el-table-column>
+    <el-table-column label="库存" align="center">
+      <template slot-scope="scope">
+          <p>{{scope.row.quantity}}</p>
+      </template>
     </el-table-column>
     <el-table-column label="单价" align="center">
         <template slot-scope="scope">
@@ -18,7 +23,7 @@
     </el-table-column>
     <el-table-column label="数量" align="center">
         <template slot-scope="scope">
-            <el-input-number  v-model="scope.row.nums"  :min="1" :max="10" @change="changeNums"></el-input-number>
+            <el-input-number  v-model="scope.row.nums"  :min="1" :max="scope.row.quantity" @change="changeNums"></el-input-number>
         </template>
     </el-table-column>
     <el-table-column label="小计" align="center">
@@ -40,7 +45,7 @@
     <el-col :span="17">
       <span >
           共<span :model="tableData" style="color:red" >{{tableData.length}}</span>件商品，
-          已选择<span :model="selectionList" style="color:red">{{selectionList.length}}</span>件 |
+          已选择<span :model="chosenNum" style="color:red">{{chosenNum}}</span>件 |
           应付总额：￥<span :model="totalPay" style="color:red">{{totalPay}}</span>
       </span>
     </el-col>
@@ -64,63 +69,34 @@
 
 <script>
   export default {
+    mounted(){
+      this.getShoppingCarList();
+    },
     data() {
       return {
-        tableData: [
-          {
-            information:'merlin',
-            price: 518,
-            nums:1,
-            check:false,
-            ID:0
-          }, 
-          {
-            information:'lilith',
-            price: 518,
-            nums:1,
-            check:false,
-            ID:1
-          }, 
-          {
-            information:'bb',
-            price: 518,
-            nums:1,
-            check:false,
-            ID:2
-          }, 
-          {
-            information:'aa',
-            price: 518,
-            nums:1,
-            check:false,
-            ID:3
-          }
-        ],
-        selectionList :[],
+        tableData: [],
+        chosenNum :0,
         totalPay:0
       }
     },
     methods:{
-        submitBill(){
-            this.updateTotalPay()
-            console.log(this.tableData)
-        },
+
         selectChange(index){
             this.$refs.Table.toggleRowSelection(this.tableData[index])
-            this.updateTotalPay()
+            this.updateTotal()
         },
         handleSelectionChange(val){
             if(val.length==0){
               this.tableData.forEach(element => {
-                element.check = false
+                element.chosen = false
               });
             }
             else if(val.length==this.tableData.length){
               this.tableData.forEach(element => {
-                element.check = true
+                element.chosen = true
               });
             }
-            this.updateTotalPay()
+            this.updateTotal()
         },
         deleteItem(index){
           this.$confirm( '商品将从购物车中移除，是否继续？' ,'提示' ,{
@@ -134,7 +110,7 @@
             });
 
             this.tableData.splice(index,1)
-            this.updateTotalPay()
+            this.updateTotal()
 
           }).catch( ()=>{
             this.$message({
@@ -145,18 +121,46 @@
 
         },
         changeNums(){
-          this.updateTotalPay()
+          this.updateTotal()
         },
-        updateTotalPay(){
+        updateTotal(){
           let tmp = 0
+          let tmp1 = 0
           this.tableData.forEach(element => {
 
-            if(element.check==true){
+            if(element.chosen==true){
                 tmp += element.price * element.nums
+                tmp1 += element.nums
               }
             });
           this.totalPay = tmp
-        }
+          this.chosenNum = tmp1
+        },
+        async getShoppingCarList(){
+          let data = {
+            query : "getShoppingCarList",
+            data : {
+              userId : '',
+              sessionId : ''
+            }
+          }
+          let response = await this.$axios.send(data)
+          if(response.status===1){
+            let tmp =  response.data.shoppingCarList
+            tmp.forEach(element => {
+              element.chosen = false
+            });
+            this.tableData = tmp;
+            
+          }
+          else{
+            this.$message.error('发生错误：'+response.err);
+          }
+        },
+        submitBill(){
+          this.updateTotal()
+          console.log(this.tableData)
+        },
 
     }
   }
