@@ -24,7 +24,7 @@
                   联系方式：{{item.phoneNumber}}
                 </div>
                 <div class="cardItem">
-                  收货地址：{{item.addressDetail}}
+                  收货地址：{{ item.province+' '+item.city+' '+ item.addressDetail}}
                 </div>
               </div>
 
@@ -153,7 +153,9 @@ export default {
           sessionId : '',
           recipientName : addressItem.recipientName,
           phoneNumber : addressItem.phoneNumber,
-          addressDetail : addressItem.addressDetail
+          addressDetail : addressItem.addressDetail,
+          province : addressItem.province,
+          city : addressItem.city,
         }
       }
       let response = await this.$axios.send(data)
@@ -177,6 +179,8 @@ export default {
           recipientName : addressItem.recipientName,
           phoneNumber : addressItem.phoneNumber,
           addressDetail : addressItem.addressDetail,
+          province : addressItem.province,
+          city : addressItem.city,
           isDefaultAddress : this.addressItems[index].isDefaultAddress,
           addressId : this.addressItems[index].addressId
         }

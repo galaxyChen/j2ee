@@ -1,68 +1,103 @@
 <template>
   <!--联动选择地区-->
-  <el-form-item label="选择地区：">
-      <el-select size="small" style="width: 100px" v-model="selectProv" placeholder="请选择省份" v-on:change="getProv($event)">
-          <el-option v-for="item in provs" :key="item.value" :label="item.label" :value="item.value">
-          </el-option>
-      </el-select>
-      <el-select size="small" style="width: 100px;margin-left:10px;" v-if="selectProv!=''" v-model="selectCity" placeholder="请选择城市" v-on:change="getCity($event)">
-          <el-option v-for="item in citys" :key="item.value" :label="item.label" :value="item.value">
-          </el-option>
-      </el-select>
-  </el-form-item>
+
+  <el-form status-icon :rules="areaRules" ref="area" :model="area">
+    
+      <el-form-item label="选择地区：">
+
+        <el-col :span="8">
+            <el-form-item  prop="selectProv">
+                <el-select size="small"  style="width: 100%" v-model="area.selectProv" placeholder="请选择省份" v-on:change="getProv($event)">
+                    <el-option v-for="item in provs" :key="item.value" :label="item.label" :value="item.value">
+                    </el-option>
+                </el-select>
+            </el-form-item>
+
+        </el-col>
+
+    
+
+      <el-col :span="8">
+        <el-form-item prop="selectCity">
+            <el-select size="small" style="width: 100%" v-if="area.selectProv!=''" v-model="area.selectCity" placeholder="请选择城市" v-on:change="getCity($event)">
+                <el-option v-for="item in citys" :key="item.value" :label="item.label" :value="item.value">
+                </el-option>
+            </el-select>
+        </el-form-item>
+      </el-col>
+
+
+      </el-form-item>
+    
+
+      
+
+  </el-form>
 </template>
 
 <script>
  export default {
         data() {
+            
             return {
-              provs:[
-                {label:"北京市",value:"北京市"},
-                {label:"天津市",value:"天津市"},
-                {label:"河北省",value:"河北省"},
-                {label:"山西省",value:"山西省"},
-                {label:"内蒙古自治区",value:"内蒙古自治区"},
-                {label:"辽宁省",value:"辽宁省"},
-                {label:"吉林省",value:"吉林省"},
-                {label:"黑龙江省",value:"黑龙江省"},
-                {label:"上海市",value:"上海市"},
-                {label:"江苏省",value:"江苏省"},
-                {label:"浙江省",value:"浙江省"},
-                {label:"安徽省",value:"安徽省"},
-                {label:"福建省",value:"福建省"},
-                {label:"江西省",value:"江西省"},
-                {label:"山东省",value:"山东省"},
-                {label:"河南省",value:"河南省"},
-                {label:"湖北省",value:"湖北省"},
-                {label:"湖南省",value:"湖南省"},
-                {label:"广东省",value:"广东省"},
-                {label:"广西壮族自治区",value:"广西壮族自治区"},
-                {label:"海南省",value:"海南省"},
-                {label:"重庆市",value:"重庆市"},
-                {label:"四川省",value:"四川省"},
-                {label:"贵州省",value:"贵州省"},
-                {label:"云南省",value:"云南省"},
-                {label:"西藏自治区",value:"西藏自治区"},
-                {label:"陕西省",value:"陕西省"},
-                {label:"甘肃省",value:"甘肃省"},
-                {label:"青海省",value:"青海省"},
-                {label:"宁夏回族自治区",value:"宁夏回族自治区"},
-                {label:"新疆维吾尔自治区",value:"新疆维吾尔自治区"},
-                {label:"台湾省",value:"台湾省"},
-                {label:"香港特别行政区",value:"香港特别行政区"},
-                {label:"澳门特别行政区",value:"澳门特别行政区"}
-              ] ,
-              citys: [],
-              selectProv: '',
-              selectCity: ''
-              }
+                areaRules:{
+                    selectProv : [
+                        {required:true, message: '请输入省份' }
+                    ],
+                    selectCity :[
+                        {required:true, message: '请输入城市' }
+                    ]
+                },
+
+                provs:[
+                    {label:"北京市",value:"北京市"},
+                    {label:"天津市",value:"天津市"},
+                    {label:"河北省",value:"河北省"},
+                    {label:"山西省",value:"山西省"},
+                    {label:"内蒙古自治区",value:"内蒙古自治区"},
+                    {label:"辽宁省",value:"辽宁省"},
+                    {label:"吉林省",value:"吉林省"},
+                    {label:"黑龙江省",value:"黑龙江省"},
+                    {label:"上海市",value:"上海市"},
+                    {label:"江苏省",value:"江苏省"},
+                    {label:"浙江省",value:"浙江省"},
+                    {label:"安徽省",value:"安徽省"},
+                    {label:"福建省",value:"福建省"},
+                    {label:"江西省",value:"江西省"},
+                    {label:"山东省",value:"山东省"},
+                    {label:"河南省",value:"河南省"},
+                    {label:"湖北省",value:"湖北省"},
+                    {label:"湖南省",value:"湖南省"},
+                    {label:"广东省",value:"广东省"},
+                    {label:"广西壮族自治区",value:"广西壮族自治区"},
+                    {label:"海南省",value:"海南省"},
+                    {label:"重庆市",value:"重庆市"},
+                    {label:"四川省",value:"四川省"},
+                    {label:"贵州省",value:"贵州省"},
+                    {label:"云南省",value:"云南省"},
+                    {label:"西藏自治区",value:"西藏自治区"},
+                    {label:"陕西省",value:"陕西省"},
+                    {label:"甘肃省",value:"甘肃省"},
+                    {label:"青海省",value:"青海省"},
+                    {label:"宁夏回族自治区",value:"宁夏回族自治区"},
+                    {label:"新疆维吾尔自治区",value:"新疆维吾尔自治区"},
+                    {label:"台湾省",value:"台湾省"},
+                    {label:"香港特别行政区",value:"香港特别行政区"},
+                    {label:"澳门特别行政区",value:"澳门特别行政区"}
+                ] ,
+                citys: [],
+                area:{
+                    selectProv: '',
+                    selectCity: ''
+                },
+            }
         },
         methods: {
             /*二级联动选择地区*/
             getProv: function (prov) {
                 let tempCity=[];              
                 this.citys=[];
-                this.selectCity='';               
+                this.area.selectCity='';               
                 let allCity=[
                   {
                       prov: "北京市",
@@ -1215,20 +1250,37 @@
 //                 console.log(city);
 //                 console.log(this.selectCity)
             },
-            init: function(){
-                
-                this.selectProv = ''
-                this.selectCity = ''
+            reset: function(){
+                this.$refs.area.resetFields()
+                this.area.selectProv = ''
+                this.area.selectCity = ''
                 this.citys = []
+            },
+            init: function(province,city){
+                this.area.selectProv = province
+                this.area.selectCity = city
+            },
+            test: function(){
+                // console.log('test the mapform')
+                this.$refs.area.validateField('selectProv')
+                if(this.area.selectProv!='')
+                    this.$refs.area.validateField('selectCity')
+                if(this.area.selectProv!='' && this.area.selectCity!=''){
+                    this.$emit('updateArea', this.area.selectProv, this.area.selectCity   )
+                    return true
+                }
+                return false
+                    
+                
             }
+            
 
         },
         mounted: function () {
           
         },
-        updated: function () {
-            let area = this.selectProv+this.selectCity
-            this.$emit('updateArea',area)
+        submitForm: function () {
+            // this.$emit('updateArea', this.area.selectProv, this.area.selectCity   )
         },
 
     }
