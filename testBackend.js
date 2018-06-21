@@ -71,13 +71,13 @@ app.use(bodyParser.json()); // for parsing application/json
 app.use(bodyParser.urlencoded({extended: true}));
 
 app.post('/upload/', upload.single('img'), function (req, res, next) {
-  var file = req.body.img;
+  var file = req.body.data;
   console.log(file)
   console.log(req.body)
   // console.log('文件类型：%s', file.mimetype); console.log('原始文件名：%s',
   // file.originalname); console.log('文件大小：%s', file.size);
   // console.log('文件保存路径：%s', file.path); 接收文件成功后返回数据给前端
-  res.json({status: 1});
+  res.json({status: 1,data:{pictureAddress:'http://localhost:3001/1.png'}});
 })
 
 app.post('/BookStore/', function (req, res) {
@@ -102,6 +102,10 @@ app.post('/BookStore/', function (req, res) {
       status:1
     }
     res.json(response)
+  }
+
+  if (data['query'] == 'addBook'){
+    res.json({status:1})
   }
 
   if (data['query'] == 'getRecent') {
