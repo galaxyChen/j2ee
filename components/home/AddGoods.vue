@@ -30,8 +30,11 @@
                      <el-radio v-model="radio" label="1">包邮</el-radio>
                      <el-radio v-model="radio" label="2">邮费自理</el-radio>
                 </el-form-item>
-                 <el-form-item label="发货地: ">
+                 <el-form-item label="发货城市: ">
                    <mapLinkage @updateArea="updateArea"></mapLinkage>
+                </el-form-item>
+                <el-form-item label="详细地址: ">
+                  <el-input  v-model='Goods.addressDetail'  placeholder='请输入详细地址'></el-input>
                 </el-form-item>
                  <el-form-item label="商品描述: ">
                       <el-input  type="textarea"  :rows="2"  :value='Goods.description' placeholder="请输入商品描述" ></el-input>
@@ -79,6 +82,7 @@ export default {
         originAddress: "",
         quantity: 0,
         description: "",
+        addressDetail:'',
         //选择图书类别
         options: [
           //全部
@@ -304,6 +308,7 @@ export default {
   methods: {
     //选择发货地地区
     updateArea(area) {
+      console.log(area)
       this.Goods.originAddress = area;
     },
 
