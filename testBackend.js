@@ -4,35 +4,11 @@ var app = express();
 var multer = require('multer')
 var upload = multer({dest: 'uploads/'})
 
-<<<<<<< HEAD
-
-
-var addresses= [
-=======
 var addresses = [
->>>>>>> 8e94333f8e72efd30158450d6a44cf5f0727ec32
   {
     recipientName: "Foo",
     phoneNumber: "110",
     addressDetail: "scut",
-<<<<<<< HEAD
-    province : "Guangdong",
-    city:"Guangzhou",
-    isDefaultAddress:true,
-    addressId:111
-  },
-  {
-    recipentName: "Lilith",
-    phoneNumber: "120",
-    province : "moon",
-    city:"moon",
-    addressDetail: "CCC",
-    isDefaultAddress:false,
-    addressId:222
-  },
-  {
-    recipentName: "merlin",
-=======
     isDefaultAddress: true,
     addressId: 111
   }, {
@@ -43,7 +19,6 @@ var addresses = [
     addressId: 222
   }, {
     recipientName: "merlin",
->>>>>>> 8e94333f8e72efd30158450d6a44cf5f0727ec32
     phoneNumber: "518",
     province : "moon",
     city:"moon",
@@ -315,21 +290,11 @@ app.post('/BookStore/', function (req, res) {
 
   if (data['query'] == 'addAddress') {
     let newAddress = {
-<<<<<<< HEAD
-      recipentName:data.data['recipentName'],
-      phoneNumber:data.data['phoneNumber'],
-      addressDetail:data.data['addressDetail'],
-      province:data.data['province'],
-      city:data.data['city'],
-      default:false,
-      addressId:888
-=======
       recipientName: data.data['recipientName'],
       phoneNumber: data.data['phoneNumber'],
       addressDetail: data.data['addressDetail'],
       default: false,
       addressId: 888
->>>>>>> 8e94333f8e72efd30158450d6a44cf5f0727ec32
     }
     addresses.push(newAddress)
     console.log(addresses)
@@ -394,15 +359,6 @@ app.post('/BookStore/', function (req, res) {
 
   if (data['query'] == 'register') {
     response = {
-<<<<<<< HEAD
-        status:1,//1是登录成功，0是登录失败
-        data :{
-            userId:1,//该用户的用户id
-            userName:'tester',//该用户的昵称
-            sessionId:'asdfghjkl',//登录成功的时候返回这次登录的session_id
-            err:'',//登录失败的时候返回出错原因
-        }
-=======
       status: 1, //1是登录成功，0是登录失败
       data: {
         user_id: 1, //该用户的用户id
@@ -410,7 +366,6 @@ app.post('/BookStore/', function (req, res) {
         session_id: 'asdfghjkl', //登录成功的时候返回这次登录的session_id
         err: '', //登录失败的时候返回出错原因
       }
->>>>>>> 8e94333f8e72efd30158450d6a44cf5f0727ec32
 
     }
     res.json(response)
