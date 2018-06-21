@@ -13,7 +13,7 @@
           <el-menu-item @click="signout" index="signout" class="NavRight">退出登录</el-menu-item>
           <el-menu-item index="home" class="NavRight">个人中心</el-menu-item>
           <el-menu-item index="index" class="NavRight">首页</el-menu-item>
-          <el-menu-item index="welcome" class="NavRight" >欢迎，{{user.userName}}</el-menu-item>
+          <el-menu-item index="welcome" class="NavRight" >欢迎，{{userName}}</el-menu-item>
         
         </el-menu>
         <Login ref='login' :dialogVisible='dialogVisible'></Login>
@@ -65,10 +65,10 @@ export default {
       };
       let check = this.$axios.send(data);
       check.then(response => {
-        if (response.status === 1) {
+        if (response.status == 1) {
           this.login = true;
-          this.user.userName = Cookies.get("userName");
-          this.user.userId = Cookies.get("userId");
+          this.userName = Cookies.get("userName");
+          this.userId = Cookies.get("userId");
         }
       });
     }
@@ -79,17 +79,16 @@ export default {
   data() {
     return {
       login: false,
-      user: {
-        nauserNameme: "张三",
-        userId: "1"
-      },
+      userName:'',
+      userId:'',
       dialogVisible: false
     };
   },
   methods: {
-    changeName(){
-      let userName = Cookies.get('userName')
-      this.user.userName = userName;
+    changeName(newName){
+      console.log('navtop')
+      console.log(newName)
+      this.userName = newName;
     },
     async handleSelect(key, keyPath) {
       console.log(key, keyPath);
@@ -109,16 +108,10 @@ export default {
             }
           };
           let check = await this.$axios.send(data);
-          if (check.status === 1) {
+          if (check.status == 1) {
             this.$router.push({ path: `/home/${userId}` });
           } else {
-            this.$message.error("操作失败!请重新登录");
-            Cookies.remove("name");
-            Cookies.remove("userId");
-            Cookies.remove("sessionId");
-            this.login = false;
-            this.user = {};
-            this.$router.push({ path: "/" });
+            this.signout()
           }
         }
       }
@@ -129,9 +122,9 @@ export default {
     },
     logined() {
       console.log("haha");
-      let name = Cookies.get("name");
-      if (name) {
-        this.user.name = name;
+      let userName = Cookies.get("userName");
+      if (userName) {
+        this.userName = userName;
         this.login = true;
       }
     },
@@ -148,7 +141,7 @@ export default {
       if (response.status === 0) {
         this.$message.error(""+response.err);
       }
-      Cookies.remove("name");
+      Cookies.remove("userName");
       Cookies.remove("userId");
       Cookies.remove("sessionId");
       this.login = false;

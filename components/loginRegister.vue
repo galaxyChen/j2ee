@@ -92,11 +92,12 @@ export default {
       } 
       else {
         let p = /^(?=.*\d)(?=.*[a-zA-Z])(?=.*[_])[\da-zA-Z_]+/;
+        
         if(!p.test(value)){
           callback(new Error("最少包含数字、字母和下划线"))
         }
-        else if (this.regForm.pw2 !== "") {
-          this.$refs.regForm.validateField("pw2");
+        else if (this.regForm.password2 !== "") {
+          this.$refs.regForm.validateField("password2");
         }
         callback();
       }
@@ -104,7 +105,7 @@ export default {
     var validatePw2 = (rule, value, callback) => {
       if (value == "") {
         callback(new Error("请再次输入密码"));
-      } else if (value !== this.regForm.pw) {
+      } else if (value !== this.regForm.password) {
         callback(new Error("两次输入密码不一致!"));
       } else {
         callback();
@@ -127,27 +128,37 @@ export default {
       query: "login",
       loginRules: {
         email: [
-          { type: "email", required: true, message: "请输出正确的邮箱", trigger: "blur" },
+          { type: "email", required: true, message: "请输入正确的邮箱", trigger: "blur" },
           { min: 1, max: 30, message: "长度小于30个字符", trigger: "blur" }
         ],
         password: [
-          { required: true, message: "密码不能为空", trigger: "blur" },
-          { min: 5, max: 16, message: "长度在 5 到 16 个字符", trigger: "blur" }
+          { required: true, message: "请输入正确的密码", trigger: "blur" },
         ]
       },
       regRules: {
         email: [
-          {
-            type: "email",
-            required: true,
-            message: "请输出正确的邮箱",
-            trigger: "blur"
-          },
+          { type: "email", required: true, message: "请输入正确的邮箱", trigger: "blur" },
           { min: 1, max: 30, message: "长度小于30个字符", trigger: "blur" }
         ],
         userName: [
-          { required: true, message: "昵称不能为空", trigger: "blur" },
-          { min: 1, max: 20, message: "长度小于20个字符", trigger: "blur" }
+          {  
+            validator:(rule,value,callback)=>{
+              if(value==''){
+                callback(new Error("昵称不能为空"))
+              }
+              else if(value.length>20){
+                callback(new Error("长度不超过20个字"))
+              }
+              else{
+                let p = /^[0-9]*$/;
+                if(p.test(value)){
+                  callback(new Error("由汉字、字母和数字组成，不允许是纯数字"))
+                }
+                callback()
+              }
+            }, 
+            trigger: "blur" 
+          },
         ],
         password: [{ required: true, validator: validatePw, trigger: "blur" }],
         password2: [{ required: true, validator: validatePw2, trigger: "blur" }],
@@ -172,6 +183,8 @@ export default {
       function serialize(obj) {
         let result = {};
         for (let term in obj) {
+          if (term=='password2')
+            continue;
           if (obj.hasOwnProperty(term)) {
             result[term] = obj[term];
           }
@@ -190,15 +203,15 @@ export default {
           else if (data.query == "register")
             data.data = serialize(this.regForm);
           let response = await this.$axios.send(data);
-
+          console.log(response)
           if (data.query == "login") this.applyLogin(response);
           else if (data.query == "register") {
             if (this.applyRegister(response)) {
               let newData = {
                 query: "login",
                 data: {
-                  usn: data.data.email,
-                  pw: data.data.pw
+                  email: data.data.email,
+                  password: data.data.password
                 }
               };
               let response = await this.$axios.send(newData);
@@ -221,7 +234,8 @@ export default {
         this.visible = false;
       } else {
         console.log("error");
-        this.$message.error("发生错误：" + response.err);
+        // this.$message.error("发生错误：" + response.err);
+        this.$message.error("用户名或密码错误" );
       }
     },
     applyRegister(response) {
