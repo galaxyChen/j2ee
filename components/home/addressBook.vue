@@ -91,6 +91,7 @@
 <script>
 import addAddress from "~/components/home/addAddress";
 import editAddress from "~/components/home/editAddress";
+import Cookies from 'js-cookie'
 export default {
   components: {
     addAddress,
@@ -123,8 +124,8 @@ export default {
         let data = {
           query : "deleteAddress",
           data :{
-            userId:'',
-            sessionId : '',
+            userId :Cookies.get('userId'),
+            sessionId : Cookies.get('sessionId'),
             addressId : this.addressItems[index].addressId
           }
         }
@@ -149,8 +150,8 @@ export default {
       let data = {
         query : "addAddress",
         data :{
-          userId:'',
-          sessionId : '',
+          userId : Cookies.get('userId'),
+          sessionId :Cookies.get('sessionId'),
           recipientName : addressItem.recipientName,
           phoneNumber : addressItem.phoneNumber,
           addressDetail : addressItem.addressDetail,
@@ -174,8 +175,8 @@ export default {
       let data = {
         query : "editAddress",
         data :{
-          userId:'',
-          sessionId : '',
+          userId : Cookies.get('userId'),
+          sessionId : Cookies.get('sessionId'),
           recipientName : addressItem.recipientName,
           phoneNumber : addressItem.phoneNumber,
           addressDetail : addressItem.addressDetail,
@@ -200,8 +201,8 @@ export default {
       let data = {
         query : "getAddress",
         data : {
-          userId : '',
-          sessionId : ''
+          userId : Cookies.get('userId'),
+          sessionId : Cookies.get('sessionId')
         }
       }
       let response = await this.$axios.send(data)
