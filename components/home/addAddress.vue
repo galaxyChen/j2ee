@@ -63,15 +63,9 @@ export default {
                 city:''
             },
             addressRule:{
-<<<<<<< HEAD
-                recipentName: [
-                    { required: true, message: "请输入姓名", trigger: "blur" },
-                    { min: 1, max: 15, message: "长度不超过15个字", trigger: "blur" }
-=======
                 recipientName: [
                     { required: true, message: "收货人不能为空", trigger: "blur" },
                     { min: 1, max: 16, message: "长度小于16个字符", trigger: "blur" }
->>>>>>> 8e94333f8e72efd30158450d6a44cf5f0727ec32
                 ],
                 phoneNumber:[
                     { validator:validPhone ,trigger:"blur" }
