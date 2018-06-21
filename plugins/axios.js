@@ -4,7 +4,7 @@ export default function ({$axios, redirect}) {
 
     $axios.send = async function (data,URL,header) {
         console.log(data)
-        let url = '/BookStore/'
+        let url = '/api'
         if (URL!=undefined){
             url = URL
         }
