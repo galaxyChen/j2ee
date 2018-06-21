@@ -2,13 +2,13 @@
   <div class="search-box" style="text-align:center;" >
       <el-row :gutter="20" style="border-radius:4px; min-height: 36px;">
           <el-col :span="14" style="margin-left:10%;padding:10px;">
-                      <el-input class="index-input-box" placeholder="请输入内容"  prefix-icon="el-icon-search" ></el-input>
+                      <el-input v-model="searchText" class="index-input-box" placeholder="请输入内容"  prefix-icon="el-icon-search" ></el-input>
           </el-col>
           <el-col :span="4" style="padding-top:8px;height:36px;">
-              <el-cascader class="index-input-box" :options="options" change-on-select @change='changeValue'></el-cascader>
+              <el-cascader v-model="tag" class="index-input-box" :options="options" change-on-select @change='changeValue'></el-cascader>
           </el-col>
           <el-col :span="2" style="padding:10px;"> 
-                      <el-button size='small' class="index-input-box" type="primary"  >搜 索 </el-button>
+                      <el-button @click="search" size='small' class="index-input-box" type="primary"  >搜 索 </el-button>
               </el-col>
       </el-row> 
   </div>
@@ -35,6 +35,10 @@ export default {
           value: "小说",
           label: "小说",
           children: [
+            {
+              value: "全部",
+              label: "全部"
+            },
             {
               value: "中国小说",
               label: "中国小说"
@@ -63,6 +67,10 @@ export default {
           label: "文艺",
           children: [
             {
+              value: "全部",
+              label: "全部"
+            },
+            {
               value: "文学",
               label: "文学"
             },
@@ -86,6 +94,10 @@ export default {
           label: "童书",
           children: [
             {
+              value: "全部",
+              label: "全部"
+            },
+            {
               value: "科普",
               label: "科普"
             },
@@ -108,6 +120,10 @@ export default {
           value: "教育",
           label: "教育",
           children: [
+            {
+              value: "全部",
+              label: "全部"
+            },
             {
               value: "教材",
               label: "教材"
@@ -135,6 +151,10 @@ export default {
           value: "人文社科",
           label: "人文社科",
           children: [
+            {
+              value: "全部",
+              label: "全部"
+            },
             {
               value: "历史",
               label: "历史"
@@ -178,12 +198,22 @@ export default {
           value: "其他",
           label: "其他"
         }
-      ]
+      ],
+      searchText:'',
+      tag:['全部']
     };
   },
   methods: {
     changeValue(value) {
-      console.log(value);
+      console.log(this.tag);
+    },
+    search(){
+      let text = this.searchText;
+      let tag = this.tag;
+      this.$router.push({name:'search',params:{
+        text:text,
+        tag:tag
+      }})
     }
   }
 };

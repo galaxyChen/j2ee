@@ -13,58 +13,29 @@
           </el-carousel>
 
           <!-- 搜索框组件 -->
-          <SearchBox class="search-box"></SearchBox>
+          <SearchBox ref = 'searchbox' class="search-box"></SearchBox>
           
 
           <!-- 新书上架组件 -->
           <div id="newBookBox"  style="text-align:left;">
-            <el-button type="text" style="color:green;font-size:28px;">新书上架</el-button> 
+            <p type="text" style="color:green;font-size:28px;">新书上架</p> 
             <hr style="margin-top:-50px;">
+            <div
+            v-for="book in newBooks"
+            :key='book.item_id'
+            class="goods" >
+                  <img class='goods-img' :src="book.url">
+                  <div style="margin-top:-100px;"> 
+                      <p style="margin-top:-50px;margin-left:10px;">{{book.item_name}}</p>
+                      <p style="margin-top:-100px;margin-left:10px;">价格： {{book.item_price}}</p>
+                      <div style="margin-top:-100px;margin-left:10px;">
+                          <el-button type="primary" @click='lookDetail(book.item_id)'>查看详情</el-button>
+                      </div>
+                  </div>
+              </div>
 
-            <div class="goods" >
-                <img class='goods-img' src="../assets/2.jpg">
-                <div style="margin-top:-100px;"> 
-                    <p style="margin-top:-50px;margin-left:10px;">{{booktitle1}}</p>
-                    <p style="margin-top:-100px;margin-left:10px;">价格： {{price1}}</p>
-                    <div style="margin-top:-100px;margin-left:10px;">
-                        <el-button type="primary" >查看详情</el-button>
-                    </div>
-                </div>
+            
             </div>
-
-            <div class="goods">
-                <img class='goods-img' src="../assets/3.jpg">
-                <div style="margin-top:-100px;">
-                    <p style="margin-top:-50px;margin-left:10px;">{{booktitle2}}</p>
-                    <p style="margin-top:-100px;margin-left:10px;">价格： {{price2}}</p>
-                    <div style="margin-top:-100px;">
-                        <el-button type="primary" >查看详情</el-button>
-                    </div>
-                </div>
-            </div>
-
-            <div class="goods" >
-                <img class='goods-img' src="../assets/4.jpg">
-                <div style="margin-top:-100px;">
-                    <p style="margin-top:-50px;margin-left:10px;">{{booktitle3}}</p>
-                    <p style="margin-top:-100px;margin-left:10px;">价格： {{price3}}</p>
-                    <div style="margin-top:-100px;"> 
-                          <el-button type="primary" >查看详情</el-button>
-                    </div>
-                </div>
-            </div>
-
-            <div class="goods">
-                <img class='goods-img' src="../assets/5.jpg">
-                <div style="margin-top:-100px;">
-                    <p style="margin-top:-50px;margin-left:10px;">{{booktitle4}}</p>
-                    <p style="margin-top:-100px;margin-left:10px;">价格： {{price4}}</p>
-                    <div style="margin-top:-100px;">
-                        <el-button type="primary" >查看详情</el-button>
-                    </div>
-                </div>
-            </div>
-        </div>
     </el-main>
   </div>
 </template>
@@ -73,17 +44,23 @@
 import NavTop from "~/components/NavTop";
 import SearchBox from "~/components/SearchBox";
 export default {
+  async mounted(){
+    let data = {
+      query:'getRecent',
+      data:{
+        number:5
+      }
+    }
+    let response = await this.$axios.send(data);
+    if (response.status==1){
+      this.newBooks = response.data.item_list;
+    } else {
+      this.$message.error("发生错误："+response.err)
+    }
+  },
   data() {
     return {
-      booktitle1: "新东方GRE词汇1",
-      booktitle2: "新东方GRE词汇2",
-      booktitle3: "新东方GRE词汇3",
-      booktitle4: "新东方GRE词汇4",
-
-      price1: "￥30",
-      price2: "￥30",
-      price3: "￥30",
-      price4: "￥30"
+      newBooks:[]
     };
   },
   components: {
@@ -92,10 +69,11 @@ export default {
   },
   
   methods: {
-    changeValue(value) {
-      console.log(value);
+    lookDetail(item_id){
+      console.log(item_id)
+      this.$router.push({ path: `/item/${item_id}` })
     }
-  }
+  },
 };
 </script>
 
