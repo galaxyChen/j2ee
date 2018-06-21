@@ -11,19 +11,25 @@ var addresses= [
     recipentName: "Foo",
     phoneNumber: "110",
     addressDetail: "scut",
+    province : "Guangdong",
+    city:"Guangzhou",
     isDefaultAddress:true,
     addressId:111
   },
   {
     recipentName: "Lilith",
     phoneNumber: "120",
-    addressDetail: "China",
+    province : "moon",
+    city:"moon",
+    addressDetail: "CCC",
     isDefaultAddress:false,
     addressId:222
   },
   {
     recipentName: "merlin",
     phoneNumber: "518",
+    province : "moon",
+    city:"moon",
     addressDetail: "avalon",
     isDefaultAddress:false,
     addressId:333
@@ -177,6 +183,8 @@ app.post('/BookStore/', function (req, res) {
       recipentName:data.data['recipentName'],
       phoneNumber:data.data['phoneNumber'],
       addressDetail:data.data['addressDetail'],
+      province:data.data['province'],
+      city:data.data['city'],
       default:false,
       addressId:888
     }
@@ -223,6 +231,8 @@ app.post('/BookStore/', function (req, res) {
         element.recipentName = data.data.recipentName
         element.phoneNumber = data.data.phoneNumber,
         element.addressDetail = data.data.addressDetail,
+        element.province = data.data.province,
+        element.city = data.data.city,
         element.isDefaultAddress = data.data.isDefaultAddress
       }
     });

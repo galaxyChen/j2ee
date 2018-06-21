@@ -59,7 +59,8 @@ export default {
                 recipentName:'',
                 phoneNumber:'',
                 addressDetail:'',
-                area:''
+                province:'',
+                city:''
             },
             addressRule:{
                 recipentName: [
@@ -83,17 +84,20 @@ export default {
         },
         resetForm() {
             this.$refs['addressItem'].resetFields()
-            this.$refs.map.init()
+            this.$refs.map.reset()
         },
         submitForm() {
-
+            let flag = this.$refs.map.test()
             this.$refs['addressItem'].validate(async valid => {
         
-                if (valid) {
+                if (valid && flag) {
+                    
                     let newAddress = {
                         recipentName : this.addressItem.recipentName,
                         phoneNumber: this.addressItem.phoneNumber,
-                        addressDetail: this.addressItem.area+this.addressItem.addressDetail
+                        addressDetail: this.addressItem.addressDetail,
+                        province : this.addressItem.province,
+                        city :this.addressItem.city
                     }
                     this.visible = false;
                     this.$emit('submitForm',newAddress)
@@ -106,12 +110,13 @@ export default {
 
 
         },
-        updateArea(area){
-            this.addressItem.area = area
+        updateArea(province,city){
+            this.addressItem.province = province
+            this.addressItem.city = city
         },
         closeDialog() {
             this.$refs["addressItem"].resetFields();
-            this.$refs.map.init()
+            this.$refs.map.reset()
         }
     }
 };
