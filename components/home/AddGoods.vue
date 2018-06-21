@@ -51,7 +51,6 @@
                             :auto-upload="false"
                             list-type="picture">
                         <el-button slot='trigger' size="small" type="primary">选择文件</el-button>
-                        <el-button @click="commitImg" size="small" type="primary">确定上传</el-button>
                         <div slot="tip" class="el-upload__tip">只能上传jpg/png文件，且不超过1M</div>
                     </el-upload>
                 </el-form-item>
