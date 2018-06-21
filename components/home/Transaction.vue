@@ -11,12 +11,12 @@
                 </el-tabs>
             </el-header>
             <el-main>
-                <Order v-for="order in orderList" :key='order.id' :order='order'></Order>
+                <Order @lookDetail='lookDetail' v-for="order in orderList" :key='order.id' :order='order'></Order>
             </el-main>
         </el-container>
         <el-container v-else>
             <el-header>
-                <el-button class="back-button" size="medium" type='text' icon="el-icon-back">返回</el-button>
+                <el-button @click="goBack" class="back-button" size="medium" type='text' icon="el-icon-back">返回</el-button>
             </el-header>
             <el-main>
                 <OrderDetail :order='onShowOrder'></OrderDetail>
@@ -74,7 +74,14 @@ export default {
   },
   methods:{
       handleClick(){
+          this.showList = false;
+          
+      },
+      lookDetail(id){
 
+      },
+      goBack(){
+          this.showList = true;
       }
   }
 };

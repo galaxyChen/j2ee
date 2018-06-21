@@ -9,7 +9,7 @@
         </el-row>
         <el-row>
             <el-col class='order-box' :span='4'>
-                <div >
+                <div >  
                     <img class='order-book' src='~/static/book.png'/>
                 </div>
             </el-col>
@@ -26,7 +26,7 @@
             </el-col>
             <el-col class='order-box' :span="4">
                 <el-button class="order-button" size='small' type='danger'>{{button_text}}</el-button>
-                 <el-button type="text"  class="order-button-text">查看详情</el-button>
+                 <el-button @click="lookDetail" type="text"  class="order-button-text">查看详情</el-button>
                 <!-- <a  class="order-button-text">取消订单</a> -->
             </el-col>
         </el-row>
@@ -118,6 +118,11 @@ export default {
                 return "发货"
             if (this.order.state==='已完成')
                 return "申请退货"
+        }
+    },
+    methods:{
+        lookDetail(){
+            this.$emit('lookDetail',this.order.id)
         }
     }
 }
