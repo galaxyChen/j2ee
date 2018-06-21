@@ -27,8 +27,8 @@ export default {
       options: [
         //全部
         {
-          value:"全部",
-          label:"全部"
+          value: "全部",
+          label: "全部"
         },
         //小说 -> 其子分类
         {
@@ -199,21 +199,26 @@ export default {
           label: "其他"
         }
       ],
-      searchText:'',
-      tag:['全部']
+      searchText: "",
+      tag: ["全部"]
     };
   },
   methods: {
     changeValue(value) {
       console.log(this.tag);
     },
-    search(){
+    search() {
       let text = this.searchText;
       let tag = this.tag;
-      this.$router.push({name:'search',params:{
-        text:text,
-        tag:tag
-      }})
+      if (text != "") {
+        this.$router.push({
+          path: "search",
+          query: {
+            text: text,
+            tag: tag
+          }
+        });
+      }
     }
   }
 };

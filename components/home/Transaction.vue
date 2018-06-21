@@ -52,7 +52,7 @@ export default {
   data() {
     return {
       activeTab: "buy_all",
-      showList:true,
+      showList:false,
       orderList: [{
           id:'1234567',
           time:'2018-01-08 13:02',

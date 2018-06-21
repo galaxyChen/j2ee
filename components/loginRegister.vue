@@ -17,6 +17,9 @@
                     <el-button type="primary" @click="submitForm('loginForm')">确定</el-button>
                     <el-button @click="resetForm('loginForm')">重置</el-button>
                 </el-form-item>
+                <el-form-item>
+                  <el-button type="text" @click="ForgetPw" style="margin-left:70%">忘记密码</el-button>
+                </el-form-item>
             </el-form>
 
             <el-form  ref="regForm" status-icon :model="regForm"  :rules="regRules"  label-width="80px" v-show="query=='register'">
@@ -180,6 +183,8 @@ export default {
       function serialize(obj) {
         let result = {};
         for (let term in obj) {
+          if (term=='password2')
+            continue;
           if (obj.hasOwnProperty(term)) {
             result[term] = obj[term];
           }
@@ -198,7 +203,7 @@ export default {
           else if (data.query == "register")
             data.data = serialize(this.regForm);
           let response = await this.$axios.send(data);
-
+          console.log(response)
           if (data.query == "login") this.applyLogin(response);
           else if (data.query == "register") {
             if (this.applyRegister(response)) {
@@ -249,6 +254,9 @@ export default {
     closeDialog() {
       this.$refs["regForm"].resetFields();
       this.$refs["loginForm"].resetFields();
+    },
+    ForgetPw(){
+       this.$router.push({ path: `/ForgetPw/` });
     }
   }
 };

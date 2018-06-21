@@ -12,7 +12,7 @@ export default function ({$axios, redirect}) {
         if (header!=undefined){
             Header = header
         }
-        console.log(url)
+    console.log(url)
         let request = await $axios
             .post(url, data,Header)
             .then((response) => {

@@ -3,8 +3,8 @@
 
         <el-form status-icon :model="addressItem" ref="addressItem" :rules="addressRule">
 
-            <el-form-item label="姓名" prop="recipentName">
-                <el-input @input='check("recipentName")' v-model="addressItem.recipentName" ></el-input>
+            <el-form-item label="姓名" prop="recipientName">
+                <el-input @input='check("recipientName")' v-model="addressItem.recipientName" ></el-input>
             </el-form-item>
             <el-form-item label="手机号" prop="phoneNumber">
                 <el-input  @input='check("phoneNumber")' v-model="addressItem.phoneNumber"></el-input>
@@ -56,16 +56,22 @@ export default {
         return {
             visible: false,
             addressItem:{
-                recipentName:'',
+                recipientName:'',
                 phoneNumber:'',
                 addressDetail:'',
                 province:'',
                 city:''
             },
             addressRule:{
+<<<<<<< HEAD
                 recipentName: [
                     { required: true, message: "请输入姓名", trigger: "blur" },
                     { min: 1, max: 15, message: "长度不超过15个字", trigger: "blur" }
+=======
+                recipientName: [
+                    { required: true, message: "收货人不能为空", trigger: "blur" },
+                    { min: 1, max: 16, message: "长度小于16个字符", trigger: "blur" }
+>>>>>>> 8e94333f8e72efd30158450d6a44cf5f0727ec32
                 ],
                 phoneNumber:[
                     { validator:validPhone ,trigger:"blur" }
@@ -93,7 +99,7 @@ export default {
                 if (valid && flag) {
                     
                     let newAddress = {
-                        recipentName : this.addressItem.recipentName,
+                        recipientName : this.addressItem.recipientName,
                         phoneNumber: this.addressItem.phoneNumber,
                         addressDetail: this.addressItem.addressDetail,
                         province : this.addressItem.province,

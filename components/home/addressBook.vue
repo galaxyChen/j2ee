@@ -18,7 +18,7 @@
 
               <div class="leftCard">
                 <div class="cardItem">
-                  收货人：{{item.recipentName}}
+                  收货人：{{item.recipientName}}
                 </div>
                 <div class="cardItem">
                   联系方式：{{item.phoneNumber}}
@@ -157,7 +157,7 @@ export default {
         data :{
           userId:'',
           sessionId : '',
-          recipentName : addressItem.recipentName,
+          recipientName : addressItem.recipientName,
           phoneNumber : addressItem.phoneNumber,
           addressDetail : addressItem.addressDetail,
           province : addressItem.province,
@@ -174,7 +174,7 @@ export default {
     },
     async editAddressItem(index, addressItem) {
       // this.addressItems[index].address = addressItem.address;
-      // this.addressItems[index].recipentName = addressItem.recipentName;
+      // this.addressItems[index].recipientName = addressItem.recipientName;
       // this.addressItems[index].phoneNumber = addressItem.phoneNumber;
       
       let data = {
@@ -182,7 +182,7 @@ export default {
         data :{
           userId:'',
           sessionId : '',
-          recipentName : addressItem.recipentName,
+          recipientName : addressItem.recipientName,
           phoneNumber : addressItem.phoneNumber,
           addressDetail : addressItem.addressDetail,
           province : addressItem.province,
