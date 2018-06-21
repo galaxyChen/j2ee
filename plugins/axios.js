@@ -1,9 +1,13 @@
+import Vue from 'vue'
 export default function ({$axios, redirect}) {
     $axios.onRequest(config => {
     })
 
     $axios.send = async function (data,URL,header) {
         console.log(data)
+        // Vue.$message({
+        //     message:'加载中'
+        // })
         let url = '/BookStore/'
         if (URL!=undefined){
             url = URL

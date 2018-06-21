@@ -1,30 +1,30 @@
 <template>
-    <el-col :span='12' :push='1' style="margin-top:30px;">
+    <el-col :span='12' :push='1' style="margin-top:30px;margin-bottom:30px;">
         <div class='AddGoods-box'>
             <el-form :model="Goods" :rules="rules" ref="Goods" label-width="100px">
-                <el-form-item label="商品标题: " prop="title">
-                    <el-input  v-model='Goods.title'  placeholder='请输入商品标题'></el-input>
+                <el-form-item label="商品标题: " prop="itemTitle">
+                    <el-input  v-model='Goods.itemTitle'  placeholder='请输入商品标题'></el-input>
                 </el-form-item>
-                <el-form-item label="书名: " prop="name">
-                    <el-input  :value='Goods.name'  placeholder='请输入书名'></el-input>
+                <el-form-item label="书名: " prop="bookName">
+                    <el-input  v-model='Goods.bookName'  placeholder='请输入书名'></el-input>
                 </el-form-item>
                 <el-form-item label="作者：" prop="author">
-                    <el-input  :value='Goods.author'  placeholder='请输入作者'></el-input>
+                    <el-input  v-model='Goods.author'  placeholder='请输入作者'></el-input>
                 </el-form-item>
-                <el-form-item label="出版社: " prop="publisher">
-                    <el-input  :value='Goods.publisher'  placeholder='请输入出版社'></el-input>
+                <el-form-item label="出版社: " prop="press">
+                    <el-input  v-model='Goods.press'  placeholder='请输入出版社'></el-input>
                 </el-form-item>
-                <el-form-item label="出版日期: " prop="pubDate">
-                    <el-date-picker v-model="Goods.pubDate" type="month" placeholder="选择日期"> </el-date-picker>
+                <el-form-item label="出版日期: " prop="publicationDate">
+                    <el-date-picker v-model="Goods.publicationDate" type="month" placeholder="选择日期"> </el-date-picker>
                 </el-form-item>
                 <el-form-item label="图书类别: " prop="options">
                    <el-cascader class="index-input-box" :options="Goods.options" change-on-select></el-cascader>
                 </el-form-item>
                 <el-form-item label="价格: "  prop="price">
-                    <el-input :value='Goods.price'  placeholder='请输入商品价格'></el-input>
+                     <el-input-number v-model="Goods.price" :precision="2" :step="1" :min='0'></el-input-number>
                 </el-form-item>
-                <el-form-item label="库存数量: " prop="inventory">
-                    <el-input  :value='Goods.inventory'  placeholder='请输入库存数量'></el-input>
+                <el-form-item label="库存数量: " prop="quantity">
+                     <el-input-number v-model="Goods.quantity"  :min="1"  label="描述文字"></el-input-number>
                 </el-form-item>
                 <el-form-item label="配送方式: ">
                      <el-radio v-model="radio" label="1">包邮</el-radio>
@@ -34,15 +34,13 @@
                    <mapLinkage @updateArea="updateArea"></mapLinkage>
                 </el-form-item>
                  <el-form-item label="商品描述: ">
-                      <el-input  type="textarea"  :rows="2"  :value='Goods.dsc' placeholder="请输入商品描述" ></el-input>
+                      <el-input  type="textarea"  :rows="2"  :value='Goods.description' placeholder="请输入商品描述" ></el-input>
                 </el-form-item>
                  <el-form-item label="上传图片: ">
                     <el-upload class="upload-pic" 
                             action="https://jsonplaceholder.typicode.com/posts/"  
                             :show-file-list="true"
                             ref='upload'
-                            :on-preview="handlePreview"   
-                            :on-remove="handleRemove"
                             :before-remove="beforeRemove" 
                             :limit="1"
                             :on-exceed="handleExceed"
@@ -76,9 +74,11 @@ export default {
         bookName: "",
         author: "",
         press: "",
-        pubDpublicationDateate: "",
-        price: "",
+        publicationDate: "",
+        price: 0,
         originAddress: "",
+        quantity: 0,
+        description: "",
         //选择图书类别
         options: [
           //全部
@@ -260,26 +260,25 @@ export default {
       fileList: [],
       //验证必填项是否填写
       rules: {
-        title: [
-          { required: true, message: "商品标题不能为空", trigger: "blur" },
-          { min: 1, max: 30, message: "标题长度应在30字内！", trigger: "blur" }
+        itemTitle: [
+          { required: true, message: "商品标题不能为空", trigger: "change" },
+          { min: 1, max: 30, message: "标题长度应在30字内！", trigger: "change" }
         ],
-        name: [
-          { required: true, message: "书名不能为空", trigger: "blur" },
-          { min: 1, max: 30, message: "书名应在30字内！", trigger: "blur" }
+        bookName: [
+          { required: true, message: "书名不能为空", trigger: "change" },
+          { min: 1, max: 30, message: "书名应在30字内！", trigger: "change" }
         ],
         author: [
-          { required: true, message: "作者名不能为空", trigger: "blur" },
-          { min: 1, max: 30, message: "作者名应在30字内！", trigger: "blur" }
+          { required: true, message: "作者名不能为空", trigger: "change" },
+          { min: 1, max: 30, message: "作者名应在30字内！", trigger: "change" }
           //应有要求作者姓名不能为数字->未写
         ],
-        publisher: [
-          { required: true, message: "出版社名不能为空", trigger: "blur" },
-          { min: 1, max: 50, message: "出版社名应在 50字内", trigger: "blur" }
+        press: [
+          { required: true, message: "出版社名不能为空", trigger: "change" },
+          { min: 1, max: 50, message: "出版社名应在 50字内", trigger: "change" }
         ],
-        pubDate: [
+        publicationDate: [
           {
-            type: "date",
             required: true,
             message: "请选择出版时间",
             trigger: "change"
@@ -294,9 +293,8 @@ export default {
           { required: true, message: "价格不能为空", trigger: "blur" }
           //应有验证输入必须为数字
         ],
-        inventory: [
+        quantity: [
           { required: true, message: "库存量不能为空", trigger: "blur" },
-          { min: 0, max: 100, message: "库存量范围为：0-100" }
         ]
 
         //商品描述可以为空
@@ -306,17 +304,10 @@ export default {
   methods: {
     //选择发货地地区
     updateArea(area) {
-      this.Goods.area = area;
+      this.Goods.originAddress = area;
     },
 
-    //上传图片处理操作
-    handleRemove(file, fileList) {
-      console.log(file, fileList);
-    },
-    handlePreview(file) {
-      console.log(file);
-      duration: 0;
-    },
+
     handleExceed(files, fileList) {
       this.$message.warning(
         `当前限制选择 1 个文件，本次选择了 ${
@@ -327,6 +318,7 @@ export default {
     beforeRemove(file, fileList) {
       return this.$confirm(`确定移除 ${file.name}？`);
     },
+
     async commitImg() {
       let file = this.$refs.upload.uploadFiles[0];
       file = this.$refs.upload.getFile(file);
@@ -343,7 +335,8 @@ export default {
     submitForm(formName) {
       this.$refs[formName].validate(valid => {
         if (valid) {
-          alert("submit!");
+          console.log(this.Goods)
+          console.log(this.fileList)
         } else {
           console.log("error submit!!");
           return false;

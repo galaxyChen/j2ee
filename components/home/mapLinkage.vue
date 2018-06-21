@@ -5,7 +5,7 @@
           <el-option v-for="item in provs" :key="item.value" :label="item.label" :value="item.value">
           </el-option>
       </el-select>
-      <el-select size="small" style="width: 100px" v-if="selectProv!=''" v-model="selectCity" placeholder="请选择城市" v-on:change="getCity($event)">
+      <el-select size="small" style="width: 100px;margin-left:10px;" v-if="selectProv!=''" v-model="selectCity" placeholder="请选择城市" v-on:change="getCity($event)">
           <el-option v-for="item in citys" :key="item.value" :label="item.label" :value="item.value">
           </el-option>
       </el-select>
