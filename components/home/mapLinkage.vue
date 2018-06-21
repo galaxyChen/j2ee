@@ -1,21 +1,35 @@
 <template>
   <!--联动选择地区-->
-  <el-form-item label="选择地区：">
-      <el-select size="small" style="width: 100px" v-model="selectProv" placeholder="请选择省份" v-on:change="getProv($event)">
-          <el-option v-for="item in provs" :key="item.value" :label="item.label" :value="item.value">
-          </el-option>
-      </el-select>
-      <el-select size="small" style="width: 100px" v-if="selectProv!=''" v-model="selectCity" placeholder="请选择城市" v-on:change="getCity($event)">
-          <el-option v-for="item in citys" :key="item.value" :label="item.label" :value="item.value">
-          </el-option>
-      </el-select>
-  </el-form-item>
+  <el-form :rules="areaRules">
+    <el-form-item prop="province">
+        <el-select size="small"  style="width: 100px" v-model="selectProv" placeholder="请选择省份" v-on:change="getProv($event)">
+            <el-option v-for="item in provs" :key="item.value" :label="item.label" :value="item.value">
+            </el-option>
+        </el-select>
+      </el-form-item>
+       <el-form-item prop="city">
+         <el-select size="small" style="width: 100px" v-if="selectProv!=''" v-model="selectCity" placeholder="请选择城市" v-on:change="getCity($event)">
+             <el-option v-for="item in citys" :key="item.value" :label="item.label" :value="item.value">
+             </el-option>
+         </el-select>
+       </el-form-item>
+  </el-form>
 </template>
 
 <script>
  export default {
         data() {
+            
             return {
+              areaRules:{
+                province : [
+                    {required:true, message: '1111', trigger: "blur" }
+                ],
+                city :[
+                    {required:true, message: '2222', trigger: "blur" }
+                ]
+              },
+
               provs:[
                 {label:"北京市",value:"北京市"},
                 {label:"天津市",value:"天津市"},
@@ -1220,7 +1234,8 @@
                 this.selectProv = ''
                 this.selectCity = ''
                 this.citys = []
-            }
+            },
+            
 
         },
         mounted: function () {
