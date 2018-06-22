@@ -2,7 +2,7 @@
     <div>
         <NavBar ref='navtop' :logined='logined' :user='user'></NavBar>
         <el-col :span="5">
-            <NavLeft @changeTab='changeTab'></NavLeft>
+            <NavLeft :active='currentMainIndex' @changeTab='changeTab'></NavLeft>
         </el-col>
         <component @changeName='changeName' :is="currentMain" :user='user' :type='type'></component>
     </div>
@@ -47,13 +47,16 @@ export default {
             this.$router.push({ path: "/" });
         } 
     }
-    // console.log(this.$route.params);
+    let query = this.$route.query;
+    this.changeTab(query['index'],[query['tab']])
+    // console.log(this.$route.query);
   },
   data() {
     return {
       type: 1,
       logined: true,
       currentMain: "Person",
+      currentMainIndex:'1',
       user: {
         name: "张三"
       }
@@ -70,6 +73,9 @@ export default {
         "AddGoods"
       ];
       this.currentMain = name[indexPath[0] - 1];
+      this.currentMainIndex = index;
+      // console.log(this.currentMain)
+      // console.log(this.currentMainIndex)
       if (index === "3-1") this.type = 1;
       if (index === "3-2") this.type = 2;
     },
