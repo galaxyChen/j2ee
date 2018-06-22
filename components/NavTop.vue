@@ -12,6 +12,7 @@
           <el-menu-item index="logo" class="NavLeft">二手书交易平台</el-menu-item>
           <el-menu-item @click="signout" index="signout" class="NavRight">退出登录</el-menu-item>
           <el-menu-item index="home" class="NavRight">个人中心</el-menu-item>
+          <el-menu-item index="shoppingCar" class="NavRight">购物车</el-menu-item>
           <el-menu-item index="index" class="NavRight">首页</el-menu-item>
           <el-menu-item index="welcome" class="NavRight" >欢迎，{{userName}}</el-menu-item>
         
@@ -110,6 +111,26 @@ export default {
           let check = await this.$axios.send(data);
           if (check.status == 1) {
             this.$router.push({ path: `/home/${userId}` });
+          } else {
+            this.signout()
+          }
+        }
+      }
+
+      if (key === "shoppingCar") {
+        let userId = Cookies.get("userId");
+        let sessionId = Cookies.get("sessionId");
+        if (userId && sessionId) {
+          let data = {
+            query: "check",
+            data: {
+              userId: userId,
+              sessionId: sessionId
+            }
+          };
+          let check = await this.$axios.send(data);
+          if (check.status == 1) {
+            this.$router.push({ path: `/shoppingCar/${userId}` });
           } else {
             this.signout()
           }

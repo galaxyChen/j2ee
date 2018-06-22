@@ -68,6 +68,7 @@
 
 
 <script>
+import Cookies from "js-cookie";
   export default {
     mounted(){
       this.getShoppingCarList();
@@ -157,9 +158,42 @@
             this.$message.error('发生错误：'+response.err);
           }
         },
-        submitBill(){
-          this.updateTotal()
-          console.log(this.tableData)
+        async submitBill(){
+
+          let userId = Cookies.get("userId");
+          let sessionId = Cookies.get("sessionId");
+          if (userId && sessionId) {
+            let data = {
+              query: "check",
+              data: {
+                userId: userId,
+                sessionId: sessionId
+              }
+            };
+            let check = await this.$axios.send(data);
+            if (check.status == 1) {
+              this.updateTotal()
+              
+              let toBuyList = []
+              this.tableData.forEach(ele =>{
+                if(ele.chosen==true){
+                  let newItem = {
+                    price : ele.price,
+                    nums : ele.nums,
+                    information : ele.information,
+                    province : ele.province
+                  }
+                  toBuyList.push(newItem)
+                }
+              });
+
+              
+              Cookies.set("itemList", toBuyList);
+              this.$router.push({ path: `/order/${userId}` });
+            } else {
+              this.signout()
+            }
+          }
         },
 
     }

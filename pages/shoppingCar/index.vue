@@ -1,21 +1,23 @@
 <template>
-    <div>
-        <NavBar ref='navtop' :logined='logined' :user='user'></NavBar>
-        <shoppingCar></shoppingCar>
-    </div>
-    
+      <el-alert
+    title="验证失败"
+    type="error">
+  </el-alert>
 </template>
 
-
 <script>
-import shoppingCar from '~/components/shoppingCar/shoppingCar'
-// import order from '~/components/shoppingCar/order'
-import Cookies from "js-cookie";
-import NavBar from "~/components/NavTop";
+
 export default {
-    components:{
-        shoppingCar,
-        NavBar,
-    }
-}
+  mounted(){
+    this.$confirm('请先登录！', '错误', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'error'
+        }).then(() => {
+          this.$router.push({path:'/'})
+        }).catch(()=>{
+          this.$router.push({path:'/'})
+        })
+  }
+};
 </script>

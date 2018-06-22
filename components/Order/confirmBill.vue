@@ -1,35 +1,50 @@
 <template>
-    <div :model="totalData">
-        <p>商品件数：{{totalData.totalItem}}</p>
-        <p>商品总额：{{totalData.totalPay}}</p>
-        <p>运费：{{totalData.totalTransportFee}}</p>
-        <p>应付总费：{{totalData.totalTransportFee+totalData.totalPay }}</p>
-        <el-button type="primary" @click="submitBill">提交订单</el-button>
+    <div :model="totalList">
+        <el-row class="el-row1">商品件数：
+            <span style="color:red">
+                {{totalList.nums}}件
+            </span>
+        </el-row>
+
+        <el-row class="el-row1">商品总额：
+            <span style="color:red">
+                ￥{{totalList.pay}}
+            </span>
+        </el-row>
+
+        <el-row class="el-row1">运费：
+            <span style="color:red">
+                ￥{{totalList.transportFee}}
+            </span>
+        </el-row>
+
+        <el-row class="el-row1">应付总费：
+            <span style="color:red">
+                ￥{{totalList.transportFee+totalList.pay }}
+            </span>
+        </el-row>
+        <el-row class="el-row1">
+            <el-button type="primary" @click="submitBill">提交订单</el-button>
+        </el-row>
+        
     </div>
 </template>
+
+<style scope>
+.el-row1{
+  margin-top: 20px
+}
+
+</style>
+
 <script>
 export default {
-    props:["itemList"],
-    mounted() {
-        console.log(this.itemList)
-        this.itemList.forEach(element => {
-            this.totalData.totalItem += element.nums;
-            this.totalData.totalPay += element.nums * element.price;
-            this.totalData.totalTransportFee += element.transportFee
-        });
-    },
-    data(){
-        return {
-            totalData:{
-                totalItem : 0,
-                totalPay : 0,
-                totalTransportFee : 0,
-            }
-        }
-    },
+    props:["totalList"],
     methods:{
+
+
         submitBill(){
-            // this.$emit('submitBill',)
+            this.$emit('submitBill')
         }
     }
 }

@@ -7,64 +7,80 @@ var upload = multer({dest: 'uploads/'})
 var addresses = [
   {
     recipientName: "Foo",
-    phoneNumber: "110",
+    phoneNumber: "13612345678",
     addressDetail: "scut",
-    province : "Guangdong",
-    city:"Guangzhou",
+    province : "湖南省",
+    city:"广州市",
     isDefaultAddress:true,
-    addressId:111
+    addressId:111,
   },
   {
-    recipientName: "Lilith",
-    phoneNumber: "120",
-    province : "moon",
-    city:"moon",
-    addressDetail: "CCC",
+    recipientName: "Bar",
+    phoneNumber: "15123456789",
+    province : "广东省",
+    city:"广州市",
+    addressDetail: "大学城",
     isDefaultAddress:false,
     addressId:222
   },
   {
-    recipientName: "merlin",
-    phoneNumber: "518",
-    province : "moon",
-    city:"moon",
-    addressDetail: "avalon",
+    recipientName: "Tony",
+    phoneNumber: "13412345678",
+    province : "广东省",
+    city:"广州市",
+    addressDetail: "小谷围",
     isDefaultAddress: false,
     addressId: 333
   }
 ]
 var tableData= [
   {
-    information:'merlin',
-    price: 518,
+    information:'钱包',
+    price: 500,
     nums:1,
-
+    transportFee : 2,
     quantity:10,
-    itemState:1
+    itemState:1,
+    province : '广东省',
+    userName :'lwz',
+    freePostage:1,
+    itemId : 123
   }, 
   {
-    information:'lilith',
-    price: 518,
+    information:'铅笔',
+    price: 10,
     nums:1,
-
+    transportFee : 2,
     quantity:15,
-    itemState:1
+    itemState:1,
+    userName :'lwz',
+    province : '湖南省',
+    freePostage:1,
+    itemId : 123
   }, 
   {
-    information:'bb',
-    price: 518,
+    information:'鼠标',
+    price: 200,
     nums:1,
-
+    transportFee : 2,
     quantity:20,
-    itemState:1
+    itemState:1,
+    province : '广东省',
+    userName :'lwz',
+    freePostage:1,
+    itemId : 123
   }, 
   {
-    information:'aa',
-    price: 518,
+    information:'面包',
+    price: 30,
     nums:1,
-
+    transportFee : 2,
     quantity:8,
-    itemState:1
+    itemState:1,
+    province : '广东省',
+    userName :'lwz',
+    freePostage:1,
+    itemId : 123
   }
 ]
 app.use(express.static('uploads'));

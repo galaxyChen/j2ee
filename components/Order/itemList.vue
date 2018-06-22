@@ -1,5 +1,5 @@
 <template>
-  <el-table ref="Table" :data="tableData"  style="width: 100%"  >
+  <el-table ref="Table" :data="itemList"  style="width: 100%"  >
 
     <el-table-column label="商品信息" align="center">
         <template slot-scope="scope">
@@ -7,6 +7,11 @@
         </template>
     </el-table-column>
 
+    <el-table-column label="发货地" align="center">
+        <template slot-scope="scope">
+            <p>{{scope.row.province}}</p>
+        </template>
+    </el-table-column>
     <el-table-column label="单价" align="center">
         <template slot-scope="scope">
             <p>￥{{scope.row.price}}</p>
@@ -33,8 +38,11 @@
 </template>
 <script>
 export default {
+    mounted(){
+        
+    },
     props: [ 
-        "tableData"
+        "itemList"
     ],
 
 }
