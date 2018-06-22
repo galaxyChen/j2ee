@@ -5,7 +5,7 @@
         </el-header>
         <el-main>
             <el-row>
-                <SearchBox></SearchBox>
+                <SearchBox @doSearch='doSearch'></SearchBox>
             </el-row>
             <el-row>
                 <ItemRow v-for="(row,index) in rows" :row='row' :key='"row"+index'></ItemRow>
@@ -57,10 +57,9 @@ export default {
     return {
       text: "",
       tag: ["全部"],
-      itemList: [
-      ],
-      size:0,
-      current:1
+      itemList: [],
+      size: 0,
+      current: 1
     };
   },
   computed: {
@@ -84,14 +83,16 @@ export default {
     }
   },
   methods: {
-    async doSearch() {
+    async doSearch(searchText, searchTag) {
+      let text = searchText || this.text;
+      let tag = searchTag || this.tag;
       let data = {
         query: "search",
         data: {
-          name: this.text,
-          pageNo:this.current,
-          itemsPerPage:10,
-          bookCategory: this.tag
+          name: text,
+          pageNo: this.current,
+          itemsPerPage: 10,
+          bookCategory: tag
         }
       };
       let response = await this.$axios.send(data);
@@ -99,11 +100,11 @@ export default {
       this.size = response.data.size;
     }
   },
-  watch:{
-    '$route'(to,from){
+  watch: {
+    $route(to, from) {
       this.text = to.query.text;
       this.tag = to.query.tag;
-      this.doSearch()
+      this.doSearch();
     }
   }
 };

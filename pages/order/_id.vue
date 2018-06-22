@@ -102,7 +102,7 @@ export default {
             this.addressItem = addressItem
             this.totalList = tmp
         },
-        submitBill(){
+        async submitBill(){
             let data = {
                 query : 'submitBill',
                 itemList : this.itemList,

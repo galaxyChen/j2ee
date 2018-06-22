@@ -110,7 +110,7 @@ export default {
           };
           let check = await this.$axios.send(data);
           if (check.status == 1) {
-            this.$router.push({ path: `/home/${userId}` });
+            this.$router.push({ path: `/home/${userId}` ,query:{index:1,tab:1}});
           } else {
             this.signout()
           }

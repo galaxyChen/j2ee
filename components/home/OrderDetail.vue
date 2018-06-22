@@ -8,15 +8,15 @@
             </el-col>
             <el-col class="header-box" :span="4">
                 <p style="margin-top:4px;color:#999;">订单编号</p>
-                <p style="margin-top:4px;">{{order.id}}</p>
+                <p style="margin-top:4px;">{{order.orderId}}</p>
             </el-col>
             <el-col class="header-box" :span="4">
                 <p style="margin-top:4px;color:#999;">下单时间</p>
-                <p style="margin-top:4px;">{{order.time}}</p>
+                <p style="margin-top:4px;">{{order.purchaseTime}}</p>
             </el-col>
             <el-col class="header-box" :span="4">
                 <p style="margin-top:4px;color:#999;">付款截止</p>
-                <p style="margin-top:4px;">{{order.time_limit}}</p>
+                <p style="margin-top:4px;">{{timeLimit}}</p>
             </el-col>
             <el-col class="header-box" :span="3" >
                 <el-button type="danger">立即付款</el-button>
@@ -50,7 +50,7 @@
                             </div>
                         </el-col>
                         <el-col :span='12'>
-                            <h4 class="order-detail-text">{{scope.row.title}}</h4>
+                            <h4 class="order-detail-text">{{scope.row.itemTitle}}</h4>
                         </el-col>
                     </template>
                 </el-table-column>
@@ -70,13 +70,13 @@
             <div style='font-size:16px;color:#999;padding:14px;'> 收货信息</div>
             <el-card >
                 <div  class="text item">
-                    收货人:李四{{order.recievier}}
+                    收货人:李四{{address.recipient}}
                 </div>
                 <div  class="text item">
-                    联系方式:15588888888{{order.phone}}
+                    联系方式:15588888888{{address.phoneNumber}}
                 </div>
                 <div  class="text item">
-                    收货地址:广州大学城华南理工大学{{order.location}}
+                    收货地址:广州大学城华南理工大学{{addressDetail}}
                 </div>
             </el-card>
         </el-row>
@@ -177,27 +177,58 @@
   justify-content: center;
   text-align: center;
 }
-.order-summary{
-    text-align: right;
+.order-summary {
+  text-align: right;
 }
 .order-summary-text {
-    margin-top: 20px;
+  margin-top: 20px;
 }
 
 .order-summary-text:last-child {
-    margin-bottom: 20px;
+  margin-bottom: 20px;
 }
 </style>
 
 <script>
+import Cookies from "js-cookie";
 export default {
+  async mounted() {
+    let data = {
+      query: "getAddress",
+      data: {
+        userId: Cookies.get("userId"),
+        sessionId: Cookies.get("sessionId"),
+        addressId: this.order.addressId
+      }
+    };
+    let response = await this.$axios.send(data);
+    if (response.status == 1) {
+        this.address = response.data;
+    } else if (response.status == 0) {
+      this.$message.error("发生错误" + response.err);
+    } else {
+      this.$message.error("登录超时！");
+      Cookies.remove("userId");
+      Cookies.remove("sessionId");
+      Cookies.remove("userName");
+      this.$router.push({ path: "/" });
+    }
+  },
   props: ["order"],
   data() {
-    return {};
+    return {
+        address:{}
+    };
   },
   computed: {
     tableData() {
       return [this.order];
+    },
+    timeLimit() {
+      return 0;
+    },
+    addressDetail(){
+        return this.address.province + " " + this.address.city + " " + this.address.addressDetail;
     }
   }
 };

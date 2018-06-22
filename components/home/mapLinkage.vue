@@ -38,7 +38,7 @@ export default {
   data() {
     return {
       areaRules: {
-        selectProv: [{ required: true, message: "请输入省份" ,trigger:'change'}],
+        selectProv: [{ required: true, message: "请选择省份" ,trigger:'change'}],
         selectCity: [{ required: true, message: "请输入城市" ,trigger:'change'}]
       },
 
@@ -1634,7 +1634,10 @@ export default {
         this.$refs.area.validateField("selectCity");
       if (this.area.selectProv != "" && this.area.selectCity != "") {
         this.$emit("updateArea", this.area.selectProv, this.area.selectCity);
-        return true;
+        return {
+          prov:this.area.selectProv,
+          city:this.area.selectCity
+        }
       }
       return false;
     }

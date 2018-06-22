@@ -50,6 +50,9 @@
 
 <script>
 export default {
+    mounted(){
+        console.log(this.item)
+    },
   props: ["item"],
   data() {
     return {
