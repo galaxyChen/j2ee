@@ -78,6 +78,8 @@ export default {
       // console.log(this.currentMainIndex)
       if (index === "3-1") this.type = 1;
       if (index === "3-2") this.type = 2;
+      let userId = Cookies.get('userId')
+      this.$router.push({ path: `/home/${userId}` ,query:{index:index,tab:indexPath[0]}});
     },
     changeName(newName){
       // console.log('index')
