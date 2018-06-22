@@ -1,9 +1,13 @@
+import Vue from 'vue'
 export default function ({$axios, redirect}) {
     $axios.onRequest(config => {
     })
 
     $axios.send = async function (data,URL,header) {
         console.log(data)
+        // Vue.$message({
+        //     message:'加载中'
+        // })
         let url = '/BookStore/'
         if (URL!=undefined){
             url = URL
@@ -12,7 +16,7 @@ export default function ({$axios, redirect}) {
         if (header!=undefined){
             Header = header
         }
-    console.log(url)
+    // console.log(url)
         let request = await $axios
             .post(url, data,Header)
             .then((response) => {

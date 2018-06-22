@@ -61,7 +61,7 @@ export default {
   },
   methods: {
     changeTab(index, indexPath) {
-      console.log(index, indexPath);
+      // console.log(index, indexPath);
       let name = [
         "Person",
         "addressBook",
@@ -74,7 +74,7 @@ export default {
       if (index === "3-2") this.type = 2;
     },
     changeName(newName){
-      console.log('index')
+      // console.log('index')
       this.$refs.navtop.$emit('changeName',newName)
     }
   }

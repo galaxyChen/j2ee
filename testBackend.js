@@ -4,9 +4,7 @@ var app = express();
 var multer = require('multer')
 var upload = multer({dest: 'uploads/'})
 
-
-
-var addresses= [
+var addresses = [
   {
     recipientName: "Foo",
     phoneNumber: "110",
