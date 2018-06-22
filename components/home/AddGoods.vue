@@ -1,52 +1,52 @@
 <template>
-    <el-col :span='12' :push='1' style="margin-top:30px;">
+    <el-col v-loading='loading' element-loading-text='发布中，请稍后' :span='12' :push='1' style="margin-top:30px;margin-bottom:30px;">
         <div class='AddGoods-box'>
             <el-form :model="Goods" :rules="rules" ref="Goods" label-width="100px">
-                <el-form-item label="商品标题: " prop="title">
-                    <el-input  v-model='Goods.title'  placeholder='请输入商品标题'></el-input>
+                <el-form-item label="商品标题: " prop="itemTitle">
+                    <el-input  v-model='Goods.itemTitle'  placeholder='请输入商品标题'></el-input>
                 </el-form-item>
-                <el-form-item label="书名: " prop="name">
-                    <el-input  :value='Goods.name'  placeholder='请输入书名'></el-input>
+                <el-form-item label="书名: " prop="bookName">
+                    <el-input  v-model='Goods.bookName'  placeholder='请输入书名'></el-input>
                 </el-form-item>
                 <el-form-item label="作者：" prop="author">
-                    <el-input  :value='Goods.author'  placeholder='请输入作者'></el-input>
+                    <el-input  v-model='Goods.author'  placeholder='请输入作者'></el-input>
                 </el-form-item>
-                <el-form-item label="出版社: " prop="publisher">
-                    <el-input  :value='Goods.publisher'  placeholder='请输入出版社'></el-input>
+                <el-form-item label="出版社: " prop="press">
+                    <el-input  v-model='Goods.press'  placeholder='请输入出版社'></el-input>
                 </el-form-item>
-                <el-form-item label="出版日期: " prop="pubDate">
-                    <el-date-picker v-model="Goods.pubDate" type="month" placeholder="选择日期"> </el-date-picker>
+                <el-form-item label="出版日期: " prop="publicationDate">
+                    <el-date-picker v-model="Goods.publicationDate" type="month" placeholder="选择日期" value-format='yyyy-MM'> </el-date-picker>
                 </el-form-item>
                 <el-form-item label="图书类别: " prop="options">
-                   <el-cascader class="index-input-box" :options="Goods.options" change-on-select></el-cascader>
+                   <el-cascader class="index-input-box" :options="Goods.options" @change='changeType' change-on-select></el-cascader>
                 </el-form-item>
                 <el-form-item label="价格: "  prop="price">
-                    <el-input :value='Goods.price'  placeholder='请输入商品价格'></el-input>
+                     <el-input-number v-model="Goods.price" :precision="2" :step="1" :min='0'></el-input-number>
                 </el-form-item>
-                <el-form-item label="库存数量: " prop="inventory">
-                    <el-input  :value='Goods.inventory'  placeholder='请输入库存数量'></el-input>
+                <el-form-item label="库存数量: " prop="quantity">
+                     <el-input-number v-model="Goods.quantity"  :min="1"  label="描述文字"></el-input-number>
                 </el-form-item>
                 <el-form-item label="配送方式: ">
-                     <el-radio v-model="radio" label="1">包邮</el-radio>
-                     <el-radio v-model="radio" label="2">邮费自理</el-radio>
+                     <el-radio v-model="radio" label='0'>包邮</el-radio>
+                     <el-radio v-model="radio" label='1'>邮费自理</el-radio>
                 </el-form-item>
-                 <el-form-item label="发货地: ">
-                   <mapLinkage @updateArea="updateArea"></mapLinkage>
+                 <el-form-item label="发货城市: ">
+                   <mapLinkage ref='area'></mapLinkage>
+                </el-form-item>
+                <el-form-item label="详细地址: ">
+                  <el-input  v-model='Goods.addressDetail'  placeholder='请输入详细地址'></el-input>
                 </el-form-item>
                  <el-form-item label="商品描述: ">
-                      <el-input  type="textarea"  :rows="2"  :value='Goods.dsc' placeholder="请输入商品描述" ></el-input>
+                      <el-input  type="textarea"  :rows="2"  :value='Goods.description' placeholder="请输入商品描述" ></el-input>
                 </el-form-item>
                  <el-form-item label="上传图片: ">
                     <el-upload class="upload-pic" 
-                            action="https://jsonplaceholder.typicode.com/posts/"  
+                            action=""  
                             :show-file-list="true"
                             ref='upload'
-                            :on-preview="handlePreview"   
-                            :on-remove="handleRemove"
                             :before-remove="beforeRemove" 
                             :limit="1"
                             :on-exceed="handleExceed"
-                            :file-list="fileList"
                             :auto-upload="false"
                             list-type="picture">
                         <el-button slot='trigger' size="small" type="primary">选择文件</el-button>
@@ -64,21 +64,26 @@
 
 <script >
 import mapLinkage from "~/components/home/mapLinkage";
+import Cookies from "js-cookie";
 export default {
   components: {
     mapLinkage
   },
   data() {
     return {
-      radio: "1",
+      radio: "0",
+      loading: false,
       Goods: {
         itemTitle: "",
         bookName: "",
         author: "",
         press: "",
-        pubDpublicationDateate: "",
-        price: "",
+        publicationDate: "",
+        price: 0,
         originAddress: "",
+        quantity: 0,
+        description: "",
+        addressDetail: "",
         //选择图书类别
         options: [
           //全部
@@ -256,30 +261,33 @@ export default {
           }
         ]
       },
-      //图片
-      fileList: [],
+
       //验证必填项是否填写
       rules: {
-        title: [
-          { required: true, message: "商品标题不能为空", trigger: "blur" },
-          { min: 1, max: 30, message: "标题长度应在30字内！", trigger: "blur" }
+        itemTitle: [
+          { required: true, message: "商品标题不能为空", trigger: "change" },
+          {
+            min: 1,
+            max: 30,
+            message: "标题长度应在30字内！",
+            trigger: "change"
+          }
         ],
-        name: [
-          { required: true, message: "书名不能为空", trigger: "blur" },
-          { min: 1, max: 30, message: "书名应在30字内！", trigger: "blur" }
+        bookName: [
+          { required: true, message: "书名不能为空", trigger: "change" },
+          { min: 1, max: 30, message: "书名应在30字内！", trigger: "change" }
         ],
         author: [
-          { required: true, message: "作者名不能为空", trigger: "blur" },
-          { min: 1, max: 30, message: "作者名应在30字内！", trigger: "blur" }
+          { required: true, message: "作者名不能为空", trigger: "change" },
+          { min: 1, max: 30, message: "作者名应在30字内！", trigger: "change" }
           //应有要求作者姓名不能为数字->未写
         ],
-        publisher: [
-          { required: true, message: "出版社名不能为空", trigger: "blur" },
-          { min: 1, max: 50, message: "出版社名应在 50字内", trigger: "blur" }
+        press: [
+          { required: true, message: "出版社名不能为空", trigger: "change" },
+          { min: 1, max: 50, message: "出版社名应在 50字内", trigger: "change" }
         ],
-        pubDate: [
+        publicationDate: [
           {
-            type: "date",
             required: true,
             message: "请选择出版时间",
             trigger: "change"
@@ -294,9 +302,8 @@ export default {
           { required: true, message: "价格不能为空", trigger: "blur" }
           //应有验证输入必须为数字
         ],
-        inventory: [
-          { required: true, message: "库存量不能为空", trigger: "blur" },
-          { min: 0, max: 100, message: "库存量范围为：0-100" }
+        quantity: [
+          { required: true, message: "库存量不能为空", trigger: "blur" }
         ]
 
         //商品描述可以为空
@@ -305,18 +312,6 @@ export default {
   },
   methods: {
     //选择发货地地区
-    updateArea(area) {
-      this.Goods.area = area;
-    },
-
-    //上传图片处理操作
-    handleRemove(file, fileList) {
-      console.log(file, fileList);
-    },
-    handlePreview(file) {
-      console.log(file);
-      duration: 0;
-    },
     handleExceed(files, fileList) {
       this.$message.warning(
         `当前限制选择 1 个文件，本次选择了 ${
@@ -327,26 +322,100 @@ export default {
     beforeRemove(file, fileList) {
       return this.$confirm(`确定移除 ${file.name}？`);
     },
+
     async commitImg() {
+      if (this.$refs.upload.uploadFiles.length == 0) return "";
       let file = this.$refs.upload.uploadFiles[0];
       file = this.$refs.upload.getFile(file);
       // console.log(file.raw instanceof File)
       // console.log(this.$refs.upload.$refs['upload-inner'].upload)
       let data = new FormData();
-      data.append("file", file.raw);
+      data.append("data", file.raw);
+      data.append("query", "uploadImg");
+      data.append("userId", Cookies.get("userId"));
+      data.append("sessionId", Cookies.get("sessionId"));
       let header = { "Content-Type": "multipart/form-data" };
-      let response = await this.$axios.send(data, "/BookStore/test/", header);
-      console.log(response);
+      let response = await this.$axios.send(data, "/upload/", header);
+      if (response.status == 1) {
+        return response.data.pictureAddress;
+      } else if (response.status == 0) {
+        this.$message.error("发送错误:" + response.err);
+        return false;
+      } else {
+        Cookies.remove("userId");
+        Cookies.remove("sessionId");
+        Cookies.remove("userName");
+        this.$router.push({ path: "/" });
+      }
     },
-
+    changeType(value) {
+      if (value.length == 2) {
+        let type = [];
+        type.push(value[0]);
+        type.push(value[1]);
+        this.type = type;
+      }
+    },
     //提交表单
-    submitForm(formName) {
-      this.$refs[formName].validate(valid => {
+    async submitForm(formName) {
+      this.$refs[formName].validate(async valid => {
         if (valid) {
-          alert("submit!");
+          let area = this.$refs.area.test();
+          if (area) {
+            console.log(area);
+            //添加loading
+            this.loading = true;
+            //上传图片
+            let url = await this.commitImg();
+            if (url === false) {
+              this.loading = false;
+              return;
+            }
+            //发送请求
+            let data = {
+              query: "addBook",
+              data: {
+                userId: Cookies.get("userId"),
+                sessionId: Cookies.get("sessionId"), //常规验证
+                itemTitle: this.Goods.itemTitle, //商品标题
+                bookName: this.Goods.bookName, //书的名字
+                author: this.Goods.author, //作者
+                press: this.Goods.press, //出版社
+                publicationDate: this.Goods.publicationDate, //出版日期
+                bookCategory: this.type, //标签，用于搜索的筛选，是一个字符串数组
+                price: this.Goods.price, //价格
+                quantity: this.Goods.quantity, //库存
+                freePostage: this.radio, //是否包邮，0/1
+                province: area["prov"],
+                city: area["city"],
+                addressDetail: this.Goods.addressDetail,
+                description: this.Goods.description, //详细描述
+                pictureAddress: url //图片的链接。在发布商品之前会先执行上传图片操作，成功获得图片的url之后才会发送这个请求
+              }
+            };
+            console.log(data);
+            let response = await this.$axios.send(data);
+            if (response.status == 1) {
+              this.$message({
+                message: "发布成功！",
+                type: "success"
+              });
+              this.loading = false;
+            } else if (response.status == 0) {
+              this.$message.error("发送错误:" + response.err);
+            } else {
+              Cookies.remove("userId");
+              Cookies.remove("sessionId");
+              Cookies.remove("userName");
+              this.$router.push({ path: "/" });
+            }
+          } else {
+            //测试未通过
+            this.$message.error("有信息未填写完毕!");
+            return;
+          }
         } else {
-          console.log("error submit!!");
-          return false;
+          this.$message.error("有信息未填写完毕!");
         }
       });
     }

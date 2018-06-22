@@ -41,7 +41,7 @@ export default {
     data() {
         var validPhone = (rule,value,callback)=>{
             if(value==""){
-                callback(new Error("联系方式不能为空"));
+                callback(new Error("请输入手机号"));
             }
             else{
                 let p = /^1[3|4|5|7|8][0-9]\d{8}$/;
@@ -59,7 +59,8 @@ export default {
                 recipientName:'',
                 phoneNumber:'',
                 addressDetail:'',
-                area:''
+                province:'',
+                city:''
             },
             addressRule:{
                 recipientName: [
@@ -67,11 +68,11 @@ export default {
                     { min: 1, max: 16, message: "长度小于16个字符", trigger: "blur" }
                 ],
                 phoneNumber:[
-                    { validator:validPhone , message:"请输入正确的手机号",trigger:"blur" }
+                    { validator:validPhone ,trigger:"blur" }
                 ],
                 addressDetail:[
-                    { required: true, message: "地址不能为空", trigger: "blur" },
-                    { min: 1, max: 50, message: "长度小于50个字符", trigger: "blur" }
+                    { required: true, message: "请输入详细地址", trigger: "blur" },
+                    { min: 1, max: 50, message: "长度不超过50个字符", trigger: "blur" }
                 ],
             }
         };
@@ -83,17 +84,20 @@ export default {
         },
         resetForm() {
             this.$refs['addressItem'].resetFields()
-            this.$refs.map.init()
+            this.$refs.map.reset()
         },
         submitForm() {
-
+            let flag = this.$refs.map.test()
             this.$refs['addressItem'].validate(async valid => {
         
-                if (valid) {
+                if (valid && flag) {
+                    
                     let newAddress = {
                         recipientName : this.addressItem.recipientName,
                         phoneNumber: this.addressItem.phoneNumber,
-                        addressDetail: this.addressItem.area+this.addressItem.addressDetail
+                        addressDetail: this.addressItem.addressDetail,
+                        province : this.addressItem.province,
+                        city :this.addressItem.city
                     }
                     this.visible = false;
                     this.$emit('submitForm',newAddress)
@@ -106,12 +110,13 @@ export default {
 
 
         },
-        updateArea(area){
-            this.addressItem.area = area
+        updateArea(province,city){
+            this.addressItem.province = province
+            this.addressItem.city = city
         },
         closeDialog() {
             this.$refs["addressItem"].resetFields();
-            this.$refs.map.init()
+            this.$refs.map.reset()
         }
     }
 };

@@ -20,9 +20,45 @@ var addresses = [
   }, {
     recipientName: "merlin",
     phoneNumber: "518",
+    province : "moon",
+    city:"moon",
     addressDetail: "avalon",
     isDefaultAddress: false,
     addressId: 333
+  }
+]
+var tableData= [
+  {
+    information:'merlin',
+    price: 518,
+    nums:1,
+
+    quantity:10,
+    itemState:1
+  }, 
+  {
+    information:'lilith',
+    price: 518,
+    nums:1,
+
+    quantity:15,
+    itemState:1
+  }, 
+  {
+    information:'bb',
+    price: 518,
+    nums:1,
+
+    quantity:20,
+    itemState:1
+  }, 
+  {
+    information:'aa',
+    price: 518,
+    nums:1,
+
+    quantity:8,
+    itemState:1
   }
 ]
 app.use(express.static('uploads'));
@@ -35,13 +71,13 @@ app.use(bodyParser.json()); // for parsing application/json
 app.use(bodyParser.urlencoded({extended: true}));
 
 app.post('/upload/', upload.single('img'), function (req, res, next) {
-  var file = req.body.img;
+  var file = req.body.data;
   console.log(file)
   console.log(req.body)
   // console.log('文件类型：%s', file.mimetype); console.log('原始文件名：%s',
   // file.originalname); console.log('文件大小：%s', file.size);
   // console.log('文件保存路径：%s', file.path); 接收文件成功后返回数据给前端
-  res.json({status: 1});
+  res.json({status: 1,data:{pictureAddress:'http://localhost:3001/1.png'}});
 })
 
 app.post('/BookStore/', function (req, res) {
@@ -66,6 +102,10 @@ app.post('/BookStore/', function (req, res) {
       status:1
     }
     res.json(response)
+  }
+
+  if (data['query'] == 'addBook'){
+    res.json({status:1})
   }
 
   if (data['query'] == 'getRecent') {
@@ -303,6 +343,8 @@ app.post('/BookStore/', function (req, res) {
         element.recipientName = data.data.recipientName
         element.phoneNumber = data.data.phoneNumber,
         element.addressDetail = data.data.addressDetail,
+        element.province = data.data.province,
+        element.city = data.data.city,
         element.isDefaultAddress = data.data.isDefaultAddress
       }
     });
@@ -332,6 +374,18 @@ app.post('/BookStore/', function (req, res) {
     }
     res.json(response)
   }
+
+  if(data['query']=='getShoppingCarList'){
+    response = {
+      status:1,//1是登录成功，0是登录失败
+      data :{
+        shoppingCarList : tableData
+      },
+      err :''
+    }
+    res.json(response)
+  }
+
 });
 
 app.listen(3001);
