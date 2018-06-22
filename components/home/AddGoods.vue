@@ -330,16 +330,16 @@ export default {
       // console.log(file.raw instanceof File)
       // console.log(this.$refs.upload.$refs['upload-inner'].upload)
       let data = new FormData();
-      data.append("data", file.raw);
+      data.append("file", file.raw);
       data.append("query", "uploadImg");
       data.append("userId", Cookies.get("userId"));
       data.append("sessionId", Cookies.get("sessionId"));
       let header = { "Content-Type": "multipart/form-data" };
-      let response = await this.$axios.send(data, "/upload/", header);
+      let response = await this.$axios.send(data, "/BookStore/upload/", header);
       if (response.status == 1) {
         return response.data.pictureAddress;
       } else if (response.status == 0) {
-        this.$message.error("发送错误:" + response.err);
+        this.$message.error("发生错误:" + response.err);
         return false;
       } else {
         Cookies.remove("userId");
@@ -350,10 +350,10 @@ export default {
     },
     changeType(value) {
       if (value.length == 2) {
-        let type = [];
-        type.push(value[0]);
-        type.push(value[1]);
-        this.type = type;
+        this.type = value[0]+'/'+value[1];
+      }
+      if (value.length == 1) {
+        this.type = value[0]
       }
     },
     //提交表单
@@ -367,7 +367,8 @@ export default {
             this.loading = true;
             //上传图片
             let url = await this.commitImg();
-            if (url === false) {
+            console.log(url)
+            if (url == false) {
               this.loading = false;
               return;
             }
