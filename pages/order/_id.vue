@@ -108,7 +108,13 @@ export default {
                 itemList : this.itemList,
                 addressId : this.addressItem.addressId
             }
-            console.log(data)
+            let response = await this.$axios.send(data)
+            if(response.status===1){
+                this.$router.push({ path: '/Pay/' });
+            }
+            else{
+                this.$message.error('发生错误：'+response.err);
+            }
         }
     }
 }

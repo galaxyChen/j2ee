@@ -22,7 +22,7 @@
                 <el-button type="danger">立即付款</el-button>
             </el-col>
             <el-col class="header-box" :span="3" :push='1'>
-                <el-button type="pain" style='color:rgb(26, 188, 156)'>取消订单</el-button>
+                <el-button type="pain" style='color:rgb(26, 188, 156)' @click="cancelOrder">取消订单</el-button>
             </el-col>
         </el-row>
         <el-row class="step">
@@ -230,6 +230,11 @@ export default {
     addressDetail(){
         return this.address.province + " " + this.address.city + " " + this.address.addressDetail;
     }
+  },
+  methods:{
+      cancel(){
+          
+      }
   }
 };
 </script>
