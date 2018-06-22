@@ -160,6 +160,7 @@
         submitBill(){
           this.updateTotal()
           console.log(this.tableData)
+           this.$router.push({ path: `/Pay/` });
         },
 
     }
