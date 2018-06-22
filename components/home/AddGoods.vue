@@ -350,10 +350,11 @@ export default {
     },
     changeType(value) {
       if (value.length == 2) {
-        this.type = value[0]+'/'+value[1];
+        this.type = value
       }
       if (value.length == 1) {
-        this.type = value[0]
+        value.push('全部')
+        this.type = value
       }
     },
     //提交表单
@@ -368,7 +369,7 @@ export default {
             //上传图片
             let url = await this.commitImg();
             console.log(url)
-            if (url == false) {
+            if (url === false) {
               this.loading = false;
               return;
             }
@@ -384,9 +385,9 @@ export default {
                 press: this.Goods.press, //出版社
                 publicationDate: this.Goods.publicationDate, //出版日期
                 bookCategory: this.type, //标签，用于搜索的筛选，是一个字符串数组
-                price: this.Goods.price, //价格
-                quantity: this.Goods.quantity, //库存
-                freePostage: this.radio, //是否包邮，0/1
+                price: this.Goods.price+'', //价格
+                quantity: this.Goods.quantity+'', //库存
+                freePostage: this.radio+'', //是否包邮，0/1
                 province: area["prov"],
                 city: area["city"],
                 addressDetail: this.Goods.addressDetail,

@@ -54,23 +54,7 @@ export default {
     OrderDetail
   },
   async mounted() {
-    let query = this.type == 1?'getBuyOrder':'getSellOrder';
-    let data = {
-      query: query,
-      data: {
-        userId: Cookies.get("userId"),
-        sessionId: Cookies.get("sessionId")
-      }
-    };
-    let response = await this.$axios.send(data);
-    if (response.status == 1) {
-      this.orderList = response.data.orderList;
-      this.updateShowList()
-    } else if (response.status == 0) {
-      this.$message.error("发生错误" + response.err);
-    } else {
-      this.signout();
-    }
+    this.getOrder();
   },
   props: ["type"],
   data() {
@@ -88,6 +72,25 @@ export default {
     };
   },
   methods: {
+    async getOrder() {
+      let query = this.type == 1 ? "getBuyOrder" : "getSellOrder";
+      let data = {
+        query: query,
+        data: {
+          userId: Cookies.get("userId"),
+          sessionId: Cookies.get("sessionId")
+        }
+      };
+      let response = await this.$axios.send(data);
+      if (response.status == 1) {
+        this.orderList = response.data.orderList;
+        this.updateShowList();
+      } else if (response.status == 0) {
+        this.$message.error("发生错误" + response.err);
+      } else {
+        this.signout();
+      }
+    },
     updateShowList() {
       if (this.activeTab == "all") {
         this.onShowList = this.orderList;
@@ -100,7 +103,7 @@ export default {
         signed: "已签收",
         finish: "已完成",
         cancel: "已取消",
-        service:'售后中',
+        service: "售后中"
       };
       this.onShowList = this.orderList.filter(item => {
         if (item.orderState == tabs[this.activeTab]) return true;
@@ -130,7 +133,12 @@ export default {
       let index = 0;
       while (this.orderList[index].orderId != item.orderId) index++;
       this.orderList.splice(index, 1, item);
-      this.updateShowList()
+      this.updateShowList();
+    }
+  },
+  watch:{
+    type(newType,lodType){
+      this.getOrder()
     }
   }
 };

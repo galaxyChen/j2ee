@@ -134,19 +134,19 @@ export default {
       }
     },
     pay() {
-      if (this.order.orderState == "等待付款") return true;
+      if (this.type == 1 && this.order.orderState == "等待付款") return true;
       else return false;
     },
     signfor() {
-      if (this.order.orderState == "等待收货" && this.type == 1) return true;
+      if (this.type == 1 && this.order.orderState == "等待收货" && this.type == 1) return true;
       else return false;
     },
     service() {
-      if (this.order.orderState == "已签收") return true;
+      if (this.type == 1 && this.order.orderState == "已签收") return true;
       else return false;
     },
     finish() {
-      if (this.order.orderState == "已签收") return true;
+      if (this.type == 1 && this.order.orderState == "已签收") return true;
       else return false;
     },
     detail() {
@@ -157,17 +157,23 @@ export default {
       else return false;
     },
     cancel() {
-      if (this.order.orderState == "等待付款") return true;
+      if (this.type == 1 && this.order.orderState == "等待付款") return true;
       else return false;
     },
     send() {
-      console.log(this.type);
-      if (this.order.orderState == "等待发货" && this.type == 2) return true;
+      // console.log(this.type);
+      if (this.type == 1 && this.order.orderState == "等待发货" && this.type == 2) return true;
       else return false;
     }
   },
   methods: {
-    signout() {},
+    signout() {
+      this.$message.error("登录超时！")
+      Cookies.remove('userId')
+      Cookies.remove('sessionId')
+      Cookies.remove('userName')
+      this.$router.push({path:'/'})
+    },
     lookDetail() {
       this.$emit("lookDetail", this.order.orderId);
     },
