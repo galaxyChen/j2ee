@@ -23,7 +23,7 @@
     </el-table-column>
     <el-table-column label="数量" align="center">
         <template slot-scope="scope">
-            <el-input-number  v-model="scope.row.nums"  :min="1" :max="scope.row.quantity" @change="changeNums"></el-input-number>
+            <el-input-number  v-model="scope.row.nums"  :min="1" :max="scope.row.quantity" @change="changeNums(scope.$index)"></el-input-number>
         </template>
     </el-table-column>
     <el-table-column label="小计" align="center">
@@ -135,20 +135,20 @@ import Cookies from "js-cookie";
             }
             let response = await this.$axios.send(data)
             if(response.status===1){
-              
+              this.tableData.splice(index,1)
+              this.$message({
+                type: 'success',
+                message: '删除成功!'
+              });
+            
+              this.updateTotal()
             }
             else{
               this.$message.error('发生错误：'+response.err);
             }
             //////
 
-            this.tableData.splice(index,1)
-            this.$message({
-              type: 'success',
-              message: '删除成功!'
-            });
-            
-            this.updateTotal()
+
 
           }).catch( ()=>{
             this.$message({
@@ -158,8 +158,24 @@ import Cookies from "js-cookie";
           })
 
         },
-        changeNums(){
-          this.updateTotal()
+        async changeNums(index){
+          let data = {
+            query : "changeShoppingCarNums",
+            data : {
+              userId : Cookies.get('userId'),
+              sessionId : Cookies.get('sessionId'),
+              itemId : this.tableData[index].itemId,
+              nums : this.tableData[index].nums,
+            }
+          }
+          let response = await this.$axios.send(data)
+          if(response.status===1){
+            this.updateTotal()
+          }
+          else{
+            this.$message.error('发生错误：'+response.err);
+          }
+
         },
         updateTotal(){
           let tmp = 0
@@ -233,6 +249,11 @@ import Cookies from "js-cookie";
               
               Cookies.set("itemList", toBuyList);
               this.$router.push({ path: `/order/${userId}` });
+              // this.$router.push({ 
+              //       name: 'order-id' ,
+              //       params : { userId:userId }
+                    
+              // });
             } else {
               this.signout()
             }

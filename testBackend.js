@@ -486,6 +486,17 @@ app.post('/BookStore/', function (req, res) {
     res.json(response)
   }
 
+  if (data['query'] == 'changeShoppingCarNums') {
+    response = {
+      status: 1, //1是登录成功，0是登录失败
+      data: {
+        shoppingCarList: tableData
+      },
+      err: ''
+    }
+    res.json(response)
+  }
+
   if (data['query'] == 'submitBill') {
     response = {
         status:1,//1是成功，0是失败
