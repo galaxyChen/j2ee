@@ -10,7 +10,7 @@
                 <el-input  @input='check("phoneNumber")' v-model="addressItem.phoneNumber"></el-input>
             </el-form-item>
             
-            <mapLinkage ref="map" @updateArea="updateArea"></mapLinkage>
+            <mapLinkage ref="map" :province="addressItem.province" :city="addressItem.city"  @updateArea="updateArea"></mapLinkage>
 
             <el-form-item label="详细地址" prop="addressDetail"> 
                 <el-input @input='check("addressDetail")'  v-model="addressItem.addressDetail"></el-input>
@@ -42,7 +42,7 @@ export default {
             this.addressItem.addressDetail = this.item.addressDetail
             this.addressItem.province = this.item.province
             this.addressItem.city = this.item.city
-            // this.$refs.map.init(this.addressItem.province,this.addressItem.city)
+            
         });
         this.$on("closeDialog", function() {
             this.visible = false;
@@ -94,7 +94,7 @@ export default {
             this.$refs['addressItem'].validateField(item);
         },
         resetForm() {
-            this.$refs['addressItem'].resetFields()
+            this.$refs.addressItem.resetFields()
             this.$refs.map.reset()
         },
         submitForm() {
@@ -120,14 +120,12 @@ export default {
 
         },
         updateArea(province,city){
-            console.log('什么玩意')
-            console.log(province+ ' '+city)
             this.addressItem.province = province
             this.addressItem.city = city
         },
         closeDialog() {
             this.$refs["addressItem"].resetFields();
-            this.$refs.map.reset()
+            // this.$refs.map.reset()
         }
     }
 };

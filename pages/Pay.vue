@@ -53,15 +53,20 @@
 
 <script>
 import NavTop from "~/components/NavTop";
+import Cookies from 'js-cookie'
 export default {
      components: {
           NavTop,
     },
+    mounted(){
+        let params = this.$route.params;
+        console.log(params)
+    },
     data(){
         return{
             payRadio:1,
-            time_limit:'2小时0分',
-            price:1245.00,
+            time_limit:'',
+            price:'',
         }
     },
 
@@ -93,18 +98,23 @@ export default {
                 type: "warning"
             })
             .then(() => {
-            let userId = Cookies.get("userId");
-            let sessionId = Cookies.get("sessionId");
-            let orderId = Cookies.get("orderId");
-            let data = {
-              query: "payForOrder",
-              data: {
-                userId: userId,
-                sessionId: sessionId,
-                orderId:orderId
-              }
-            };
-            return this.$axios.send(data);
+                let userId = Cookies.get("userId");
+                let sessionId = Cookies.get("sessionId");
+                let orderId = Cookies.get("orderId");
+                let data = {
+                    query: "payForOrder",
+                    data: {
+                        userId: userId,
+                        sessionId: sessionId,
+                        orderId:orderId
+                    }
+                };
+                let response = this.$axios.send(data);
+
+                // 假装和后台交互好了
+
+                this.$router.push({ path: `/home/${userId}` ,query:{index:'1',tab:'1'}});
+
           })
           .then(response => {
             if (response.status == 1) {
