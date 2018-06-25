@@ -22,7 +22,7 @@
                 <el-button @click="goBack" class="back-button" size="medium" type='text' icon="el-icon-back">返回</el-button>
             </el-header>
             <el-main>
-                <OrderDetail :order='onShowOrder'></OrderDetail>
+                <OrderDetail :type='type' :order='onShowOrder'></OrderDetail>
             </el-main>
         </el-container>
     </el-col>
@@ -122,7 +122,7 @@ export default {
       for (let item in this.orderList) {
         if (this.orderList[item].orderId == id) {
           console.log(this.orderList[item]);
-          this.onShowOrder = item;
+          this.onShowOrder = this.orderList[item];
           this.showList = false;
           return;
         }

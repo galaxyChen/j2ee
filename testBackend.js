@@ -202,11 +202,43 @@ app.post('/BookStore/', function (req, res) {
       data: {
         orderList: [
           {
-            orderId: "1234567",
+            orderId: "0001",
             purchaseTime: "2018-01-08 13:02",
             itemTitle: "三体",
             pictureAddress: "http://localhost:3001/1.png",
             orderState: "等待发货",
+            totalPrice: "40",
+            price: "30",
+            quantity: "1",
+            deliveryTime: "",
+            receiptTime: "",
+            expressCompany: "",
+            expressCode: "",
+            postage: "10",
+            addressId: "123"
+          },
+          {
+            orderId: "0002",
+            purchaseTime: "2018-01-08 13:02",
+            itemTitle: "物理",
+            pictureAddress: "http://localhost:3001/2.png",
+            orderState: "等待付款",
+            totalPrice: "40",
+            price: "30",
+            quantity: "1",
+            deliveryTime: "",
+            receiptTime: "",
+            expressCompany: "",
+            expressCode: "",
+            postage: "10",
+            addressId: "123"
+          },
+          {
+            orderId: "0003",
+            purchaseTime: "2018-01-08 13:02",
+            itemTitle: "三体",
+            pictureAddress: "http://localhost:3001/1.png",
+            orderState: "等待收货",
             totalPrice: "40",
             price: "30",
             quantity: "1",
@@ -229,11 +261,43 @@ app.post('/BookStore/', function (req, res) {
       data: {
         orderList: [
           {
-            orderId: "1234567",
+            orderId: "0001",
             purchaseTime: "2018-01-08 13:02",
             itemTitle: "三体",
             pictureAddress: "http://localhost:3001/1.png",
             orderState: "等待发货",
+            totalPrice: "40",
+            price: "30",
+            quantity: "1",
+            deliveryTime: "",
+            receiptTime: "",
+            expressCompany: "",
+            expressCode: "",
+            postage: "",
+            addressId: ""
+          },
+          {
+            orderId: "0002",
+            purchaseTime: "2018-01-08 13:02",
+            itemTitle: "三体",
+            pictureAddress: "http://localhost:3001/1.png",
+            orderState: "等待付款",
+            totalPrice: "40",
+            price: "30",
+            quantity: "1",
+            deliveryTime: "",
+            receiptTime: "",
+            expressCompany: "",
+            expressCode: "",
+            postage: "",
+            addressId: ""
+          },
+          {
+            orderId: "0003",
+            purchaseTime: "2018-01-08 13:02",
+            itemTitle: "三体",
+            pictureAddress: "http://localhost:3001/1.png",
+            orderState: "等待收货",
             totalPrice: "40",
             price: "30",
             quantity: "1",
@@ -354,6 +418,24 @@ app.post('/BookStore/', function (req, res) {
       status: 1, //1是成功，0是失败
       data: {
         addresses: addresses
+      }
+
+    }
+    // console.log(response)
+    res.json(response)
+  }
+  if (data['query'] == 'getAddressDetail') {
+    response = {
+      status: 1, //1是成功，0是失败
+      data: {
+        recipientName: "Foo",
+        phoneNumber: "110",
+        addressDetail: "scut",
+        isDefaultAddress: true,
+        addressId: 111,
+        province:'广东',
+        city:'广州',
+        addressDetail:'番禺区大学城华南理工大学'
       }
 
     }
