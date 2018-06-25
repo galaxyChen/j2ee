@@ -8,9 +8,9 @@ var addresses = [
   {
     recipientName: "Foo",
     phoneNumber: "13612345678",
-    addressDetail: "scut",
+    addressDetail: "xxx",
     province : "湖南省",
-    city:"广州市",
+    city:"长沙市",
     isDefaultAddress:true,
     addressId:111,
   },
@@ -35,19 +35,20 @@ var addresses = [
 ]
 var tableData = [
   {
-    title:'钱包',
+    title:'html从入门到放弃',
     price: 500,
     nums:1,
     transportFee : 2,
     quantity:10,
     itemState:1,
     province : '广东省',
+    picture: 'http://localhost:3001/1.png',
     userName :'lwz',
     freePostage:1,
     itemId : 123
   }, 
   {
-    title:'铅笔',
+    title:'Css从入门到精通',
     price: 10,
     nums:1,
     transportFee : 2,
@@ -55,11 +56,12 @@ var tableData = [
     itemState:1,
     userName :'lwz',
     province : '湖南省',
+    picture: 'http://localhost:3001/2.png',
     freePostage:1,
     itemId : 124
   }, 
   {
-    title:'鼠标',
+    title:'Json的使用',
     price: 200,
     nums:1,
     transportFee : 2,
@@ -68,10 +70,11 @@ var tableData = [
     province : '广东省',
     userName :'lwz',
     freePostage:1,
-    itemId : 125
+    itemId : 125,
+    picture: 'http://localhost:3001/3.png',
   }, 
   {
-    title:'面包',
+    title:'如何与项目经理相处',
     price: 30,
     nums:1,
     transportFee : 2,
@@ -80,7 +83,8 @@ var tableData = [
     province : '广东省',
     userName :'lwz',
     freePostage:1,
-    itemId : 126
+    itemId : 126,
+    picture: 'http://localhost:3001/4.png',
   }
 ]
 app.use(express.static('uploads'));
@@ -231,11 +235,43 @@ app.post('/BookStore/', function (req, res) {
       data: {
         orderList: [
           {
-            orderId: "1234567",
+            orderId: "0001",
             purchaseTime: "2018-01-08 13:02",
             itemTitle: "三体",
             pictureAddress: "http://localhost:3001/1.png",
             orderState: "等待发货",
+            totalPrice: "40",
+            price: "30",
+            quantity: "1",
+            deliveryTime: "",
+            receiptTime: "",
+            expressCompany: "",
+            expressCode: "",
+            postage: "10",
+            addressId: "123"
+          },
+          {
+            orderId: "0002",
+            purchaseTime: "2018-01-08 13:02",
+            itemTitle: "物理",
+            pictureAddress: "http://localhost:3001/2.png",
+            orderState: "等待付款",
+            totalPrice: "40",
+            price: "30",
+            quantity: "1",
+            deliveryTime: "",
+            receiptTime: "",
+            expressCompany: "",
+            expressCode: "",
+            postage: "10",
+            addressId: "123"
+          },
+          {
+            orderId: "0003",
+            purchaseTime: "2018-01-08 13:02",
+            itemTitle: "三体",
+            pictureAddress: "http://localhost:3001/1.png",
+            orderState: "等待收货",
             totalPrice: "40",
             price: "30",
             quantity: "1",
@@ -258,11 +294,43 @@ app.post('/BookStore/', function (req, res) {
       data: {
         orderList: [
           {
-            orderId: "1234567",
+            orderId: "0001",
             purchaseTime: "2018-01-08 13:02",
             itemTitle: "三体",
             pictureAddress: "http://localhost:3001/1.png",
             orderState: "等待发货",
+            totalPrice: "40",
+            price: "30",
+            quantity: "1",
+            deliveryTime: "",
+            receiptTime: "",
+            expressCompany: "",
+            expressCode: "",
+            postage: "",
+            addressId: ""
+          },
+          {
+            orderId: "0002",
+            purchaseTime: "2018-01-08 13:02",
+            itemTitle: "三体",
+            pictureAddress: "http://localhost:3001/1.png",
+            orderState: "等待付款",
+            totalPrice: "40",
+            price: "30",
+            quantity: "1",
+            deliveryTime: "",
+            receiptTime: "",
+            expressCompany: "",
+            expressCode: "",
+            postage: "",
+            addressId: ""
+          },
+          {
+            orderId: "0003",
+            purchaseTime: "2018-01-08 13:02",
+            itemTitle: "三体",
+            pictureAddress: "http://localhost:3001/1.png",
+            orderState: "等待收货",
             totalPrice: "40",
             price: "30",
             quantity: "1",
@@ -389,10 +457,28 @@ app.post('/BookStore/', function (req, res) {
     // console.log(response)
     res.json(response)
   }
+  if (data['query'] == 'getAddressDetail') {
+    response = {
+      status: 1, //1是成功，0是失败
+      data: {
+        recipientName: "Foo",
+        phoneNumber: "110",
+        addressDetail: "scut",
+        isDefaultAddress: true,
+        addressId: 111,
+        province:'广东',
+        city:'广州',
+        addressDetail:'番禺区大学城华南理工大学'
+      }
+
+    }
+    // console.log(response)
+    res.json(response)
+  }
 
   if (data['query'] == 'addAddress') {
     let newAddress = {
-      recipentName:data.data['recipentName'],
+      recipentName:data.data['recipientName'],
       phoneNumber:data.data['phoneNumber'],
       addressDetail:data.data['addressDetail'],
       province:data.data['province'],

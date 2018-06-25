@@ -1,14 +1,18 @@
 <template>
 <div>
-  <el-table ref="Table" :data="tableData"  style="width: 100%" @selection-change="handleSelectionChange"  >
+  <el-table ref="Table" :data="tableData"  style="width: 100%"  @selection-change="handleSelectionChange"  >
     <el-table-column type="selection"  >
         <template slot-scope="scope">
             <el-checkbox v-model="scope.row.chosen"  @change="selectChange(scope.$index)"></el-checkbox>
         </template>
     </el-table-column>
-    <el-table-column label="商品信息" align="center">
+    <el-table-column label="商品标题" align="center">
         <template slot-scope="scope">
-            <p>{{scope.row.title}}</p>
+            <div>
+              <img  class="img1" :src='scope.row.picture'/>
+              <p>{{scope.row.title}}</p>
+              <p v-if="scope.row.itemState!=1" style="color:red">[商品已下架]</p>
+            </div>
         </template>
     </el-table-column>
     <el-table-column label="库存" align="center">
@@ -21,9 +25,9 @@
             <p>￥{{scope.row.price}}</p>
         </template>
     </el-table-column>
-    <el-table-column label="数量" align="center">
+    <el-table-column label="数量" align="center" >
         <template slot-scope="scope">
-            <el-input-number  v-model="scope.row.nums"  :min="1" :max="scope.row.quantity" @change="changeNums(scope.$index)"></el-input-number>
+            <el-input-number :disabled="!scope.row.canChosen" v-model="scope.row.nums"  :min="1" :max="scope.row.quantity" @change="changeNums(scope.$index)"></el-input-number>
         </template>
     </el-table-column>
     <el-table-column label="小计" align="center">
@@ -63,7 +67,12 @@
 .el-row1{
   margin-top: 30px
 }
+.img1{
+  width: 70px;
+  height: 70px;
+  margin: 10px;
 
+}
 </style>
 
 
@@ -81,7 +90,9 @@ import Cookies from "js-cookie";
       }
     },
     methods:{
-
+        checkSelectable(){
+            return false
+        },
         selectChange(index){
             // 判断是否库存为0 或者 下架了
             if(this.tableData[index].canChosen ){
@@ -151,10 +162,7 @@ import Cookies from "js-cookie";
 
 
           }).catch( ()=>{
-            this.$message({
-            type: 'info',
-            message: '已取消删除'
-          });   
+            // this.$message({ type: 'info', message: '已取消删除'});   
           })
 
         },
@@ -246,9 +254,14 @@ import Cookies from "js-cookie";
                 }
               });
 
-              
-              Cookies.set("itemList", toBuyList);
-              this.$router.push({ path: `/order/${userId}` });
+              if(toBuyList.length==0){
+                this.$message('购物车为空，无法下单')
+              }
+              else{
+                Cookies.set("itemList", toBuyList);
+                this.$router.push({ path: `/order/${userId}` });
+              }
+
               // this.$router.push({ 
               //       name: 'order-id' ,
               //       params : { userId:userId }

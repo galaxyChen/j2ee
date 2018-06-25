@@ -58,7 +58,7 @@ export default {
 
     mounted(){
 
-        let params = $this.route.params;
+        let params = this.$route.params;
         console.log(params)
         let itemList = Cookies.getJSON("itemList")
         // 这里做个判断itemList 是否为空
