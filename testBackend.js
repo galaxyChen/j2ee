@@ -255,6 +255,10 @@ app.post('/BookStore/', function (req, res) {
     res.json(response)
   }
 
+  if (data['query'] == 'cancelOrder'){
+    res.json({status:1})
+  }
+
   if (data['query'] == 'getSellOrder') {
     let response = {
       status: 1,

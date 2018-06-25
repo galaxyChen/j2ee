@@ -34,7 +34,10 @@
                    <mapLinkage ref='area'></mapLinkage>
                 </el-form-item>
                 <el-form-item label="详细地址: ">
-                  <el-input  v-model='Goods.addressDetail'  placeholder='请输入详细地址'></el-input>
+                  <el-input  v-model='Goods.addressDetail'  placeholder='默认退货地址'></el-input>
+                </el-form-item>
+                <el-form-item label="联系电话: ">
+                  <el-input  v-model='Goods.phoneNumer'  placeholder='默认退货联系电话'></el-input>
                 </el-form-item>
                  <el-form-item label="商品描述: ">
                       <el-input  type="textarea"  :rows="2"  :value='Goods.description' placeholder="请输入商品描述" ></el-input>
@@ -84,6 +87,7 @@ export default {
         quantity: 0,
         description: "",
         addressDetail: "",
+        phoneNumer:"",
         //选择图书类别
         options: [
           //全部
@@ -392,7 +396,8 @@ export default {
                 city: area["city"],
                 addressDetail: this.Goods.addressDetail,
                 description: this.Goods.description, //详细描述
-                pictureAddress: url //图片的链接。在发布商品之前会先执行上传图片操作，成功获得图片的url之后才会发送这个请求
+                pictureAddress: url, //图片的链接。在发布商品之前会先执行上传图片操作，成功获得图片的url之后才会发送这个请求
+                phoneNumer:this.Goods.phoneNumer
               }
             };
             console.log(data);
