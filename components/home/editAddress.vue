@@ -120,8 +120,6 @@ export default {
 
         },
         updateArea(province,city){
-            console.log('什么玩意')
-            console.log(province+ ' '+city)
             this.addressItem.province = province
             this.addressItem.city = city
         },

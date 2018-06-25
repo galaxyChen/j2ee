@@ -35,7 +35,7 @@ var addresses = [
 ]
 var tableData = [
   {
-    information:'钱包',
+    title:'钱包',
     price: 500,
     nums:1,
     transportFee : 2,
@@ -47,7 +47,7 @@ var tableData = [
     itemId : 123
   }, 
   {
-    information:'铅笔',
+    title:'铅笔',
     price: 10,
     nums:1,
     transportFee : 2,
@@ -56,31 +56,31 @@ var tableData = [
     userName :'lwz',
     province : '湖南省',
     freePostage:1,
-    itemId : 123
+    itemId : 124
   }, 
   {
-    information:'鼠标',
+    title:'鼠标',
     price: 200,
     nums:1,
     transportFee : 2,
     quantity:20,
-    itemState:1,
+    itemState:0,
     province : '广东省',
     userName :'lwz',
     freePostage:1,
-    itemId : 123
+    itemId : 125
   }, 
   {
-    information:'面包',
+    title:'面包',
     price: 30,
     nums:1,
     transportFee : 2,
-    quantity:8,
+    quantity:0,
     itemState:1,
     province : '广东省',
     userName :'lwz',
     freePostage:1,
-    itemId : 123
+    itemId : 126
   }
 ]
 app.use(express.static('uploads'));
@@ -141,6 +141,10 @@ app.post('/BookStore/', function (req, res) {
   if (data['query'] == 'addBook') {
     res.json({status: 1})
   }
+  if (data['query']=='deleteItemFromCar'){
+    res.json({status: 1})
+  }
+
 
   if (data['query'] == 'getRecent') {
     let response = {

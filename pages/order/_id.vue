@@ -102,6 +102,7 @@ export default {
             this.addressItem = addressItem
             this.totalList = tmp
         },
+        // 提交订单
         async submitBill(){
             let data = {
                 query : 'submitBill',
@@ -110,7 +111,13 @@ export default {
             }
             let response = await this.$axios.send(data)
             if(response.status===1){
-                this.$router.push({ path: '/Pay/' });
+                this.$router.push({ 
+                    path: '/Pay' ,
+                    params: { 
+                        totalPay: this.totalList.pay + this.totalList.transportFee ,
+                        time_limit :'2小时0分',
+                    }  
+                });
             }
             else{
                 this.$message.error('发生错误：'+response.err);

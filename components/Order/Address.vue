@@ -4,7 +4,7 @@
         <!-- 操作地址的三个弹窗 -->
         <editAddress ref="editAddress" :index="index" :item="addressItem"  @submitForm="editAddressItem"></editAddress>
         <addAddress ref='addAddress' @submitForm="addAddressItem" ></addAddress>
-        <selectAddress ref='selectAddress' :addressList="addressList" @submitSelect="changeSelectAdress" ></selectAddress>
+        <selectAddress ref='selectAddress' :defaultIndex="defaultIndex"  :addressList="addressList" @submitSelect="changeSelectAdress" ></selectAddress>
         <!-- 显示信息 -->
         <el-row :gutter="20">
             <el-col :span="14">
@@ -50,8 +50,11 @@ export default {
     },
     async mounted() {
         await this.getAddress();
-        let defaultIndex = 0
-        this.addressItem = this.addressList[defaultIndex]
+        for(let i=0;i< this.addressList.length;i++){
+            if(this.addressList[i].isDefaultAddress)
+                this.defaultIndex = i;
+        }
+        this.addressItem = this.addressList[this.defaultIndex]
     },
     watch: {
         addressItem(){
@@ -68,7 +71,8 @@ export default {
                 province:'',
                 city:''
             },
-            index : 0
+            index : 0,
+            defaultIndex : 0,
         }
     },
     methods:{
@@ -82,12 +86,57 @@ export default {
         applySelectAddress() {
             this.$refs.selectAddress.$emit("openDialog");
         },
-        editAddressItem(index,addressItem){
+        async editAddressItem(index,addressItem){
             // 编辑地址的组件 会发回一个 index,addressItem 。这里可以无视这个index值
-            this.addressItem = addressItem
+            let data = {
+                query : "editAddress",
+                data : {
+                    userId : Cookies.get('userId'),
+                    sessionId : Cookies.get('sessionId'),
+                    recipientName : addressItem.recipientName,
+                    phoneNumber : addressItem.phoneNumber,
+                    addressDetail : addressItem.addressDetail,
+                    province : addressItem.province,
+                    city : addressItem.city,
+                    isDefaultAddress : this.addressList[index].isDefaultAddress,
+                    addressId : this.addressList[index].addressId
+                }
+            }
+            
+            let response = await this.$axios.send(data)
+            if(response.status===1){
+                this.addressList =  response.data.addresses
+                this.addressItem = addressItem 
+            }
+            else{
+                this.$message.error('发生错误：'+response.err);
+            }
+
         },
-        addAddressItem(val){
-            console.log(val)
+        async addAddressItem(addressItem){
+             
+            let data = {
+                query : "addAddress",
+                data : {
+                    userId : Cookies.get('userId'),
+                    sessionId : Cookies.get('sessionId'),
+                    recipientName : addressItem.recipientName,
+                    phoneNumber : addressItem.phoneNumber,
+                    addressDetail : addressItem.addressDetail,
+                    province : addressItem.province,
+                    city : addressItem.city,
+                    isDefaultAddress : false
+                }
+            }
+            console.log(data)
+            let response = await this.$axios.send(data)
+            if(response.status===1){
+                this.addressList =  response.data.addresses
+                this.addressItem = addressItem
+            }
+            else{
+                this.$message.error('发生错误：'+response.err);
+            }
         },
         changeSelectAdress(index){
             this.addressItem = this.addressList[index]

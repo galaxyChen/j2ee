@@ -58,11 +58,15 @@ export default {
      components: {
           NavTop,
     },
+    mounted(){
+        let params = this.$route.params;
+        console.log(params)
+    },
     data(){
         return{
             payRadio:1,
-            time_limit:'2小时0分',
-            price:1245.00,
+            time_limit:'',
+            price:'',
         }
     },
 

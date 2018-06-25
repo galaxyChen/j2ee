@@ -3,12 +3,12 @@
   <el-table ref="Table" :data="tableData"  style="width: 100%" @selection-change="handleSelectionChange"  >
     <el-table-column type="selection"  >
         <template slot-scope="scope">
-            <el-checkbox v-model="scope.row.chosen" @change="selectChange(scope.$index)"></el-checkbox>
+            <el-checkbox v-model="scope.row.chosen"  @change="selectChange(scope.$index)"></el-checkbox>
         </template>
     </el-table-column>
     <el-table-column label="商品信息" align="center">
         <template slot-scope="scope">
-            <p>{{scope.row.information}}</p>
+            <p>{{scope.row.title}}</p>
         </template>
     </el-table-column>
     <el-table-column label="库存" align="center">
@@ -83,8 +83,16 @@ import Cookies from "js-cookie";
     methods:{
 
         selectChange(index){
-            this.$refs.Table.toggleRowSelection(this.tableData[index])
-            this.updateTotal()
+            // 判断是否库存为0 或者 下架了
+            if(this.tableData[index].canChosen ){
+              this.$refs.Table.toggleRowSelection(this.tableData[index])
+              this.updateTotal()
+            }
+            else{
+              this.tableData[index].chosen = false
+              this.$message('商品库存不足或已下架')
+            }
+
         },
         handleSelectionChange(val){
             if(val.length==0){
@@ -93,9 +101,18 @@ import Cookies from "js-cookie";
               });
             }
             else if(val.length==this.tableData.length){
-              this.tableData.forEach(element => {
-                element.chosen = true
-              });
+              // this.tableData.forEach(element => {
+              //   element.chosen = true
+              // });
+              for(let i =0;i<this.tableData.length;i++){
+                if(this.tableData[i].canChosen){
+                  this.tableData[i].chosen = true
+                }
+                else{
+                  this.$refs.Table.toggleRowSelection(this.tableData[i])
+                }
+              }
+
             }
             this.updateTotal()
         },
@@ -104,13 +121,33 @@ import Cookies from "js-cookie";
             confirmButtonText: '确定',
             cancelButtonText: '取消',
             type: 'warning'
-          }).then( ()=>{
+          }).then( async ()=>{
+
+
+            //发送给后台 删除了那一项
+            let data = {
+              query : "deleteItemFromCar",
+              data : {
+                userId : Cookies.get('userId'),
+                sessionId : Cookies.get('sessionId'),
+                itemId : this.tableData[index].itemId,
+              }
+            }
+            let response = await this.$axios.send(data)
+            if(response.status===1){
+              
+            }
+            else{
+              this.$message.error('发生错误：'+response.err);
+            }
+            //////
+
+            this.tableData.splice(index,1)
             this.$message({
               type: 'success',
               message: '删除成功!'
             });
-
-            this.tableData.splice(index,1)
+            
             this.updateTotal()
 
           }).catch( ()=>{
@@ -141,15 +178,21 @@ import Cookies from "js-cookie";
           let data = {
             query : "getShoppingCarList",
             data : {
-              userId : '',
-              sessionId : ''
+                userId : Cookies.get('userId'),
+                sessionId : Cookies.get('sessionId'),
             }
           }
           let response = await this.$axios.send(data)
           if(response.status===1){
             let tmp =  response.data.shoppingCarList
             tmp.forEach(element => {
-              element.chosen = false
+              element.chosen = false;
+              if(element.quantity>0 && element.itemState==1){
+                element.canChosen = true;
+              }
+              else{
+                element.canChosen = false;
+              }
             });
             this.tableData = tmp;
             
@@ -180,7 +223,7 @@ import Cookies from "js-cookie";
                   let newItem = {
                     price : ele.price,
                     nums : ele.nums,
-                    information : ele.information,
+                    title : ele.title,
                     province : ele.province
                   }
                   toBuyList.push(newItem)
