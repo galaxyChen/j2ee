@@ -1,6 +1,6 @@
 <template>
     <div class="item-describe">
-        <p>{{item.describe}}</p>
+        <p>{{item.description}}</p>
     </div>
 </template>
 
