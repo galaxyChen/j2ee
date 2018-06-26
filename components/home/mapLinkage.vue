@@ -35,6 +35,13 @@
 
 <script>
 export default {
+  props:["province","city"],
+  mounted: function() {
+      this.area = {
+        selectProv : this.province,
+        selectCity : this.city
+      }
+  },
   data() {
     return {
       areaRules: {
@@ -1627,8 +1634,15 @@ export default {
       }
       this.citys = [];
     },
+    initVal : function(){
+      // this.area = {
+      //   province : province ,
+      //   city : city
+      // }
+      console.log("haha")
+    },
     test: function() {
-      // console.log('test the mapform')
+      console.log('test the mapform')
       this.$refs.area.validateField("selectProv");
       if (this.area.selectProv != "")
         this.$refs.area.validateField("selectCity");
@@ -1640,9 +1654,10 @@ export default {
         }
       }
       return false;
-    }
+    },
+
   },
-  mounted: function() {},
+
   submitForm: function() {
     // this.$emit('updateArea', this.area.selectProv, this.area.selectCity   )
   }

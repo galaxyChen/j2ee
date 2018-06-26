@@ -107,7 +107,11 @@ export default {
         callback(new Error("请再次输入密码"));
       } else if (value !== this.regForm.password) {
         callback(new Error("两次输入密码不一致!"));
-      } else {
+      }
+      else if (value.length > 16 || value.length < 6) {
+        callback(new Error("长度在 6 到 16 个字符"));
+      }
+      else {
         callback();
       }
     };
@@ -150,8 +154,12 @@ export default {
                 callback(new Error("长度不超过20个字"))
               }
               else{
-                let p = /^[0-9]*$/;
-                if(p.test(value)){
+                let p1 = /^[A-Za-z0-9\u4e00-\u9fa5]+$/;
+                let p2 = /^[0-9]$/;
+                if(p2.test(value)){
+                  callback(new Error("由汉字、字母和数字组成，不允许是纯数字"))
+                }
+                else if(!p1.test(value)){
                   callback(new Error("由汉字、字母和数字组成，不允许是纯数字"))
                 }
                 callback()
