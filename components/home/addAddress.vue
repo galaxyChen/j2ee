@@ -64,15 +64,15 @@ export default {
             },
             addressRule:{
                 recipientName: [
-                    { required: true, message: "收货人不能为空", trigger: "blur" },
-                    { min: 1, max: 16, message: "长度小于16个字符", trigger: "blur" }
+                    { required: true, message: "收货人不能为空", trigger: "change" },
+                    { min: 1, max: 16, message: "长度小于16个字符", trigger: "change" }
                 ],
                 phoneNumber:[
-                    { validator:validPhone ,trigger:"blur" }
+                    { validator:validPhone ,trigger:"change" }
                 ],
                 addressDetail:[
-                    { required: true, message: "请输入详细地址", trigger: "blur" },
-                    { min: 1, max: 50, message: "长度不超过50个字符", trigger: "blur" }
+                    { required: true, message: "请输入详细地址", trigger: "change" },
+                    { min: 1, max: 50, message: "长度不超过50个字符", trigger: "change" }
                 ],
             }
         };

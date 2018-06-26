@@ -33,14 +33,14 @@
                  <el-form-item label="发货城市: ">
                    <mapLinkage ref='area'></mapLinkage>
                 </el-form-item>
-                <el-form-item label="详细地址: ">
+                <el-form-item label="详细地址: " prop='addressDetail'>
                   <el-input  v-model='Goods.addressDetail'  placeholder='默认退货地址'></el-input>
                 </el-form-item>
-                <el-form-item label="联系人: ">
+                <el-form-item label="联系人: " prop='seller'>
                   <el-input  v-model='Goods.seller'  placeholder='默认退货联系人'></el-input>
                 </el-form-item>
-                <el-form-item label="联系电话: ">
-                  <el-input  v-model='Goods.phoneNumer'  placeholder='默认退货联系电话'></el-input>
+                <el-form-item label="联系电话: " prop='phoneNumber'>
+                  <el-input  v-model='Goods.phoneNumber'  placeholder='默认退货联系电话'></el-input>
                 </el-form-item>
                  <el-form-item label="商品描述: ">
                       <el-input  type="textarea"  :rows="2"  :value='Goods.description' placeholder="请输入商品描述" ></el-input>
@@ -76,6 +76,18 @@ export default {
     mapLinkage
   },
   data() {
+    var validPhone = (rule, value, callback) => {
+      if (value == "") {
+        callback(new Error("请输入手机号"));
+      } else {
+        let p = /^1[3|4|5|7|8][0-9]\d{8}$/;
+        if (!p.test(value)) {
+          callback(new Error("请输入正确的手机号"));
+        } else {
+          callback();
+        }
+      }
+    };
     return {
       radio: "0",
       loading: false,
@@ -90,24 +102,15 @@ export default {
         quantity: 0,
         description: "",
         addressDetail: "",
-        phoneNumer:"",
-        seller:"",
+        phoneNumber: "",
+        seller: "",
         //选择图书类别
         options: [
-          //全部
-          {
-            value: "全部",
-            label: "全部"
-          },
           //小说 -> 其子分类
           {
             value: "小说",
             label: "小说",
             children: [
-              {
-                value: "全部",
-                label: "全部"
-              },
               {
                 value: "中国小说",
                 label: "中国小说"
@@ -136,10 +139,6 @@ export default {
             label: "文艺",
             children: [
               {
-                value: "全部",
-                label: "全部"
-              },
-              {
                 value: "文学",
                 label: "文学"
               },
@@ -154,6 +153,10 @@ export default {
               {
                 value: "摄影",
                 label: "摄影"
+              },
+              {
+                value: "其他",
+                label: "其他"
               }
             ]
           },
@@ -162,10 +165,6 @@ export default {
             value: "童书",
             label: "童书",
             children: [
-              {
-                value: "全部",
-                label: "全部"
-              },
               {
                 value: "科普",
                 label: "科普"
@@ -190,10 +189,6 @@ export default {
             label: "教育",
             children: [
               {
-                value: "全部",
-                label: "全部"
-              },
-              {
                 value: "教材",
                 label: "教材"
               },
@@ -212,6 +207,10 @@ export default {
               {
                 value: "工具书",
                 label: "工具书"
+              },
+              {
+                value: "其他",
+                label: "其他"
               }
             ]
           },
@@ -220,10 +219,6 @@ export default {
             value: "人文社科",
             label: "人文社科",
             children: [
-              {
-                value: "全部",
-                label: "全部"
-              },
               {
                 value: "历史",
                 label: "历史"
@@ -259,6 +254,10 @@ export default {
               {
                 value: "心理学",
                 label: "心理学"
+              },
+              {
+                value: "其他",
+                label: "其他"
               }
             ]
           },
@@ -300,6 +299,29 @@ export default {
             message: "请选择出版时间",
             trigger: "change"
           }
+        ],
+        addressDetail: [
+          {
+            required: true,
+            message: "默认退货地址不能为空",
+            trigger: "change"
+          },
+          { min: 1, max: 50, message: "长度不超过50个字符", trigger: "change" }
+        ],
+        seller: [
+          {
+            required: true,
+            message: "退货联系人不能为空",
+            trigger: "change"
+          }
+        ],
+        phoneNumber: [
+          {
+            required: true,
+            message: "退货电话不能为空",
+            trigger: "change"
+          },
+          { validator: validPhone, trigger: "change" }
         ],
 
         options: [
@@ -358,11 +380,11 @@ export default {
     },
     changeType(value) {
       if (value.length == 2) {
-        this.type = value
+        this.type = value;
       }
       if (value.length == 1) {
-        value.push('全部')
-        this.type = value
+        value.push("全部");
+        this.type = value;
       }
     },
     //提交表单
@@ -376,7 +398,7 @@ export default {
             this.loading = true;
             //上传图片
             let url = await this.commitImg();
-            console.log(url)
+            console.log(url);
             if (url === false) {
               this.loading = false;
               return;
@@ -393,16 +415,16 @@ export default {
                 press: this.Goods.press, //出版社
                 publicationDate: this.Goods.publicationDate, //出版日期
                 bookCategory: this.type, //标签，用于搜索的筛选，是一个字符串数组
-                price: this.Goods.price+'', //价格
-                quantity: this.Goods.quantity+'', //库存
-                freePostage: this.radio+'', //是否包邮，0/1
+                price: this.Goods.price + "", //价格
+                quantity: this.Goods.quantity + "", //库存
+                freePostage: this.radio + "", //是否包邮，0/1
                 province: area["prov"],
                 city: area["city"],
                 addressDetail: this.Goods.addressDetail,
                 description: this.Goods.description, //详细描述
                 pictureAddress: url, //图片的链接。在发布商品之前会先执行上传图片操作，成功获得图片的url之后才会发送这个请求
-                phoneNumer:this.Goods.phoneNumer,
-                sellerName:this.Goods.seller
+                phoneNumber: this.Goods.phoneNumber,
+                sellerName: this.Goods.seller
               }
             };
             console.log(data);
