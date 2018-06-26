@@ -67,7 +67,7 @@ export default {
         // 这里做个判断itemList 是否为空
         // 为每个商品添加一个邮费项
         itemList.forEach(element => {
-            element.transportFee = 0
+            element.postage = 0
         });
         this.itemList = itemList
     },
@@ -86,10 +86,10 @@ export default {
             tmp.forEach( ele=>{
                 if(ele.freePostage!=1){
                     if(ele.province!=province){
-                        ele.transportFee = 20
+                        ele.postage = 20
                     }
                     else{
-                        ele.transportFee = 10
+                        ele.postage = 10
                     }
                 }
             });
@@ -98,12 +98,12 @@ export default {
             tmp = {
                 nums :0,
                 pay : 0,
-                transportFee : 0
+                postage : 0
             }
             this.itemList.forEach( ele => {
                  tmp.nums += ele.nums;
                  tmp.pay += ele.nums * ele.price;
-                 tmp.transportFee += ele.transportFee;
+                 tmp.postage += ele.postage;
             })
             this.addressItem = addressItem
             this.totalList = tmp
@@ -112,15 +112,20 @@ export default {
         async submitBill(){
             let data = {
                 query : 'submitBill',
-                itemList : this.itemList,
-                addressId : this.addressItem.addressId
+                data : {
+                    userId: userId,
+                    sessionId: sessionId,
+                    itemList : this.itemList,
+                    addressId : this.addressItem.addressId
+                }
+
             }
             let response = await this.$axios.send(data)
             if(response.status===1){
                 this.$router.push({ 
                     name: 'Pay' ,
                     params: { 
-                        totalPay: this.totalList.pay + this.totalList.transportFee ,
+                        totalPay: this.totalList.pay + this.totalList.postage ,
                         time_limit :'2小时0分',
                     }  
                 });
