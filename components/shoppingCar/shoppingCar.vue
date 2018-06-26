@@ -259,14 +259,17 @@ import Cookies from "js-cookie";
               }
               else{
                 Cookies.set("itemList", toBuyList);
-                this.$router.push({ path: `/order/${userId}` });
+                // this.$router.push({ path: `/order/${userId}` });
+
+                
+                this.$router.push({ 
+                      path: `/order/${userId}` ,
+                      params : { toBuyList },
+                      query : { sessionId},
+                      
+                });
               }
 
-              // this.$router.push({ 
-              //       name: 'order-id' ,
-              //       params : { userId:userId }
-                    
-              // });
             } else {
               this.signout()
             }

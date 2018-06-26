@@ -60,6 +60,9 @@ export default {
 
         let params = this.$route.params;
         console.log(params)
+        let query = this.$route.query;
+        console.log(query)
+        
         let itemList = Cookies.getJSON("itemList")
         // 这里做个判断itemList 是否为空
         // 为每个商品添加一个邮费项
@@ -115,7 +118,7 @@ export default {
             let response = await this.$axios.send(data)
             if(response.status===1){
                 this.$router.push({ 
-                    path: '/Pay' ,
+                    name: 'Pay' ,
                     params: { 
                         totalPay: this.totalList.pay + this.totalList.transportFee ,
                         time_limit :'2小时0分',

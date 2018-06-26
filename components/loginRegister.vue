@@ -8,10 +8,10 @@
 
             <el-form  ref="loginForm" status-icon :model="loginForm" :rules="loginRules"  label-width="80px" v-show="query=='login'">
                 <el-form-item label="登录邮箱" prop="email">
-                    <el-input  @input='check("loginForm","email")' v-model="loginForm.email"></el-input>
+                    <el-input   v-model="loginForm.email"></el-input>
                 </el-form-item>
                 <el-form-item label="密码" prop="password">
-                    <el-input  @input='check("loginForm","password")' type="password" v-model="loginForm.password"></el-input>
+                    <el-input   type="password" v-model="loginForm.password"></el-input>
                 </el-form-item>
                 <el-form-item>
                     <el-button type="primary" @click="submitForm('loginForm')">确定</el-button>
@@ -24,25 +24,25 @@
 
             <el-form  ref="regForm" status-icon :model="regForm"  :rules="regRules"  label-width="80px" v-show="query=='register'">
                 <el-form-item label="注册邮箱" prop="email">
-                    <el-input  @input='check("regForm","email")'  v-model="regForm.email"></el-input>
+                    <el-input   v-model="regForm.email"></el-input>
                 </el-form-item>
                 <el-form-item label="密码" prop="password">
-                    <el-input  @input='check("regForm","password")' type="password" v-model="regForm.password"></el-input>
+                    <el-input  type="password" v-model="regForm.password"></el-input>
                 </el-form-item>
 
                 <el-form-item label="确认密码" prop="password2"> 
-                    <el-input @input='check("regForm","password2")' type="password" v-model="regForm.password2"></el-input>
+                    <el-input  type="password" v-model="regForm.password2"></el-input>
                 </el-form-item>
                 
                 <el-form-item label="昵称" prop="userName">
                     <el-input @input='check("regForm","userName")' v-model="regForm.userName"></el-input>
                 </el-form-item>
                 <el-form-item label="密保问题" prop="securityQuestion">
-                    <el-input @input='check("regForm","securityQuestion")' type="textarea" maxlength=100 v-model="regForm.securityQuestion" placeholder="不超过100个字符"></el-input>
+                    <el-input  type="textarea" maxlength=100 v-model="regForm.securityQuestion" placeholder="不超过100个字符"></el-input>
                 </el-form-item>
 
                 <el-form-item label="密保回答" prop="securityAnswer">
-                    <el-input @input='check("regForm","securityAnswer")' type="textarea" maxlength=50 v-model="regForm.securityAnswer" placeholder="不超过50个字符"></el-input>
+                    <el-input  type="textarea" maxlength=50 v-model="regForm.securityAnswer" placeholder="不超过50个字符"></el-input>
                 </el-form-item>
 
                 <el-form-item>
@@ -132,17 +132,17 @@ export default {
       query: "login",
       loginRules: {
         email: [
-          { type: "email", required: true, message: "请输入正确的邮箱", trigger: "blur" },
+          { type: "email", required: true, message: "请输入正确的邮箱", trigger: "blur", trigger: "change" },
           { min: 1, max: 30, message: "长度小于30个字符", trigger: "blur" }
         ],
         password: [
-          { required: true, message: "请输入正确的密码", trigger: "blur" },
+          { required: true, message: "请输入正确的密码", trigger: "blur", trigger: "change" },
         ]
       },
       regRules: {
         email: [
-          { type: "email", required: true, message: "请输入正确的邮箱", trigger: "blur" },
-          { min: 1, max: 30, message: "长度小于30个字符", trigger: "blur" }
+          { type: "email", required: true, message: "请输入正确的邮箱", trigger: "blur", trigger: "change" },
+          { min: 1, max: 30, message: "长度小于30个字符", trigger: "blur", trigger: "change" }
         ],
         userName: [
           {  
@@ -163,29 +163,25 @@ export default {
                   callback(new Error("由汉字、字母和数字组成，不允许是纯数字"))
                 }
                 callback()
-              }
-            }, 
-            trigger: "blur" 
+              }}, 
+            trigger: "blur" , trigger: "change"
           },
         ],
-        password: [{ required: true, validator: validatePw, trigger: "blur" }],
-        password2: [{ required: true, validator: validatePw2, trigger: "blur" }],
+        password: [{ required: true, validator: validatePw, trigger: "blur", trigger: "change" }],
+        password2: [{ required: true, validator: validatePw2, trigger: "blur", trigger: "change" }],
         securityQuestion: [
-          { required: true, message: "请输入密保问题", trigger: "blur" },
-          { min: 1, max: 100, message: "长度小于100个字", trigger: "blur" }
+          { required: true, message: "请输入密保问题", trigger: "blur", trigger: "change" },
+          { min: 1, max: 100, message: "长度小于100个字", trigger: "blur", trigger: "change" }
         ],
         securityAnswer: [
-          { required: true, message: "请输入密保回答", trigger: "blur" },
-          { min: 1, max: 50, message: "长度小于50个字", trigger: "blur" }
+          { required: true, message: "请输入密保回答", trigger: "blur" , trigger: "change"},
+          { min: 1, max: 50, message: "长度小于50个字", trigger: "blur" , trigger: "change"}
         ]
       }
     };
   },
   methods: {
-    check(formName, item) {
-      console.log(this.$refs[formName]);
-      this.$refs[formName].validateField(item);
-    },
+
     submitForm: function(formName) {
       console.log("login" + formName);
       function serialize(obj) {
