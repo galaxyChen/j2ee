@@ -36,6 +36,9 @@
                 <el-form-item label="详细地址: ">
                   <el-input  v-model='Goods.addressDetail'  placeholder='默认退货地址'></el-input>
                 </el-form-item>
+                <el-form-item label="联系人: ">
+                  <el-input  v-model='Goods.seller'  placeholder='默认退货联系人'></el-input>
+                </el-form-item>
                 <el-form-item label="联系电话: ">
                   <el-input  v-model='Goods.phoneNumer'  placeholder='默认退货联系电话'></el-input>
                 </el-form-item>
@@ -88,6 +91,7 @@ export default {
         description: "",
         addressDetail: "",
         phoneNumer:"",
+        seller:"",
         //选择图书类别
         options: [
           //全部
@@ -397,7 +401,8 @@ export default {
                 addressDetail: this.Goods.addressDetail,
                 description: this.Goods.description, //详细描述
                 pictureAddress: url, //图片的链接。在发布商品之前会先执行上传图片操作，成功获得图片的url之后才会发送这个请求
-                phoneNumer:this.Goods.phoneNumer
+                phoneNumer:this.Goods.phoneNumer,
+                sellerName:this.Goods.seller
               }
             };
             console.log(data);
