@@ -330,16 +330,16 @@ export default {
       // console.log(file.raw instanceof File)
       // console.log(this.$refs.upload.$refs['upload-inner'].upload)
       let data = new FormData();
-      data.append("data", file.raw);
+      data.append("file", file.raw);
       data.append("query", "uploadImg");
       data.append("userId", Cookies.get("userId"));
       data.append("sessionId", Cookies.get("sessionId"));
       let header = { "Content-Type": "multipart/form-data" };
-      let response = await this.$axios.send(data, "/upload/", header);
+      let response = await this.$axios.send(data, "/BookStore/upload/", header);
       if (response.status == 1) {
         return response.data.pictureAddress;
       } else if (response.status == 0) {
-        this.$message.error("发送错误:" + response.err);
+        this.$message.error("发生错误:" + response.err);
         return false;
       } else {
         Cookies.remove("userId");
@@ -350,10 +350,11 @@ export default {
     },
     changeType(value) {
       if (value.length == 2) {
-        let type = [];
-        type.push(value[0]);
-        type.push(value[1]);
-        this.type = type;
+        this.type = value
+      }
+      if (value.length == 1) {
+        value.push('全部')
+        this.type = value
       }
     },
     //提交表单
@@ -367,6 +368,7 @@ export default {
             this.loading = true;
             //上传图片
             let url = await this.commitImg();
+            console.log(url)
             if (url === false) {
               this.loading = false;
               return;
@@ -383,9 +385,9 @@ export default {
                 press: this.Goods.press, //出版社
                 publicationDate: this.Goods.publicationDate, //出版日期
                 bookCategory: this.type, //标签，用于搜索的筛选，是一个字符串数组
-                price: this.Goods.price, //价格
-                quantity: this.Goods.quantity, //库存
-                freePostage: this.radio, //是否包邮，0/1
+                price: this.Goods.price+'', //价格
+                quantity: this.Goods.quantity+'', //库存
+                freePostage: this.radio+'', //是否包邮，0/1
                 province: area["prov"],
                 city: area["city"],
                 addressDetail: this.Goods.addressDetail,

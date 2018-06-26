@@ -24,8 +24,8 @@
             v-for="book in newBooks"
             :key='"recent"+book.itemId'
             class="goods" >
-                  <img class='goods-img' :src="book.pictureAddress">
-                  <div style="margin-top:-100px;"> 
+                  <img @click='lookDetail(book.itemId)' class='goods-img' :src="book.pictureAddress">
+                  <div @click='lookDetail(book.itemId)' style="margin-top:-100px;"> 
                       <p style="margin-top:-50px;margin-left:10px;">{{book.itemTitle}}</p>
                       <p style="margin-top:-100px;margin-left:10px;">价格： {{book.price}}</p>
                       <div style="margin-top:-100px;margin-left:10px;">

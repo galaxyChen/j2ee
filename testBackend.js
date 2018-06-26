@@ -20,45 +20,42 @@ var addresses = [
   }, {
     recipientName: "merlin",
     phoneNumber: "518",
-    province : "moon",
-    city:"moon",
+    province: "moon",
+    city: "moon",
     addressDetail: "avalon",
     isDefaultAddress: false,
     addressId: 333
   }
 ]
-var tableData= [
+var tableData = [
   {
-    information:'merlin',
+    information: 'merlin',
     price: 518,
-    nums:1,
+    nums: 1,
 
-    quantity:10,
-    itemState:1
-  }, 
-  {
-    information:'lilith',
+    quantity: 10,
+    itemState: 1
+  }, {
+    information: 'lilith',
     price: 518,
-    nums:1,
+    nums: 1,
 
-    quantity:15,
-    itemState:1
-  }, 
-  {
-    information:'bb',
+    quantity: 15,
+    itemState: 1
+  }, {
+    information: 'bb',
     price: 518,
-    nums:1,
+    nums: 1,
 
-    quantity:20,
-    itemState:1
-  }, 
-  {
-    information:'aa',
+    quantity: 20,
+    itemState: 1
+  }, {
+    information: 'aa',
     price: 518,
-    nums:1,
+    nums: 1,
 
-    quantity:8,
-    itemState:1
+    quantity: 8,
+    itemState: 1
   }
 ]
 app.use(express.static('uploads'));
@@ -70,14 +67,19 @@ app.get('/', function (req, res) {
 app.use(bodyParser.json()); // for parsing application/json
 app.use(bodyParser.urlencoded({extended: true}));
 
-app.post('/upload/', upload.single('img'), function (req, res, next) {
+app.post('/BookStore/upload/', upload.single('img'), function (req, res, next) {
   var file = req.body.data;
   console.log(file)
   console.log(req.body)
   // console.log('文件类型：%s', file.mimetype); console.log('原始文件名：%s',
   // file.originalname); console.log('文件大小：%s', file.size);
   // console.log('文件保存路径：%s', file.path); 接收文件成功后返回数据给前端
-  res.json({status: 1,data:{pictureAddress:'http://localhost:3001/1.png'}});
+  res.json({
+    status: 1,
+    data: {
+      pictureAddress: 'http://localhost:3001/1.png'
+    }
+  });
 })
 
 app.post('/BookStore/', function (req, res) {
@@ -88,24 +90,31 @@ app.post('/BookStore/', function (req, res) {
     console.log(data.img)
     console.log(typeof data.img)
   }
+  if (data['query'] == 'signOrder') {
+    res.json({status: 1})
+  }
 
   if (data['query'] == 'signout') {
     res.json({status: 1})
   }
 
-  if (data['query'] == 'changePassword'){
-    res.json({status:1})
+  if (data['query'] == 'finishOrder') {
+    res.json({status: 1})
   }
 
-  if (data['query'] == 'changeName'){
+  if (data['query'] == 'changePassword') {
+    res.json({status: 1})
+  }
+
+  if (data['query'] == 'changeName') {
     let response = {
-      status:1
+      status: 1
     }
     res.json(response)
   }
 
-  if (data['query'] == 'addBook'){
-    res.json({status:1})
+  if (data['query'] == 'addBook') {
+    res.json({status: 1})
   }
 
   if (data['query'] == 'getRecent') {
@@ -145,8 +154,8 @@ app.post('/BookStore/', function (req, res) {
     res.json(response)
   }
 
-  if (data['query']=='check'){
-    res.json({status:1})
+  if (data['query'] == 'check') {
+    res.json({status: 1})
   }
 
   if (data['query'] == 'search') {
@@ -179,12 +188,136 @@ app.post('/BookStore/', function (req, res) {
       }
     ]
     let response = {
-      status:1,
-      data:{
-        item_list:item_list
+      status: 1,
+      data: {
+        item_list: item_list
       }
     }
     res.json(response)
+  }
+
+  if (data['query'] == 'getBuyOrder') {
+    let response = {
+      status: 1,
+      data: {
+        orderList: [
+          {
+            orderId: "0001",
+            purchaseTime: "2018-01-08 13:02",
+            itemTitle: "三体",
+            pictureAddress: "http://localhost:3001/1.png",
+            orderState: "等待发货",
+            totalPrice: "40",
+            price: "30",
+            quantity: "1",
+            deliveryTime: "",
+            receiptTime: "",
+            expressCompany: "",
+            expressCode: "",
+            postage: "10",
+            addressId: "123"
+          },
+          {
+            orderId: "0002",
+            purchaseTime: "2018-01-08 13:02",
+            itemTitle: "物理",
+            pictureAddress: "http://localhost:3001/2.png",
+            orderState: "等待付款",
+            totalPrice: "40",
+            price: "30",
+            quantity: "1",
+            deliveryTime: "",
+            receiptTime: "",
+            expressCompany: "",
+            expressCode: "",
+            postage: "10",
+            addressId: "123"
+          },
+          {
+            orderId: "0003",
+            purchaseTime: "2018-01-08 13:02",
+            itemTitle: "三体",
+            pictureAddress: "http://localhost:3001/1.png",
+            orderState: "等待收货",
+            totalPrice: "40",
+            price: "30",
+            quantity: "1",
+            deliveryTime: "",
+            receiptTime: "",
+            expressCompany: "",
+            expressCode: "",
+            postage: "",
+            addressId: ""
+          }
+        ]
+      }
+    }
+    res.json(response)
+  }
+
+  if (data['query'] == 'getSellOrder') {
+    let response = {
+      status: 1,
+      data: {
+        orderList: [
+          {
+            orderId: "0001",
+            purchaseTime: "2018-01-08 13:02",
+            itemTitle: "三体",
+            pictureAddress: "http://localhost:3001/1.png",
+            orderState: "等待发货",
+            totalPrice: "40",
+            price: "30",
+            quantity: "1",
+            deliveryTime: "",
+            receiptTime: "",
+            expressCompany: "",
+            expressCode: "",
+            postage: "",
+            addressId: ""
+          },
+          {
+            orderId: "0002",
+            purchaseTime: "2018-01-08 13:02",
+            itemTitle: "三体",
+            pictureAddress: "http://localhost:3001/1.png",
+            orderState: "等待付款",
+            totalPrice: "40",
+            price: "30",
+            quantity: "1",
+            deliveryTime: "",
+            receiptTime: "",
+            expressCompany: "",
+            expressCode: "",
+            postage: "",
+            addressId: ""
+          },
+          {
+            orderId: "0003",
+            purchaseTime: "2018-01-08 13:02",
+            itemTitle: "三体",
+            pictureAddress: "http://localhost:3001/1.png",
+            orderState: "等待收货",
+            totalPrice: "40",
+            price: "30",
+            quantity: "1",
+            deliveryTime: "",
+            receiptTime: "",
+            expressCompany: "",
+            expressCode: "",
+            postage: "",
+            addressId: ""
+          }
+        ]
+      }
+    }
+    res.json(response)
+  }
+
+  if (data['query'] == 'sendOrder'){
+    res.json({
+      status:1
+    })
   }
 
   if (data['query'] == 'getItemDetail') {
@@ -291,6 +424,24 @@ app.post('/BookStore/', function (req, res) {
     // console.log(response)
     res.json(response)
   }
+  if (data['query'] == 'getAddressDetail') {
+    response = {
+      status: 1, //1是成功，0是失败
+      data: {
+        recipientName: "Foo",
+        phoneNumber: "110",
+        addressDetail: "scut",
+        isDefaultAddress: true,
+        addressId: 111,
+        province:'广东',
+        city:'广州',
+        addressDetail:'番禺区大学城华南理工大学'
+      }
+
+    }
+    // console.log(response)
+    res.json(response)
+  }
 
   if (data['query'] == 'addAddress') {
     let newAddress = {
@@ -375,13 +526,13 @@ app.post('/BookStore/', function (req, res) {
     res.json(response)
   }
 
-  if(data['query']=='getShoppingCarList'){
+  if (data['query'] == 'getShoppingCarList') {
     response = {
-      status:1,//1是登录成功，0是登录失败
-      data :{
-        shoppingCarList : tableData
+      status: 1, //1是登录成功，0是登录失败
+      data: {
+        shoppingCarList: tableData
       },
-      err :''
+      err: ''
     }
     res.json(response)
   }

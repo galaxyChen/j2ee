@@ -1,5 +1,5 @@
 <template>
-    <el-menu @select='changeTab' default-active="1">
+    <el-menu @select='changeTab' :default-active="active">
 
         <el-menu-item index="1">
             <i class="el-icon-star-on"></i>
@@ -40,6 +40,10 @@
 
 <script>
 export default {
+    mounted(){
+        console.log(this.active)
+    },
+    props:['active'],
     data(){
         return {}
     },

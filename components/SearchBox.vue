@@ -219,6 +219,7 @@ export default {
           }
         });
       }
+      this.$emit('doSearch',text,tag)
     }
   }
 };

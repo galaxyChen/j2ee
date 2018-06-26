@@ -56,7 +56,10 @@ module.exports = {
   },
   proxy: [
     'http://localhost:3001/BookStore/',
-    // 'http://localhost:3001/upload/'
-    // 'http://192.168.20.46:8080/BookStore/'
+    'http://localhost:3001/BookStore/upload/',
+    // 'http://192.168.20.46:8080/BookStore/upload/',
+    // 'http://192.168.20.46:8080/BookStore/',
+    // 'http://j2ee.gagagalaxy.top:8080/BookStore/upload/',
+    // 'http://j2ee.gagagalaxy.top:8080/BookStore/',
   ]
 }
