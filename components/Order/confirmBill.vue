@@ -14,13 +14,13 @@
 
         <el-row class="el-row1">运费：
             <span style="color:red">
-                ￥{{totalList.transportFee}}
+                ￥{{totalList.postage}}
             </span>
         </el-row>
 
         <el-row class="el-row1">应付总费：
             <span style="color:red">
-                ￥{{totalList.transportFee+totalList.pay }}
+                ￥{{totalList.postage+totalList.pay }}
             </span>
         </el-row>
         <el-row class="el-row1">

@@ -4,16 +4,16 @@
         <el-form status-icon :model="addressItem" ref="addressItem" :rules="addressRule">
 
             <el-form-item label="姓名" prop="recipientName">
-                <el-input @input='check("recipientName")' v-model="addressItem.recipientName" ></el-input>
+                <el-input  v-model="addressItem.recipientName" ></el-input>
             </el-form-item>
             <el-form-item label="手机号" prop="phoneNumber">
-                <el-input  @input='check("phoneNumber")' v-model="addressItem.phoneNumber"></el-input>
+                <el-input   v-model="addressItem.phoneNumber"></el-input>
             </el-form-item>
             
             <mapLinkage ref="map" @updateArea="updateArea"></mapLinkage>
 
             <el-form-item label="详细地址" prop="addressDetail"> 
-                <el-input @input='check("addressDetail")'  v-model="addressItem.addressDetail"></el-input>
+                <el-input   v-model="addressItem.addressDetail"></el-input>
             </el-form-item>
 
             <el-form-item>
@@ -64,24 +64,23 @@ export default {
             },
             addressRule:{
                 recipientName: [
-                    { required: true, message: "收货人不能为空", trigger: "change" },
-                    { min: 1, max: 16, message: "长度小于16个字符", trigger: "change" }
+                    { required: true, message: "收货人不能为空", trigger: "blur" ,trigger:"change"},
+                    { min: 1, max: 16, message: "长度小于16个字符", trigger: "blur",trigger:"change" }
                 ],
                 phoneNumber:[
-                    { validator:validPhone ,trigger:"change" }
+                    {required: true, validator:validPhone ,trigger:"blur", trigger:"change" },
+                    
                 ],
                 addressDetail:[
-                    { required: true, message: "请输入详细地址", trigger: "change" },
-                    { min: 1, max: 50, message: "长度不超过50个字符", trigger: "change" }
+                    { required: true, message: "请输入详细地址", trigger: "blur" ,trigger:"change"},
+                    { min: 1, max: 50, message: "长度不超过50个字符", trigger: "blur" ,trigger:"change" }
                 ],
             }
         };
     },
     methods: {
 
-        check(item){
-            this.$refs['addressItem'].validateField(item);
-        },
+
         resetForm() {
             this.$refs['addressItem'].resetFields()
             this.$refs.map.reset()
