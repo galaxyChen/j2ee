@@ -198,6 +198,8 @@ import Cookies from "js-cookie";
           this.totalPay = tmp
           this.chosenNum = tmp1
         },
+
+        // 获取购物车列表
         async getShoppingCarList(){
           let data = {
             query : "getShoppingCarList",
@@ -225,6 +227,8 @@ import Cookies from "js-cookie";
             this.$message.error('发生错误：'+response.err);
           }
         },
+
+        // 下单
         async submitBill(){
 
           let userId = Cookies.get("userId");
@@ -260,13 +264,15 @@ import Cookies from "js-cookie";
               else{
                 Cookies.set("itemList", toBuyList);
                 this.$router.push({ path: `/order/${userId}` });
+
+                
+                // this.$router.push({ 
+                //       path: `/order/${userId}` ,
+                //       params : { toBuyList },
+                //       query : { sessionId},   
+                // });
               }
 
-              // this.$router.push({ 
-              //       name: 'order-id' ,
-              //       params : { userId:userId }
-                    
-              // });
             } else {
               this.signout()
             }
