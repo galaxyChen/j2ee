@@ -16,9 +16,11 @@
                 <i class="el-icon-star-on"></i>
                 <span>交易管理</span>
             </template>
-            <el-menu-item-group>
+            <el-menu-item-group> 
             <el-menu-item index="3-1">购买管理</el-menu-item>
             <el-menu-item index="3-2">出售管理</el-menu-item>
+            <el-menu-item index="3-3">售后服务</el-menu-item>
+            <el-menu-item index="3-4">售后管理</el-menu-item>
             </el-menu-item-group>
         </el-submenu>
 

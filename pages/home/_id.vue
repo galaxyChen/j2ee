@@ -15,6 +15,7 @@ import Person from "~/components/home/Person";
 import Transaction from "~/components/home/Transaction";
 import AddGoods from "~/components/home/AddGoods";
 import addressBook from "~/components/home/addressBook";
+import AfterService from "~/components/home/AfterService";
 import Cookies from "js-cookie";
 export default {
   components: {
@@ -23,7 +24,7 @@ export default {
     Person,
     Transaction,
     AddGoods,
-    addressBook
+    addressBook,
   },
   async mounted() {
     let userId = Cookies.get("userId");
@@ -70,7 +71,7 @@ export default {
         "addressBook",
         "Transaction",
         "Message",
-        "AddGoods"
+        "AddGoods",
       ];
       this.currentMain = name[indexPath[0] - 1];
       this.currentMainIndex = index+'';
@@ -78,8 +79,8 @@ export default {
       // console.log(this.currentMainIndex)
       if (index === "3-1") this.type = 1;
       if (index === "3-2") this.type = 2;
-      let userId = Cookies.get('userId')
-      this.$router.push({ path: `/home/${userId}` ,query:{index:index,tab:indexPath[0]}});
+      if (index === "3-3") this.type = 3;
+      if (index === "3-4") this.type = 4 ;
     },
     changeName(newName){
       // console.log('index')
