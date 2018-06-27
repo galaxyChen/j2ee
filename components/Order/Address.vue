@@ -40,7 +40,7 @@
 <script>
 import editAddress from "~/components/home/editAddress";
 import addAddress from "~/components/home/addAddress";
-import selectAddress from "~/components/order/selectAddress";
+import selectAddress from "~/components/Order/selectAddress";
 import Cookies from 'js-cookie'
 export default {
     components: {
