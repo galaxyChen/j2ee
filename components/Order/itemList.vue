@@ -1,5 +1,5 @@
 <template>
-  <el-table ref="Table" :data="itemList"  style="width: 100%"  >
+  <el-table ref="Table" :data="itemList"  class="el-table1"  >
 
     <el-table-column label="商品信息" align="center">
         <template slot-scope="scope">
@@ -36,6 +36,14 @@
 
   </el-table>
 </template>
+
+<style scope>
+.el-table1{
+
+  width: 100%;
+
+}
+</style>
 <script>
 export default {
     mounted(){

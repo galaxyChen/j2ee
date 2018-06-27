@@ -38,8 +38,8 @@
             <div>
               <div class="cardItem">
                   
-                    <el-button v-if="defaultItem==index" type="success" disabled>默认地址</el-button>
-                    <el-button v-if="defaultItem!=index" @click="changeDefault(index)">设为默认</el-button>
+                    <el-button v-if="item.isDefaultAddress=='1' " type="success" disabled>默认地址</el-button>
+                    <el-button v-if="item.isDefaultAddress=='0' " @click="changeDefault(index)">设为默认</el-button>
               </div>
               <div>
                  <el-button @click="applyEditAddress(index)" type="text">编辑</el-button>
@@ -153,7 +153,7 @@ export default {
           userId : Cookies.get('userId'),
           sessionId :Cookies.get('sessionId'),
           recipientName : addressItem.recipientName,
-          phoneNumber : addressItem.phoneNumber,
+          phoneNumber : addressItem.phoneNumber+"",
           addressDetail : addressItem.addressDetail,
           province : addressItem.province,
           city : addressItem.city,
@@ -178,12 +178,12 @@ export default {
           userId : Cookies.get('userId'),
           sessionId : Cookies.get('sessionId'),
           recipientName : addressItem.recipientName,
-          phoneNumber : addressItem.phoneNumber,
+          phoneNumber : addressItem.phoneNumber+"",
           addressDetail : addressItem.addressDetail,
           province : addressItem.province,
           city : addressItem.city,
-          isDefaultAddress : this.addressItems[index].isDefaultAddress,
-          addressId : this.addressItems[index].addressId
+          isDefaultAddress : this.addressItems[index].isDefaultAddress+"",
+          addressId : this.addressItems[index].addressId+"",
         }
       }
       let response = await this.$axios.send(data)
@@ -194,8 +194,29 @@ export default {
         this.$message.error('发生错误：'+response.err);
       }
     },
-    changeDefault(index) {
-      this.defaultItem = index;
+    async changeDefault(index) {
+
+      let data = {
+        query : "editAddress",
+        data :{
+          userId : Cookies.get('userId'),
+          sessionId : Cookies.get('sessionId'),
+          recipientName : this.addressItems[index].recipientName,
+          phoneNumber : this.addressItems[index].phoneNumber+"",
+          addressDetail : this.addressItems[index].addressDetail,
+          province : this.addressItems[index].province,
+          city : this.addressItems[index].city,
+          isDefaultAddress : 1+"",
+          addressId : this.addressItems[index].addressId+"",
+        }
+      }
+      let response = await this.$axios.send(data)
+      if(response.status===1){
+        this.addressItems =  response.data.addresses
+      }
+      else{
+        this.$message.error('发生错误：'+response.err);
+      }
     },
     async getAddress(){
       let data = {

@@ -50,15 +50,19 @@ export default {
     },
     async mounted() {
         await this.getAddress();
-        for(let i=0;i< this.addressList.length;i++){
-            if(this.addressList[i].isDefaultAddress)
-                this.defaultIndex = i;
-        }
-        this.addressItem = this.addressList[this.defaultIndex]
+
+        if(this.addressList.length>0)
+            this.addressItem = this.addressList[this.defaultIndex]
     },
     watch: {
         addressItem(){
             this.$emit('changeAddress',this.addressItem)
+        },
+        addressList(){
+            for(let i=0;i< this.addressList.length;i++){
+                if(this.addressList[i].isDefaultAddress)
+                    this.defaultIndex = i;
+            }
         }
     },
     data() {
@@ -69,10 +73,12 @@ export default {
                 phoneNumber:'',
                 addressDetail:'',
                 province:'',
-                city:''
+                city:'',
+                addressId:'',
             },
             index : 0,
             defaultIndex : 0,
+            nowIndex : 0,
         }
     },
     methods:{
@@ -88,6 +94,7 @@ export default {
         },
         async editAddressItem(index,addressItem){
             // 编辑地址的组件 会发回一个 index,addressItem 。这里可以无视这个index值
+            console.log(addressItem)
             let data = {
                 query : "editAddress",
                 data : {
@@ -98,14 +105,15 @@ export default {
                     addressDetail : addressItem.addressDetail,
                     province : addressItem.province,
                     city : addressItem.city,
-                    isDefaultAddress : this.addressList[index].isDefaultAddress,
-                    addressId : this.addressList[index].addressId
+                    isDefaultAddress : addressItem.isDefaultAddress+"",
+                    addressId : addressItem.addressId+""
                 }
             }
             
             let response = await this.$axios.send(data)
             if(response.status===1){
                 this.addressList =  response.data.addresses
+                
                 this.addressItem = addressItem 
             }
             else{
@@ -121,11 +129,10 @@ export default {
                     userId : Cookies.get('userId'),
                     sessionId : Cookies.get('sessionId'),
                     recipientName : addressItem.recipientName,
-                    phoneNumber : addressItem.phoneNumber,
+                    phoneNumber : addressItem.phoneNumber+"",
                     addressDetail : addressItem.addressDetail,
                     province : addressItem.province,
-                    city : addressItem.city,
-                    isDefaultAddress : false
+                    city : addressItem.city
                 }
             }
             console.log(data)
