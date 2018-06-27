@@ -113,8 +113,8 @@ export default {
             let data = {
                 query : 'submitBill',
                 data : {
-                    userId: userId,
-                    sessionId: sessionId,
+                    userId : Cookies.get('userId'),
+                    sessionId : Cookies.get('sessionId'),
                     itemList : this.itemList,
                     addressId : this.addressItem.addressId
                 }
