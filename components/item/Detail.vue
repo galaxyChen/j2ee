@@ -42,13 +42,14 @@
             </el-col>
         </el-row>
         <el-row>
-            <el-button class='item-add' round type='danger'>加入购物车</el-button>
+            <el-button v-if="showAddButton" class='item-add' round type='danger'>加入购物车</el-button>
         </el-row>
     </div>
 </template>
 
 
 <script>
+import Cookies from 'js-cookie'
 export default {
     mounted(){
         console.log(this.item)
@@ -63,6 +64,11 @@ export default {
     handleChange(num) {
       this.number = num;
     }
+  },
+  computed:{
+      showAddButton(){
+          return this.item.sellerId != Cookies.get('userId')
+      }
   }
 };
 </script>

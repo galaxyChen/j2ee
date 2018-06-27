@@ -74,7 +74,7 @@ export default {
         "AddGoods",
       ];
       this.currentMain = name[indexPath[0] - 1];
-      this.currentMainIndex = index;
+      this.currentMainIndex = index+'';
       // console.log(this.currentMain)
       // console.log(this.currentMainIndex)
       if (index === "3-1") this.type = 1;

@@ -14,7 +14,7 @@
                 </el-tabs>
             </el-header>
             <el-main>
-                <Order @sendOrder='updateOrder' @cancelOrder='updateOrder' @finishOrder='updateOrder' @signOrder='updateOrder' @lookDetail='lookDetail' v-for="order in onShowList" :type='type' :key='order.itemId' :order='order'></Order>
+                <Order @sendOrder='updateOrder' @cancelOrder='updateOrder' @finishOrder='updateOrder' @signOrder='updateOrder' @lookDetail='lookDetail' v-for="order in onShowList" :type='type' :key='"order-"+order.orderId' :order='order'></Order>
             </el-main>
         </el-container>
         <el-container v-else>
@@ -22,7 +22,7 @@
                 <el-button @click="goBack" class="back-button" size="medium" type='text' icon="el-icon-back">返回</el-button>
             </el-header>
             <el-main>
-                <OrderDetail :type='type' :order='onShowOrder'></OrderDetail>
+                <OrderDetail @sendOrder='updateOrder' @cancelOrder='updateOrder' @finishOrder='updateOrder' @signOrder='updateOrder' @lookDetail='lookDetail' :type='type' :order='onShowOrder'></OrderDetail>
             </el-main>
         </el-container>
     </el-col>
@@ -92,8 +92,8 @@ export default {
       }
     },
     updateShowList() {
-      if (this.activeTab == "all") {
-        this.onShowList = this.orderList;
+      if (this.activeTab == "all" && this.showList) {
+        this.onShowList = JSON.parse(JSON.stringify(this.orderList));
         return;
       }
       let tabs = {
@@ -105,10 +105,18 @@ export default {
         cancel: "已取消",
         service: "售后中"
       };
-      this.onShowList = this.orderList.filter(item => {
-        if (item.orderState == tabs[this.activeTab]) return true;
-        else return false;
-      });
+      this.onShowList =
+        this.orderList.filter(item => {
+          if (item.orderState == tabs[this.activeTab]) return true;
+          else return false;
+        }) || [];
+      if (!this.showList) {
+        let onShowOrder = this.orderList.filter(item => {
+          if (item.orderId == this.onShowOrder.orderId) return true;
+          else return false;
+        })[0];
+        this.onShowOrder = onShowOrder;
+      }
     },
     handleClick() {
       console.log(this.activeTab);
@@ -116,6 +124,7 @@ export default {
     },
     goBack() {
       this.showList = true;
+      this.updateShowList();
     },
     lookDetail(id) {
       console.log("look detail:" + id);
@@ -129,16 +138,15 @@ export default {
       }
     },
     updateOrder(item) {
-      console.log("sign order");
       let index = 0;
       while (this.orderList[index].orderId != item.orderId) index++;
       this.orderList.splice(index, 1, item);
       this.updateShowList();
     }
   },
-  watch:{
-    type(newType,lodType){
-      this.getOrder()
+  watch: {
+    type(newType, lodType) {
+      this.getOrder();
     }
   }
 };

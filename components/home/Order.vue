@@ -162,7 +162,7 @@ export default {
     },
     send() {
       // console.log(this.type);
-      if (this.type == 1 && this.order.orderState == "等待发货" && this.type == 2) return true;
+      if (this.order.orderState == "等待发货" && this.type == 2) return true;
       else return false;
     }
   },
