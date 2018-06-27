@@ -65,9 +65,7 @@
 <script>
 import Cookies from "js-cookie";
 export default {
-  mounted() {
-    
-  },
+  mounted() {},
   data() {
     return {
       change: true,
@@ -84,7 +82,7 @@ export default {
     async changeName() {
       console.log("changeName");
       if (this.change) {
-        console.log("allow to change");
+        // console.log("allow to change");
         this.change = !this.change;
         this.$refs.name.focus();
       } else {
@@ -92,6 +90,23 @@ export default {
         if (newName == "") {
           this.change = !this.change;
           return;
+        }
+        if (newName == "") {
+          this.$message.error("请输入昵称");
+          return;
+        } else if (newName.length > 20) {
+          this.$message.error("长度不超过20个字");
+          return;
+        } else {
+          let p1 = /^[A-Za-z0-9\u4e00-\u9fa5]+$/;
+          let p2 = /^[0-9]$/;
+          if (p2.test(newName)) {
+            this.$message.error("由汉字、字母和数字组成，不允许是纯数字");
+            return;
+          } else if (!p1.test(newName)) {
+            this.$message.error("由汉字、字母和数字组成，不允许是纯数字");
+            return;
+          }
         }
         this.$confirm("确认修改用户名为" + newName + "吗？", "提示", {
           confirmButtonText: "确定",
@@ -120,7 +135,7 @@ export default {
                 type: "success",
                 message: "修改成功!"
               });
-              this.$emit("changeName",newName);
+              this.$emit("changeName", newName);
             } else if (response.status == -1) {
               this.signout();
             } else {
@@ -146,6 +161,19 @@ export default {
       let oldpw = this.oldpw;
       let newpw = this.newpw;
       let newpw2 = this.newpw2;
+      if (newpw == "") {
+        this.$message.error("请输入密码");
+        return;
+      } else if (newpw.length > 16 || newpw.length < 6) {
+        this.$message.error("新密码长度在 6 到 16 个字符");
+        return;
+      } else {
+        let p = /^(?=.*\d)(?=.*[a-zA-Z])(?=.*[_])[\da-zA-Z_]+/;
+        if (!p.test(newpw)) {
+          this.$message.error("新密码最少包含数字、字母和下划线");
+          return;
+        }
+      }
       if (newpw != newpw2) {
         this.$message.error("两次新密码输入不一致！");
         return;
@@ -164,9 +192,9 @@ export default {
       let response = await this.$axios.send(data);
       if (response.status == 1) {
         this.$message({
-          message:'修改成功！',
-          type:'success'
-        })
+          message: "修改成功！",
+          type: "success"
+        });
       } else if (response.status == -1) {
         this.signout();
       } else {

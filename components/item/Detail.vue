@@ -65,13 +65,18 @@ export default {
       this.number = num;
     },
     async addBook() {
+      let userId = Cookies.get("userId");
+      if (!userId) {
+        this.$message("请先登录");
+        return;
+      }
       let data = {
         query: "addBookToCar",
         data: {
           userId: Cookies.get("userId"),
           sessionId: Cookies.get("sessionId"),
-          itemId: this.item.itemId+'',
-          quantity: this.number+'' //添加的物品的数量
+          itemId: this.item.itemId + "",
+          quantity: this.number + "" //添加的物品的数量
         }
       };
       let response = await this.$axios.send(data);
