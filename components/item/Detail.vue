@@ -42,33 +42,59 @@
             </el-col>
         </el-row>
         <el-row>
-            <el-button v-if="showAddButton" class='item-add' round type='danger'>加入购物车</el-button>
+            <el-button v-if="showAddButton" @click="addBook" class='item-add' round type='danger'>加入购物车</el-button>
         </el-row>
     </div>
 </template>
 
 
 <script>
-import Cookies from 'js-cookie'
+import Cookies from "js-cookie";
 export default {
-    mounted(){
-        console.log(this.item)
-    },
+  mounted() {
+    console.log(this.item);
+  },
   props: ["item"],
   data() {
     return {
-        number:1
+      number: 1
     };
   },
   methods: {
     handleChange(num) {
       this.number = num;
+    },
+    async addBook() {
+      let data = {
+        query: "addBookToCar",
+        data: {
+          userId: Cookies.get("userId"),
+          sessionId: Cookies.get("sessionId"),
+          itemId: this.item.itemId+'',
+          quantity: this.number+'' //添加的物品的数量
+        }
+      };
+      let response = await this.$axios.send(data);
+      if (response.status == 1) {
+        this.$message({
+          type: "success",
+          message: "添加成功！"
+        });
+      } else if (response.status == 0) {
+        this.$message.error("发生错误：" + response.err);
+      } else {
+        this.$message.error("登录超时！");
+        Cookies.remove("userId");
+        Cookies.remove("sessionId");
+        Cookies.remove("userName");
+        this.$router.push({ path: "/" });
+      }
     }
   },
-  computed:{
-      showAddButton(){
-          return this.item.sellerId != Cookies.get('userId')
-      }
+  computed: {
+    showAddButton() {
+      return this.item.sellerId != Cookies.get("userId");
+    }
   }
 };
 </script>
