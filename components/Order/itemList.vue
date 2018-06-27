@@ -3,7 +3,7 @@
 
     <el-table-column label="商品信息" align="center">
         <template slot-scope="scope">
-            <p>{{scope.row.title}}</p>
+            <p>{{scope.row.itemTitle}}</p>
         </template>
     </el-table-column>
 
