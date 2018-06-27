@@ -49,7 +49,7 @@
             <el-button @click="dialogFormVisible = false">取 消</el-button>
             <el-button type="primary" @click="sendOrder">确 定</el-button>
           </div>
-        </el-dialog>``
+        </el-dialog>
     </el-row>
 </template>
 
