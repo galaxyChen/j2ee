@@ -41,8 +41,9 @@ export default {
             this.addressItem.phoneNumber = this.item.phoneNumber
             this.addressItem.addressDetail = this.item.addressDetail
             this.addressItem.province = this.item.province
-            this.addressItem.city = this.item.city
-            
+            this.addressItem.city = this.item.city,
+            this.addressItem.addreddId = this.item.addressId
+            this.addressItem.isDefaultAddress = this.item.isDefaultAddress
         });
         this.$on("closeDialog", function() {
             this.visible = false;
@@ -105,7 +106,9 @@ export default {
                         phoneNumber: this.addressItem.phoneNumber,
                         addressDetail:this.addressItem.addressDetail,
                         province : this.addressItem.province,
-                        city :this.addressItem.city
+                        city :this.addressItem.city,
+                        addressId : this.addressItem.addreddId,
+                        isDefaultAddress : this.addressItem.isDefaultAddress,
                     }
                     this.visible = false;
                     this.$emit('submitForm',this.index,newAddress)
