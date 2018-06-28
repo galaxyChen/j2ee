@@ -4,7 +4,7 @@
         <!-- 操作地址的三个弹窗 -->
         <editAddress ref="editAddress" :index="index" :item="addressItem"  @submitForm="editAddressItem"></editAddress>
         <addAddress ref='addAddress' @submitForm="addAddressItem" ></addAddress>
-        <selectAddress ref='selectAddress' :defaultIndex="defaultIndex"  :addressList="addressList" @submitSelect="changeSelectAdress" ></selectAddress>
+        <selectAddress ref='selectAddress'   :addressList="addressList" @submitSelect="changeSelectAdress" ></selectAddress>
         <!-- 显示信息 -->
         <el-row :gutter="20">
             <el-col :span="14">
@@ -50,7 +50,10 @@ export default {
     },
     async mounted() {
         await this.getAddress();
-
+        for(let i=0;i< this.addressList.length;i++){
+            if(this.addressList[i].isDefaultAddress)
+                this.defaultIndex = i;
+        }
         if(this.addressList.length>0)
             this.addressItem = this.addressList[this.defaultIndex]
     },
@@ -59,10 +62,7 @@ export default {
             this.$emit('changeAddress',this.addressItem)
         },
         addressList(){
-            for(let i=0;i< this.addressList.length;i++){
-                if(this.addressList[i].isDefaultAddress)
-                    this.defaultIndex = i;
-            }
+
         }
     },
     data() {
@@ -77,7 +77,6 @@ export default {
                 addressId:'',
             },
             index : 0,
-            defaultIndex : 0,
             nowIndex : 0,
         }
     },
@@ -139,7 +138,7 @@ export default {
             let response = await this.$axios.send(data)
             if(response.status===1){
                 this.addressList =  response.data.addresses
-                this.addressItem = addressItem
+                // this.addressItem = addressItem
             }
             else{
                 this.$message.error('发生错误：'+response.err);

@@ -35,7 +35,7 @@
                 </el-form-item>
                 
                 <el-form-item label="昵称" prop="userName">
-                    <el-input @input='check("regForm","userName")' v-model="regForm.userName"></el-input>
+                    <el-input  v-model="regForm.userName"></el-input>
                 </el-form-item>
                 <el-form-item label="密保问题" prop="securityQuestion">
                     <el-input  type="textarea" maxlength=100 v-model="regForm.securityQuestion" placeholder="不超过100个字符"></el-input>
