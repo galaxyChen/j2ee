@@ -2,7 +2,7 @@
     <el-container>
         <el-main>
             <el-col :span='18'>
-                <Item v-for="item in itemList" :key="'item'+item.itemId" :item='item'></Item>
+                <Item @deleteItem='deleteItem' @updateItem='updateItem' v-for="item in itemList" :key="'item'+item.itemId" :item='item'></Item>
             </el-col>
         </el-main>
     </el-container>
@@ -32,6 +32,12 @@ export default {
     }
   },
   methods: {
+    deleteItem(itemId) {
+      let index = 0;
+      while (this.itemList[index].itemId != itemId) index++;
+      this.itemList.splice(index, 1);
+    },
+    updateItem() {},
     async getItemList() {
       let data = {
         query: "getItemList",
@@ -42,7 +48,7 @@ export default {
       };
       let response = await this.$axios.send(data);
       if (response.status == 1) {
-          this.itemList = response.data.itemList
+        this.itemList = response.data.itemList;
       } else if (response.status == 0) {
         this.$message.error("发生错误：" + response.err);
       } else {
