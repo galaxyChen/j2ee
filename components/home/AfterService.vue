@@ -29,7 +29,7 @@
                 </el-tab-pane>  
 
                 <el-tab-pane label="申请记录" name="second">
-                    <AfterDetail></AfterDetail> 
+                    <AfterDetail :afterService="afterServiceList[0]"></AfterDetail> 
                 </el-tab-pane>
                 </el-tabs>
             </div>
@@ -56,7 +56,16 @@ export default {
                     orderId:12345,
                     itemTitle: "三体",
                     quantity : 4,
-                }
+                },
+                afterServiceList :[
+                    {
+                        serviceId : 123,
+                        returnReason : '图书图片不符',
+                        description : '买的时候网上看的图书封面是蓝色，买下来发现是红色',
+                        buyerName : 'lwz',
+                        phoneNumber : '13631433767',
+                    }
+                ]
             }
         },
         methods:{
