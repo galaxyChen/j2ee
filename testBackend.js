@@ -7,55 +7,84 @@ var upload = multer({dest: 'uploads/'})
 var addresses = [
   {
     recipientName: "Foo",
-    phoneNumber: "110",
-    addressDetail: "scut",
-    isDefaultAddress: true,
-    addressId: 111
-  }, {
-    recipientName: "Lilith",
-    phoneNumber: "120",
-    addressDetail: "China",
-    isDefaultAddress: false,
-    addressId: 222
-  }, {
-    recipientName: "merlin",
-    phoneNumber: "518",
-    province: "moon",
-    city: "moon",
-    addressDetail: "avalon",
+    phoneNumber: "13612345678",
+    addressDetail: "xxx",
+    province : "湖南省",
+    city:"长沙市",
+    isDefaultAddress:true,
+    addressId:111,
+  },
+  {
+    recipientName: "Bar",
+    phoneNumber: "15123456789",
+    province : "广东省",
+    city:"广州市",
+    addressDetail: "大学城",
+    isDefaultAddress:false,
+    addressId:222
+  },
+  {
+    recipientName: "Tony",
+    phoneNumber: "13412345678",
+    province : "广东省",
+    city:"广州市",
+    addressDetail: "小谷围",
     isDefaultAddress: false,
     addressId: 333
   }
 ]
 var tableData = [
   {
-    information: 'merlin',
-    price: 518,
-    nums: 1,
-
-    quantity: 10,
-    itemState: 1
-  }, {
-    information: 'lilith',
-    price: 518,
-    nums: 1,
-
-    quantity: 15,
-    itemState: 1
-  }, {
-    information: 'bb',
-    price: 518,
-    nums: 1,
-
-    quantity: 20,
-    itemState: 1
-  }, {
-    information: 'aa',
-    price: 518,
-    nums: 1,
-
-    quantity: 8,
-    itemState: 1
+    title:'html从入门到放弃',
+    price: 500,
+    nums:1,
+    postage : 2,
+    quantity:10,
+    itemState:1,
+    province : '广东省',
+    picture: 'http://localhost:3001/1.png',
+    userName :'lwz',
+    freePostage:1,
+    itemId : 123
+  }, 
+  {
+    title:'Css从入门到精通',
+    price: 10,
+    nums:1,
+    postage : 2,
+    quantity:15,
+    itemState:1,
+    userName :'lwz',
+    province : '湖南省',
+    picture: 'http://localhost:3001/2.png',
+    freePostage:1,
+    itemId : 124
+  }, 
+  {
+    title:'Json的使用',
+    price: 200,
+    nums:1,
+    postage : 2,
+    quantity:20,
+    itemState:0,
+    province : '广东省',
+    userName :'lwz',
+    freePostage:1,
+    itemId : 125,
+    picture: 'http://localhost:3001/3.png',
+  }, 
+  {
+    title:'如何与项目经理相处',
+    price: 30,
+    nums:1,
+    postage : 2,
+    quantity:0,
+    itemState:1,
+    province : '广东省',
+    userName :'lwz',
+    freePostage:1,
+    itemId : 126,
+    picture: 'http://localhost:3001/4.png',
   }
 ]
 app.use(express.static('uploads'));
@@ -116,6 +145,10 @@ app.post('/BookStore/', function (req, res) {
   if (data['query'] == 'addBook') {
     res.json({status: 1})
   }
+  if (data['query']=='deleteItemFromCar'){
+    res.json({status: 1})
+  }
+
 
   if (data['query'] == 'getRecent') {
     let response = {
@@ -449,11 +482,13 @@ app.post('/BookStore/', function (req, res) {
 
   if (data['query'] == 'addAddress') {
     let newAddress = {
-      recipientName: data.data['recipientName'],
-      phoneNumber: data.data['phoneNumber'],
-      addressDetail: data.data['addressDetail'],
-      default: false,
-      addressId: 888
+      recipentName:data.data['recipientName'],
+      phoneNumber:data.data['phoneNumber'],
+      addressDetail:data.data['addressDetail'],
+      province:data.data['province'],
+      city:data.data['city'],
+      default:false,
+      addressId:888
     }
     addresses.push(newAddress)
     console.log(addresses)
@@ -518,13 +553,13 @@ app.post('/BookStore/', function (req, res) {
 
   if (data['query'] == 'register') {
     response = {
-      status: 1, //1是登录成功，0是登录失败
-      data: {
-        user_id: 1, //该用户的用户id
-        name: 'tester', //该用户的昵称
-        session_id: 'asdfghjkl', //登录成功的时候返回这次登录的session_id
-        err: '', //登录失败的时候返回出错原因
-      }
+        status:1,//1是登录成功，0是登录失败
+        data :{
+            userId:1,//该用户的用户id
+            userName:'tester',//该用户的昵称
+            sessionId:'asdfghjkl',//登录成功的时候返回这次登录的session_id
+            err:'',//登录失败的时候返回出错原因
+        }
 
     }
     res.json(response)
@@ -537,6 +572,24 @@ app.post('/BookStore/', function (req, res) {
         shoppingCarList: tableData
       },
       err: ''
+    }
+    res.json(response)
+  }
+
+  if (data['query'] == 'changeShoppingCarNums') {
+    response = {
+      status: 1, //1是登录成功，0是登录失败
+      data: {
+        shoppingCarList: tableData
+      },
+      err: ''
+    }
+    res.json(response)
+  }
+
+  if (data['query'] == 'submitBill') {
+    response = {
+        status:1,//1是成功，0是失败
     }
     res.json(response)
   }
