@@ -2,8 +2,8 @@
     <el-row>
         <el-row>
             <div class="header">
-                <el-col class="header-text" :span='6'>发布时间：{{item.launchDate}}</el-col>
-                <el-col class="header-text" :span='6'>商品编号:{{item.itemId}}</el-col>
+                <el-col class="header-text" :span='10'>发布时间：{{item.launchDate}}</el-col>
+                <el-col class="header-text" :span='10'>商品编号:{{item.itemId}}</el-col>
             </div>
         </el-row>
         <el-row>
@@ -23,10 +23,10 @@
                 <h4 class="order-title-text">￥{{item.price}}</h4>
                 <a class="order-title-text">是否包邮:{{item.freePostage?'是':'否'}}</a>
             </el-col>
-            <el-col class='order-box' :span="4">
+            <el-col style="text-align:center;" class='order-box' :span="4">
                 <el-button v-if='detail' @click="lookDetail" type="text"  class="order-button-text">查看详情</el-button>
                 <el-button @click="changeItem" v-if='change' type="text"  class="order-button-text">修改商品信息</el-button>
-                <el-button @click="cancelItem" v-if='cancel' type="text"  class="order-button-text">下架</el-button>
+                <el-button size='small' @click="cancelItem" v-if='cancel' type="danger"  class="order-button">下架</el-button>
             </el-col>
         </el-row>
     </el-row>
@@ -66,17 +66,14 @@
   margin-top: 40px;
 }
 .order-button {
-  margin-left: 40px;
   margin-top: 10px;
 }
 .order-button-text {
-  margin-left: 50px;
   margin-top: 10px;
   margin-bottom: -20px;
   font-size: 14px;
   color: rgb(108, 105, 107);
-  display: block;
-  text-decoration: none;
+  text-align: center;
 }
 .order-button-text:hover {
   text-decoration: underline;
@@ -84,26 +81,43 @@
 </style>
 
 <script>
+import Cookies from 'js-cookie'
 export default {
-    props:['item'],
-    computed:{
-        change(){
-            return true
-        },
-        cancel(){
-            return true
-        }
+  props: ["item"],
+  computed: {
+    change() {
+      return true;
     },
-    methods:{
-        lookDetail(){
-
-        },
-        changeItem(){
-
-        },
-        cancelItem(){
-
-        }
+    cancel() {
+      return true;
+    },
+    detail() {
+      return true;
     }
-}
+  },
+  methods: {
+    lookDetail() {
+      this.$router.push({ path: `/item/${this.item.itemId}` });
+    },
+    changeItem() {
+        this.$emit('changeItem',this.item.itemId)
+    },
+    cancelItem() {
+      this.$confirm("确认下架吗?", "下架确认", {
+        confirmButtonText: "确定",
+        cancelButtonText: "取消",
+        type: "danger"
+      }).then(async ()=>{
+          let data = {
+              query:"deleteItem",
+              data:{
+                  userId:Cookies.get('userId'),
+                  sessionId:Cookies.get('sessionId'),
+                  itemId:this.item.itemId
+              }
+          }
+      })
+    }
+  }
+};
 </script>
