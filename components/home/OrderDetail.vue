@@ -98,7 +98,7 @@
                     商品件数：
                 </el-col>
                 <el-col style='color:red;' :span='4' :push='15'>
-                    ￥1
+                    {{order.quantity}}
                 </el-col>
             </el-row>
             <el-row class='order-summary-text'>
@@ -106,7 +106,7 @@
                     商品总价：
                 </el-col>
                 <el-col style='color:red;' :span='4' :push='15'>
-                    ￥30
+                    ￥{{order.price}}
                 </el-col>
             </el-row>
             <el-row class='order-summary-text'>
@@ -114,7 +114,7 @@
                     运费：
                 </el-col>
                 <el-col style='color:red;' :span='4' :push='15'>
-                    ￥0
+                    ￥{{order.postage}}
                 </el-col>
             </el-row>
             <el-row class='order-summary-text'>
@@ -122,7 +122,7 @@
                     支付总额：
                 </el-col>
                 <el-col style='color:red;' :span='4' :push='15'>
-                    ￥30
+                    ￥{{order.price+order.postage}}
                 </el-col>
             </el-row>       
         </el-row>
@@ -135,8 +135,7 @@
   border-color: rgba(228, 228, 228, 1);
   border-style: solid;
   background-color: rgba(249, 249, 249, 1);
-  height: 120px;
-
+  height: 138px;
   display: flex;
 }
 
@@ -144,6 +143,7 @@
   border-width: 2px;
   border-color: rgba(228, 228, 228, 1);
   border-style: solid;
+  height: 140px;
 }
 
 .order-detail {
