@@ -149,6 +149,7 @@ export default {
     '$route' (to, from)  {
       let index = to.query.index.split('-')
       if (index.length == 2){
+        this.showList = true;
         this.type = index[1] - 0;
       }
     }

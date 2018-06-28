@@ -13,7 +13,7 @@
           </el-carousel>
 
           <!-- 搜索框组件 -->
-          <SearchBox ref = 'searchbox' class="search-box"></SearchBox>
+          <SearchBox @doSearch='doSearch' ref = 'searchbox' class="search-box"></SearchBox>
           
 
           <!-- 新书上架组件 -->
@@ -44,41 +44,52 @@
 import NavTop from "~/components/NavTop";
 import SearchBox from "~/components/SearchBox";
 export default {
-  async mounted(){
-    let data = {
-      query:'getRecent',
-      data:{
-        number:5
-      }
-    }
-    let response = await this.$axios.send(data);
-    if (response.status==1){
-      this.newBooks = response.data.products;
-    } else {
-      this.$message.error("发生错误："+response.err)
-    }
+  mounted() {
+    this.getRecent();
   },
   data() {
     return {
-      newBooks:[]
+      newBooks: []
     };
   },
   components: {
     NavTop,
     SearchBox
   },
-  
+
   methods: {
-    lookDetail(item_id){
+    async getRecent() {
+      let data = {
+        query: "getRecent",
+        data: {
+          number: 5
+        }
+      };
+      let response = await this.$axios.send(data);
+      if (response.status == 1) {
+        this.newBooks = response.data.items;
+      } else {
+        this.$message.error("发生错误：" + response.err);
+      }
+    },
+    lookDetail(item_id) {
       // console.log(item_id)
-      this.$router.push({ path: `/item/${item_id}` })
+      this.$router.push({ path: `/item/${item_id}` });
+    },
+    doSearch(text, tag) {
+      this.$router.push({ path: "/search", query: { text: text, tag: tag } });
     }
   },
+  watch: {
+    $route(to, from) {
+      this.getRecent();
+    }
+  }
 };
 </script>
 
 <style scoped>
-.search-box{
+.search-box {
   margin-top: -100px;
 }
 
@@ -136,7 +147,7 @@ body > .el-container {
   border-style: dashed;
   border-color: #e9eef3;
 }
-.goods-img{
+.goods-img {
   width: 120px;
   height: 160px;
 }
