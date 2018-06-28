@@ -179,6 +179,18 @@ export default {
     },
     payForOrder() {
       //进入结算页面
+      let orderId = []
+      orderId.push(this.order.orderId)
+      this.$router.push({ 
+          name: 'Pay' ,
+          params: { 
+              totalPay: this.order.price + this.order.postage ,
+              orderId : orderId,
+              time_limit :'2小时0分',
+          }  
+      });
+
+
     },
     signOrder() {
       this.$confirm("确认收货吗?", "收货确认", {

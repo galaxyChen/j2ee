@@ -1,31 +1,33 @@
 <template>
-    <div>
+    <div >
         <NavBar ref='navtop' ></NavBar>
-        <el-row >
-            <p>收货地址</p>            
-        </el-row>
-        <el-row class="el-row1">
-            <Address ref="Address" @changeAddress="changeAddress" ></Address>            
-        </el-row>
+        <div class="order-box">
+            <el-row class="el-row-title" >
+                <p>收货地址</p>            
+            </el-row>
+            <el-row class="el-row3">
+                <Address ref="Address" @changeAddress="changeAddress" ></Address>            
+            </el-row>
 
-        <el-row >
-            <p>商品信息</p>            
-        </el-row>
-        <el-row class="el-row1">
-            <itemList :itemList="itemList"></itemList> 
-        </el-row>
+            <el-row class="el-row-title">
+                <p>商品信息</p>            
+            </el-row>
+            <el-row class="el-row3">
+                <itemList :itemList="itemList"></itemList> 
+            </el-row>
 
-        <el-row >
-            <p>全部明细</p>            
-        </el-row>
-        <el-row class="el-row1">
+            <el-row class="el-row-title">
+                <p>全部明细</p>            
+            </el-row>
+            <el-row class="el-line"></el-row>
+            <el-row type='flex' justify="end" class="el-row1">
 
-            <el-col :span="4" :push="20">
-                <confirmBill  ref="confirmBill" @submitBill="submitBill" :totalList="totalList" ></confirmBill>
-            </el-col>
+                <el-col :span="6">
+                    <confirmBill  ref="confirmBill" @submitBill="submitBill" :totalList="totalList" ></confirmBill>
+                </el-col>
 
-        </el-row>
-        
+            </el-row>
+         </div>
     </div>
     
 </template>
@@ -35,7 +37,38 @@
 <style scope>
 .el-row1{
   margin-top: 30px;
-  margin-bottom : 20px
+  margin-bottom : 20px;
+
+}
+.el-line{
+    width: 100%;
+    height: 0;
+    border-width: 1px;
+    border-style: solid;
+    border-color: rgba(228, 228, 228, 1);
+}
+.el-row2{
+  padding: 30px;
+  padding-bottom : 20px;
+
+}
+.el-row3{
+    margin: 30px 0;
+    border-width: 1px;
+    border-color: rgba(228, 228, 228, 1);
+    border-style: solid;
+}
+.el-row-title{
+    margin-top: 30px;
+    margin-bottom : 5px;
+
+}
+.order-box {
+  border-width: 30px;
+  border-color: rgba(228, 228, 228, 1);
+  background-color: rgba(255, 255, 255, 1);
+  border-style: solid;
+  padding: 30px
 }
 </style>
 
@@ -67,14 +100,20 @@ export default {
         // 这里做个判断itemList 是否为空
         // 为每个商品添加一个邮费项
         itemList.forEach(element => {
-            element.postage = 0
+            element.postage = 0;
+            this.totalList.nums += element.nums;
+            this.totalList.pay += element.pay;
         });
         this.itemList = itemList
     },
     data(){
         return {
             itemList : [],
-            totalList : [],
+            totalList : {
+                nums :0,
+                pay : 0,
+                postage : 0
+            },
             addressItem : '',
             defaultIndex :0
         }
@@ -83,6 +122,7 @@ export default {
         changeAddress(addressItem){
             let tmp = this.itemList
             let province = addressItem.province
+
             tmp.forEach( ele=>{
                 if(ele.freePostage!=1){
                     if(ele.province!=province){
@@ -110,13 +150,23 @@ export default {
         },
         // 提交订单
         async submitBill(){
+            function number2StrInArr(arr){
+                arr.forEach(obj=>{
+                    for (let term in obj) {
+                        if (obj.hasOwnProperty(term)) {
+                            obj[term] = obj[term]+"";
+                        }
+                    }
+                })
+                return arr;
+            }
             let data = {
                 query : 'submitBill',
                 data : {
                     userId : Cookies.get('userId'),
                     sessionId : Cookies.get('sessionId'),
-                    itemList : this.itemList,
-                    addressId : this.addressItem.addressId
+                    addressId : this.addressItem.addressId+"",
+                    itemList : number2StrInArr(this.itemList),
                 }
 
             }
@@ -127,6 +177,7 @@ export default {
                     params: { 
                         totalPay: this.totalList.pay + this.totalList.postage ,
                         time_limit :'2小时0分',
+                        orderId : response.data.orderId,
                     }  
                 });
             }
