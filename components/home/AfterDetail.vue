@@ -10,7 +10,7 @@
         <el-row>
             <el-card>
                 <p>退货原因：{{afterService.returnReason}}</p>
-                <p>退款金额：</p>
+                <p>退款金额：￥{{afterService.totalPrice}}</p>
                 <p>联系人：{{afterService.buyerName}}</p>
                 <p>联系电话：{{afterService.phoneNumber}}</p>
                 <p>售后服务状态：</p>
@@ -22,6 +22,12 @@
 
     </div>
 </template>
+
+<style scope>
+
+</style>
+
+
 <script>
 export default {
     props:["afterService"]

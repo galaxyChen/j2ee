@@ -60,7 +60,9 @@ export default {
                 afterServiceList :[
                     {
                         serviceId : 123,
+                        launchTime : '2018-6-28',
                         returnReason : '图书图片不符',
+                        totalPrice : '20.5',
                         description : '买的时候网上看的图书封面是蓝色，买下来发现是红色',
                         buyerName : 'lwz',
                         phoneNumber : '13631433767',
