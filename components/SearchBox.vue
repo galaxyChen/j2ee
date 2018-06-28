@@ -1,13 +1,13 @@
 <template>
   <div class="search-box" style="text-align:center;" >
-      <el-row :gutter="20" style="border-radius:4px; min-height: 36px;">
-          <el-col :span="14" style="margin-left:10%;padding:10px;">
+      <el-row :gutter="17" style="border-radius:4px; min-height: 36px;">
+          <el-col :span="12" style="margin-left:10%;padding:10px;">
                       <el-input v-model="searchText" class="index-input-box" placeholder="请输入内容"  prefix-icon="el-icon-search" ></el-input>
           </el-col>
-          <el-col :span="4" style="padding-top:8px;height:36px;">
+          <el-col :span="3" style="margin-left:-8px;padding-top:8px;height:36px;">
               <el-cascader v-model="tag" class="index-input-box" :options="options" change-on-select @change='changeValue'></el-cascader>
           </el-col>
-          <el-col :span="2" style="padding:10px;"> 
+          <el-col :span="2" style="margin-left:-15px;padding:10px;"> 
                       <el-button @click="search" size='small' class="index-input-box" type="primary"  >搜 索 </el-button>
               </el-col>
       </el-row> 

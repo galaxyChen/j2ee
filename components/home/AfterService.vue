@@ -1,5 +1,5 @@
 <template>
-    <el-container>
+    <el-container v-if="showList">
         <el-main style="margin-top:20px;">
             <div>
                 <el-tabs v-model="service" type="card" @tab-click="handleClick">
@@ -25,7 +25,6 @@
                                 <el-button class="ApplyBtn" @click="applyBtn">申请退货</el-button>  
                             </el-col>
                         </el-row>
-
                 </el-tab-pane>  
 
                 <el-tab-pane label="申请记录" name="second">
@@ -35,20 +34,32 @@
             </div>
         </el-main>
     </el-container>
+
+    <el-container v-else>
+        <el-header>
+            <el-button @click="goBack" class="back-button" size="medium" type='text' icon="el-icon-back">返回</el-button>
+        </el-header>
+        
+            <ApplyReturn style="margin-top:50px;margin-left:-100px;"></ApplyReturn>
+     
+    </el-container>
 </template>
 
 <script>
 import NavTop from "~/components/NavTop";
 import NavLeft from "~/components/home/NavLeft";
+import ApplyReturn from "~/components/home/ApplyReturn";
 import AfterDetail from "~/components/home/AfterDetail";
 export default {
      components: {
           NavTop,
-          NavLeft ,
+          NavLeft,
+          ApplyReturn,
           AfterDetail ,
     },
         data(){
             return{
+                showList:true,
                 service:'first',
                 order:{
                     pictureAddress:'',
@@ -73,14 +84,18 @@ export default {
                 console.log(tab, event);
             },
             applyBtn(){
-                this.$router.push({path:'/ApplyReturn/'});
-            }
+                this.showList = false;
+            },
+             goBack() {
+                this.showList = true;
+             },
 
         }
 }
 </script>
 
 <style>
+
 .header {
   background-color: rgb(249, 249, 249);
   height: 40px;
@@ -94,7 +109,6 @@ export default {
   height: 120px;
   margin: 10px;
 }
-
 .order-box {
   border-width: 2px 2px 2px 0;
   border-style: solid;
@@ -112,11 +126,17 @@ export default {
 .order-title-text-middle {
   margin-top: 40px;
 }
+
 .ApplyBtn{
     color: white;
     background-color: red;
     
     margin:50px 150px;
+}
+.back-button {
+  color: #999;
+  font-size: 30px;
+  margin-top: 16px;
 }
 
 </style>
