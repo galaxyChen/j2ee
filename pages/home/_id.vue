@@ -17,7 +17,7 @@ import AddGoods from "~/components/home/AddGoods";
 import addressBook from "~/components/home/addressBook";
 import AfterService from "~/components/home/AfterService";
 import ApplyReturn from "~/components/home/ApplyReturn";
-import itemManage from "~/components/home/itemManage";
+import ItemManage from "~/components/home/ItemManage";
 import Cookies from "js-cookie";
 
 export default {
@@ -28,7 +28,7 @@ export default {
     Transaction,
     AddGoods,
     addressBook,
-    itemManage,
+    ItemManage,
     AfterService,
     ApplyReturn
   },

@@ -225,7 +225,7 @@ export default {
   border-color: #cccccc;
 
   margin-top: 10px;
-  margin-left: 9%;
+
 }
 .ContactMsg {
   margin-top: 50px;
