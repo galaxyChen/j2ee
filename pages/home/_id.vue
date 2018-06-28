@@ -4,7 +4,7 @@
         <el-col :span="5">
             <NavLeft :active='currentMainIndex' @changeTab='changeTab'></NavLeft>
         </el-col>
-        <component @changeName='changeName' :is="currentMain" :user='user' :type='type'></component>
+        <component @changeName='changeName' :is="currentMain" :user='user' ></component>
     </div>
 </template>
 
@@ -16,7 +16,10 @@ import Transaction from "~/components/home/Transaction";
 import AddGoods from "~/components/home/AddGoods";
 import addressBook from "~/components/home/addressBook";
 import AfterService from "~/components/home/AfterService";
+import ApplyReturn from "~/components/home/ApplyReturn";
+import itemManage from "~/components/home/itemManage";
 import Cookies from "js-cookie";
+
 export default {
   components: {
     NavBar,
@@ -25,8 +28,12 @@ export default {
     Transaction,
     AddGoods,
     addressBook,
+    itemManage,
+    AfterService,
+    ApplyReturn
   },
   async mounted() {
+    
     let userId = Cookies.get("userId");
     let sessionId = Cookies.get("sessionId");
     if (userId && sessionId) {
@@ -49,7 +56,7 @@ export default {
         } 
     }
     let query = this.$route.query;
-    this.changeTab(query['index'],[query['tab']])
+    this.changeTab(query['index'],[query['index']])
     // console.log(this.$route.query);
   },
   data() {
@@ -66,21 +73,21 @@ export default {
   methods: {
     changeTab(index, indexPath) {
       // console.log(index, indexPath);
-      let name = [
-        "Person",
-        "addressBook",
-        "Transaction",
-        "Message",
-        "AddGoods",
-      ];
-      this.currentMain = name[indexPath[0] - 1];
-      this.currentMainIndex = index+'';
-      // console.log(this.currentMain)
-      // console.log(this.currentMainIndex)
-      if (index === "3-1") this.type = 1;
-      if (index === "3-2") this.type = 2;
-      if (index === "3-3") this.type = 3;
-      if (index === "3-4") this.type = 4 ;
+      let name = {
+        '1':"Person",
+        '2':"addressBook",
+        '3-1':"Transaction",
+        '3-2':"Transaction",
+        '4-2':"ItemManage",
+        '5':"Message",
+        '4-1':"AddGoods",
+        '3-3':"AfterService",
+        '3-4':'ApplyReturn'
+      };
+      this.currentMain = name[index];
+      this.currentMainIndex = index;
+      let userId = Cookies.get('userId')
+      this.$router.push({ path: `/home/${userId}` ,query:{index:index}});
     },
     changeName(newName){
       // console.log('index')

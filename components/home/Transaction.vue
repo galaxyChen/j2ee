@@ -54,11 +54,12 @@ export default {
     OrderDetail
   },
   async mounted() {
+    console.log('now at:'+this.$route.query['index'])
     this.getOrder();
   },
-  props: ["type"],
   data() {
     return {
+      type:1,
       activeTab: "all",
       showList: true,
       allOrder: [],
@@ -145,8 +146,12 @@ export default {
     }
   },
   watch: {
-    type(newType, lodType) {
-      this.getOrder();
+    '$route' (to, from)  {
+      let index = to.query.index.split('-')
+      if (index.length == 2){
+        this.showList = true;
+        this.type = index[1] - 0;
+      }
     }
   }
 };

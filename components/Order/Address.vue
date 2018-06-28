@@ -123,7 +123,7 @@ export default {
         async addAddressItem(addressItem){
              
             let data = {
-                query : "addAddress",
+                query : "addAddress2",
                 data : {
                     userId : Cookies.get('userId'),
                     sessionId : Cookies.get('sessionId'),
@@ -134,11 +134,16 @@ export default {
                     city : addressItem.city
                 }
             }
-            console.log(data)
+            
             let response = await this.$axios.send(data)
             if(response.status===1){
-                this.addressList =  response.data.addresses
-                // this.addressItem = addressItem
+                let addressId = response.data.newAddressId;
+                await this.getAddress();
+                for(let i=0; i<this.addressList.length;i++){
+                    if(addressId==this.addressList[i].addressId){
+                        this.addressItem = this.addressList[i];
+                    }
+                }
             }
             else{
                 this.$message.error('发生错误：'+response.err);

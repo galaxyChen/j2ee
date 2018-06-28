@@ -177,6 +177,7 @@ export default {
                     params: { 
                         totalPay: this.totalList.pay + this.totalList.postage ,
                         time_limit :'2小时0分',
+                        orderId : response.data.orderId,
                     }  
                 });
             }
