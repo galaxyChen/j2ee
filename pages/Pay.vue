@@ -76,6 +76,12 @@ export default {
 
   methods: {
     PayConfirm() {
+      let orderId = this.$route.params.orderId
+      if(orderId==undefined){
+        this.$message('非法操作')
+        return
+      }
+
       this.$confirm("确认支付吗？", "提示", {
         confirmButtonText: "确定",
         cancelButtonText: "取消",
@@ -83,19 +89,18 @@ export default {
       }).then(async () => {
         let userId = Cookies.get("userId");
         let sessionId = Cookies.get("sessionId");
-        let orderId = Cookies.get("orderId");
         let data = {
           query: "payForOrder",
           data: {
             userId: userId,
             sessionId: sessionId,
-            orderId: orderId
+            orderId: orderId+""
           }
         };
         let response = await this.$axios.send(data);
 
         if (response.status == 1) {
-          //   此处应该修改哪些el的状态？
+          
           this.$message({
             type: "success",
             message: "支付成功!"

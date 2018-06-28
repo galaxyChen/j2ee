@@ -9,9 +9,9 @@
     <el-table-column label="商品标题" align="center">
         <template slot-scope="scope">
             <div>
-              <img  class="img1" :src='scope.row.picture'/>
-              <p>{{scope.row.title}}</p>
-              <p v-if="scope.row.itemState!=1" style="color:red">[商品已下架]</p>
+              <img  class="img1" :src='scope.row.pictureAddress'/>
+              <p>{{scope.row.itemTitle}}</p>
+              <p v-if="scope.row.itemState!='等待拍下'" style="color:red">[商品已下架]</p>
             </div>
         </template>
     </el-table-column>
@@ -141,7 +141,7 @@ import Cookies from "js-cookie";
               data : {
                 userId : Cookies.get('userId'),
                 sessionId : Cookies.get('sessionId'),
-                itemId : this.tableData[index].itemId,
+                itemId : this.tableData[index].itemId+"",
               }
             }
             let response = await this.$axios.send(data)
@@ -172,8 +172,8 @@ import Cookies from "js-cookie";
             data : {
               userId : Cookies.get('userId'),
               sessionId : Cookies.get('sessionId'),
-              itemId : this.tableData[index].itemId,
-              nums : this.tableData[index].nums,
+              itemId : this.tableData[index].itemId+"",
+              nums : this.tableData[index].nums+"",
             }
           }
           let response = await this.$axios.send(data)
@@ -213,7 +213,7 @@ import Cookies from "js-cookie";
             let tmp =  response.data.shoppingCarList
             tmp.forEach(element => {
               element.chosen = false;
-              if(element.quantity>0 && element.itemState==1){
+              if(element.quantity>0 && element.itemState=='等待拍下'){
                 element.canChosen = true;
               }
               else{
@@ -251,8 +251,9 @@ import Cookies from "js-cookie";
                   let newItem = {
                     price : ele.price,
                     nums : ele.nums,
-                    title : ele.title,
-                    province : ele.province
+                    itemTitle : ele.itemTitle,
+                    province : ele.province,
+                    itemId : ele.itemId,
                   }
                   toBuyList.push(newItem)
                 }

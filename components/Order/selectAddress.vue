@@ -25,7 +25,7 @@
             收货地址：{{ item.province+' '+item.city+' '+ item.addressDetail}}
         </div>
         </div>
-        <span v-if="index==defaultIndex" >[默认地址]</span>
+        <span v-if="item.isDefaultAddress=='1'" >[默认地址]</span>
       </el-card>
         <span slot="footer" class="dialog-footer">
             <el-button @click="closeDialog">取 消</el-button>
