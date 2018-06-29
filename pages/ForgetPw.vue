@@ -99,16 +99,23 @@ export default {
     },
   data() {
     var validatePw = (rule, value, callback) => {
+      let p = /^(?=.*\d)(?=.*[a-zA-Z])(?=.*[_])[\da-zA-Z_]+/;
+      let p1 = /^[\da-zA-Z_]+$/;
       if (value == "") {
         callback(new Error("请输入密码"));
-      } else if (value.length > 16 || value.length < 6) {
+      } 
+      else if(!p1.test(value)){
+        callback(new Error("只能包含数字、字母和下划线"))
+      }
+      else if (value.length > 16 || value.length < 6) {
         callback(new Error("长度在 6 到 16 个字符"));
-      } else {
-        let p = /^(?=.*\d)(?=.*[a-zA-Z])(?=.*[_])[\da-zA-Z_]+/;
+      } 
+      else if(!p.test(value)){
+          callback(new Error("最少包含数字、字母和下划线"))
+      }
+      else {
 
-        if (!p.test(value)) {
-          callback(new Error("最少包含数字、字母和下划线"));
-        } else if (this.FindPwForm.checkPass !== "") {
+        if (this.FindPwForm.checkPass !== "") {
           this.$refs.FindPwForm.validateField("checkPass");
         }
         callback();
@@ -139,7 +146,7 @@ export default {
           {
             required: true,
             message: "请输入用户名（即邮箱地址）",
-            trigger: "blur"
+            trigger: "blur",trigger:"change"
           },
           {
             type: "email",
@@ -147,9 +154,9 @@ export default {
             trigger: ["blur", "change"]
           }
         ],
-        answer: [{ required: true, message: "请输入答案！", trigger: "blur" }],
-        pass: [{ validator: validatePw, trigger: "blur" }],
-        checkPass: [{ validator: validatePw2, trigger: "blur" }]
+        answer: [{ required: true, message: "请输入答案！", trigger: "blur",trigger:"change" }],
+        pass: [{ validator: validatePw, trigger: "blur",trigger:"change" }],
+        checkPass: [{ validator: validatePw2, trigger: "blur",trigger:"change" }]
       }
     };
   },
