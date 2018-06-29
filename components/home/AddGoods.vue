@@ -326,7 +326,7 @@ export default {
         ],
 
         options: [
-          { required: true, message: "请选择书籍类别", trigger: "change" }
+          { required: true, message: "请选择书籍类别", trigger: "blur" }
         ],
 
         price: [
