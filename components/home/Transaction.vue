@@ -76,6 +76,7 @@ export default {
   },
   methods: {
     async getOrder() {
+      this.onShowList = []
       let query = this.type == 1 ? "getBuyOrder" : "getSellOrder";
       let data = {
         query: query,
@@ -151,8 +152,10 @@ export default {
     $route(to, from) {
       let index = to.query.index.split("-");
       if (index.length == 2) {
+        this.onShowList = []
         this.showList = true;
         this.type = index[1] - 0;
+        this.getOrder();
       }
     }
   }

@@ -91,6 +91,7 @@ export default {
     return {
       radio: "0",
       loading: false,
+      type:[],
       Goods: {
         itemTitle: "",
         bookName: "",
@@ -325,7 +326,7 @@ export default {
         ],
 
         options: [
-          { required: true, message: "请选择书籍类别", trigger: "change" }
+          { required: true, message: "请选择书籍类别", trigger: "blur" }
         ],
 
         price: [
@@ -391,6 +392,10 @@ export default {
       this.$refs[formName].validate(async valid => {
         if (valid) {
           let area = this.$refs.area.test();
+          if (this.type.length == 0){
+            this.$message.error("类别未选择！");
+            return ;
+          }
           if (area) {
             console.log(area);
             //添加loading
