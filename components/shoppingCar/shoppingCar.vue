@@ -6,9 +6,9 @@
             <el-checkbox v-model="scope.row.chosen"  @change="selectChange(scope.$index)"></el-checkbox>
         </template>
     </el-table-column>
-    <el-table-column label="商品标题" align="center">
+    <el-table-column label="商品标题" align="center" >
         <template slot-scope="scope">
-            <div>
+            <div @click="seeItem(scope.$index)">
               <img  class="img1" :src='scope.row.pictureAddress'/>
               <p>{{scope.row.itemTitle}}</p>
               <p v-if="scope.row.itemState!='等待拍下'" style="color:red">[商品已下架]</p>
@@ -93,6 +93,11 @@ import Cookies from "js-cookie";
         checkSelectable(){
             return false
         },
+        seeItem(index){
+          console.log(index)
+          this.$router.push({ path: `/item/${this.tableData[index].itemId}` });
+        },
+
         selectChange(index){
             // 判断是否库存为0 或者 下架了
             if(this.tableData[index].canChosen ){
@@ -260,18 +265,17 @@ import Cookies from "js-cookie";
               });
 
               if(toBuyList.length==0){
-                this.$message('购物车为空，无法下单')
+                this.$message('未选择购买的商品')
               }
               else{
-                Cookies.set("itemList", toBuyList);
-                this.$router.push({ path: `/order/${userId}` });
+                // Cookies.set("itemList", toBuyList);
+                // this.$router.push({ path: `/order/${userId}` });
 
                 
-                // this.$router.push({ 
-                //       path: `/order/${userId}` ,
-                //       params : { toBuyList },
-                //       query : { sessionId},   
-                // });
+                this.$router.push({ 
+                      name: "order-id",
+                      params : { itemList:toBuyList },
+                });
               }
 
             } else {

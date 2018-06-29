@@ -20,7 +20,7 @@
             </el-col>
             <el-col :span='4'>
                 <div>
-                    <el-button @click="applyEditAddress(index)" type="text">修改地址</el-button>
+                    <el-button v-if="addressList.length>0" @click="applyEditAddress(index)" type="text">修改地址</el-button>
                 </div>
             </el-col>
 

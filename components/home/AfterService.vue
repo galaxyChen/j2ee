@@ -28,8 +28,7 @@
                 </el-tab-pane>  
 
                 <el-tab-pane label="申请记录" name="second">
-                    <!-- <AfterDetail :afterService="afterServiceList[0]"></AfterDetail>  -->
-                    <AfterRecord :afterServiceList="afterServiceList"></AfterRecord>
+                    <AfterRecord  @seeDetail="applyBtn" :afterServiceList="afterServiceList"></AfterRecord>
                 </el-tab-pane>
                 </el-tabs>
             </div>
@@ -41,16 +40,19 @@
             <el-button @click="goBack" class="back-button" size="medium" type='text' icon="el-icon-back">返回</el-button>
         </el-header>
         
-            <ApplyReturn style="margin-top:50px;margin-left:-100px;"></ApplyReturn>
-     
+            <ApplyReturn v-if="service=='first'" style="margin-top:50px;margin-left:-100px;"></ApplyReturn>
+            <AfterDetail v-if="service=='second'" :afterService="afterServiceList[0]"></AfterDetail>
     </el-container>
+
+
+
 </template>
 
 <script>
 import NavTop from "~/components/NavTop";
 import NavLeft from "~/components/home/NavLeft";
 import ApplyReturn from "~/components/home/ApplyReturn";
-
+import AfterDetail from "~/components/home/AfterDetail";
 import AfterRecord from "~/components/home/AfterRecord";
 export default {
      components: {
@@ -58,11 +60,13 @@ export default {
           NavLeft,
           ApplyReturn,
           AfterRecord ,
+          AfterDetail,
     },
         data(){
             return{
-                showList:true,
-                service:'first',
+                showList:false,
+
+                service:'second',
                 order:{
                     pictureAddress:'',
                     purchaseTime: "2018/7/3 12:00",

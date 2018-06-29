@@ -93,17 +93,22 @@ export default {
 
         let params = this.$route.params;
         console.log(params)
-        let query = this.$route.query;
-        console.log(query)
-        
-        let itemList = Cookies.getJSON("itemList")
+
+        let userId = Cookies.get("userId");
+        let itemList = params.itemList
         // 这里做个判断itemList 是否为空
+        if(itemList==undefined){
+            this.$router.push({path:`/home/`+{userId}+`?index=3-1`})
+            return 
+        }
+        
         // 为每个商品添加一个邮费项
         itemList.forEach(element => {
             element.postage = 0;
             this.totalList.nums += element.nums;
-            this.totalList.pay += element.pay;
+            this.totalList.pay += element.price;
         });
+
         this.itemList = itemList
     },
     data(){
@@ -122,7 +127,6 @@ export default {
         changeAddress(addressItem){
             let tmp = this.itemList
             let province = addressItem.province
-
             tmp.forEach( ele=>{
                 if(ele.freePostage!=1){
                     if(ele.province!=province){
@@ -172,6 +176,7 @@ export default {
             }
             let response = await this.$axios.send(data)
             if(response.status===1){
+                
                 this.$router.push({ 
                     name: 'Pay' ,
                     params: { 
