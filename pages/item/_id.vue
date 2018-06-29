@@ -1,16 +1,18 @@
 <template>
     <div>
         <NavTop></NavTop>
-        <el-row>
-            <el-col :span='11' :offset="1">
-                <div style="border-style:solid;border-color:#cccccc;margin-top:10px;margin-left:10px;">
-                    <img class='item-img' :src='item.pictureAddress'/>
-                </div>
-            </el-col>
-            <el-col :span='9'  style="margin-top:10px;margin-left:130px;">
-                <Detail :item='item'></Detail>
-            </el-col>
-        </el-row>
+        <el-main>
+            <el-row type="flex" justify="center">
+                <el-col :xs="20" :sm="18" :md="12" :lg="12">
+                    <el-card shadow="never" body-style="{ padding: '20px'}" >
+                        <el-container>
+                            <el-aside><img class='item-img' :src='item.pictureAddress'/></el-aside>
+                            <el-main><Detail :item='item'></Detail></el-main>                      
+                        </el-container>
+                    </el-card>
+                </el-col>
+            </el-row>
+        </el-main>
         <el-row class='item-more'>
             <el-col :span='17' :push='3'>
                 <el-container>
@@ -26,92 +28,96 @@
                 </el-container>
             </el-col>
         </el-row>
+
     </div>
+
+
 </template>
 
 <style>
-    .item-more{
-        position: relative;
-        top: 60px;
-    }
-    .item-img{
-        margin: 30px;
-        padding-bottom:60px;
-        height: 400px;
-        width: 400px;
-        position: relative;
-        left: 120px;
-        top: 30px;
-    }
-    .item-line{
-        width: 100%;
-        height: 0;
-        border-width: 1px;
-        border-style: dashed;
-    }
-    .item-price{
-        color:red;
-    }
-    .item-detail{
-        font-size: 20px;
-        position: relative;
-        right: 100px;
-        top: 50px;
-    }
-    .item-row {
-        margin-top: 40px;
-    }
-    .item-add{
-        position: relative;
-        top: 40px;
-        left: 400px;
-    }
+.item-more {
+  position: relative;
+  top: 60px;
+}
+.item-img {
+  margin: 5px;
+  height: 380px;
+  width: 280px;
+  position: relative;
+  left: 5px;
+  top: 40px;
+  border-style: solid;
+  border-width: 2px;
+  border-color:gainsboro;
+}
+.item-line {
+  width: 100%;
+  height: 0;
+  border-width: 1px;
+  border-style: dashed;
+}
+.item-price {
+  color: red;
+}
+.item-detail {
+  position: relative;
+
+}
+.item-row {
+  margin-top: 50px;
+}
+.item-add {
+  margin-top: 30px;
+}
+.blank-leaving {
+  margin-top: 5px;
+}
 </style>
 
 <script>
-import NavTop from '~/components/NavTop'
-import Detail from '~/components/item/Detail'
-import Describe from '~/components/item/Describe'
-import Question from '~/components/item/Question'
+import NavTop from "~/components/NavTop";
+import Detail from "~/components/item/Detail";
+import Describe from "~/components/item/Describe";
+import Question from "~/components/item/Question";
 export default {
-    async mounted(){
-        console.log(this.$route.params.id)
-        let data = {
-            query:'getItemDetail',
-            data:{
-                itemId:this.$route.params.id
-            }
-        }
-        let response = await this.$axios.send(data)
-        if (response.status==1){
-            this.item = response.data.product;
-        } else {
-            this.$message.error("发生错误："+response.err)
-        }
-    },
-    components:{
-        NavTop,
-        Detail,
-        Describe,
-        Question
-    },
-    data(){
-        return {
-            number:1,
-            activeTab:'detail',
-            currentComponent:'Describe',
-            item:{}
-        }
-    },
-    methods:{
-        handleClick(tab){
-            let com = {
-                'detail':'Describe',
-                'question':'Question'
-            }
-            this.activeTab = tab.name;
-            this.currentComponent = com[tab.name]
-        }
+  async mounted() {
+    console.log(this.$route.params.id);
+    let data = {
+      query: "getItemDetail",
+      data: {
+        itemId: this.$route.params.id
+      }
+    };
+    let response = await this.$axios.send(data);
+    if (response.status == 1) {
+      this.item = response.data.product;
+    } else {
+      this.$message.error("发生错误：" + response.err);
     }
-}
+  },
+  components: {
+    NavTop,
+    Detail,
+    Describe,
+    Question
+  },
+  data() {
+    return {
+      number: 1,
+      activeTab: "detail",
+      currentComponent: "Describe",
+      item: {}
+    };
+  },
+  methods: {
+    handleClick(tab) {
+      let com = {
+        detail: "Describe",
+        question: "Question"
+      };
+      this.activeTab = tab.name;
+      this.currentComponent = com[tab.name];
+    }
+  }
+};
 </script>
