@@ -1,7 +1,7 @@
 <template>
     <el-container>
       <el-main v-if="edit">
-            <Update @goBack='goBack' :item='editItemNo'></Update>
+            <Update @updateItem='updatedItem' @goBack='goBack' :item='editItemNo'></Update>
         </el-main>
         <el-main v-else>
             <el-col :span='18'>
@@ -39,6 +39,9 @@ export default {
     }
   },
   methods: {
+    updatedItem(){
+      // this.edit = false;
+    },
     goBack(){
       this.edit = false;
     },

@@ -48,7 +48,7 @@
                   <el-input  v-model='Goods.phoneNumber'  placeholder='默认退货联系电话'></el-input>
                 </el-form-item>
                  <el-form-item label="商品描述: ">
-                      <el-input  type="textarea"  :rows="2"  :value='Goods.description' placeholder="请输入商品描述" ></el-input>
+                      <el-input  type="textarea"  :rows="2"  v-model='Goods.description' placeholder="请输入商品描述" ></el-input>
                 </el-form-item>
                  <el-form-item label="上传图片: ">
                     <el-upload class="upload-pic" 
@@ -425,7 +425,11 @@ export default {
       file = this.$refs.upload.getFile(file);
       // console.log(file.raw instanceof File)
       // console.log(this.$refs.upload.$refs['upload-inner'].upload)
+      if (!file.raw){
+        return undefined;
+      }
       let data = new FormData();
+      console.log(file.raw)
       data.append("file", file.raw);
       data.append("query", "uploadImg");
       data.append("userId", Cookies.get("userId"));
@@ -470,6 +474,7 @@ export default {
               this.loading = false;
               return;
             }
+            if (!url) url = this.Goods.pictureAddress;
             //发送请求
             let data = {
               query: "updateBook",
@@ -503,6 +508,7 @@ export default {
                 type: "success"
               });
               this.loading = false;
+              this.$emit("updateItem")
             } else if (response.status == 0) {
               this.$message.error("发生错误:" + response.err);
             } else {

@@ -434,6 +434,8 @@ export default {
                 type: "success"
               });
               this.loading = false;
+              let userId = Cookies.get('userId')
+              this.$router.push({path:`/home/${userId}`,query={index:'4-2'}})
             } else if (response.status == 0) {
               this.$message.error("发送错误:" + response.err);
             } else {
