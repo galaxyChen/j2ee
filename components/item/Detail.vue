@@ -41,7 +41,7 @@
                 </template>
             </el-col>
         </el-row>
-        <el-row>
+        <el-row type="flex" justify="end">
             <el-button v-if="showAddButton" @click="addBook" class='item-add' round type='danger'>加入购物车</el-button>
         </el-row>
     </div>
