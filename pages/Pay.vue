@@ -50,6 +50,7 @@ export default {
   },
   mounted() {
     let params = this.$route.params;
+    console.log(params)
     this.price = params.totalPay;
     this.time_limit = params.time_limit;
   },
@@ -76,6 +77,9 @@ export default {
   },
 
   methods: {
+    cancelPay(){
+
+    },
     PayConfirm() {
       let orderId = this.$route.params.orderId
       if(orderId==undefined){

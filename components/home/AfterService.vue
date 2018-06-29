@@ -28,7 +28,8 @@
                 </el-tab-pane>  
 
                 <el-tab-pane label="申请记录" name="second">
-                    <AfterDetail :afterService="afterServiceList[0]"></AfterDetail> 
+                    <!-- <AfterDetail :afterService="afterServiceList[0]"></AfterDetail>  -->
+                    <AfterRecord :afterServiceList="afterServiceList"></AfterRecord>
                 </el-tab-pane>
                 </el-tabs>
             </div>
@@ -49,13 +50,14 @@
 import NavTop from "~/components/NavTop";
 import NavLeft from "~/components/home/NavLeft";
 import ApplyReturn from "~/components/home/ApplyReturn";
-import AfterDetail from "~/components/home/AfterDetail";
+
+import AfterRecord from "~/components/home/AfterRecord";
 export default {
      components: {
           NavTop,
           NavLeft,
           ApplyReturn,
-          AfterDetail ,
+          AfterRecord ,
     },
         data(){
             return{
@@ -70,13 +72,28 @@ export default {
                 },
                 afterServiceList :[
                     {
-                        serviceId : 123,
+                        afterServiceId : 123,
                         launchTime : '2018-6-28',
                         returnReason : '图书图片不符',
                         totalPrice : '20.5',
                         description : '买的时候网上看的图书封面是蓝色，买下来发现是红色',
                         buyerName : 'lwz',
                         phoneNumber : '13631433767',
+                        purchaseTime : '2018-6-27',
+                        orderId : '312',
+                        itemTitle : '10001个为什么'
+                    },
+                    {
+                        afterServiceId : 163,
+                        launchTime : '2018-6-28',
+                        returnReason : '图书价格不符',
+                        totalPrice : '20.5',
+                        description : '买的时候说要10块，结果收我20块',
+                        buyerName : 'lwz',
+                        phoneNumber : '13631433767',
+                        purchaseTime : '2018-6-27',
+                        orderId : '356',
+                        itemTitle : '10001个为什么'
                     }
                 ]
             }

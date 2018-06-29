@@ -1,7 +1,7 @@
 <template>
     <div>
         <el-row>
-            <el-col :span="4">服务单号：{{afterService.serviceId}}</el-col>
+            <el-col :span="4">服务单号：{{afterService.afterServiceId}}</el-col>
             <el-col :span="4">申请时间：{{afterService.launchTime}}</el-col>
         </el-row>
         <el-row>
