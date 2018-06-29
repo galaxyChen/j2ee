@@ -14,7 +14,7 @@
           <SearchBox @doSearch='doSearch' ref = 'searchbox' class="search-box"></SearchBox>
 
           <!-- 新书上架组件 -->
-          <div class="newBookBox" >
+          <!-- <div class="newBookBox" >
             <el-col style="color: #99a9bf;font-size:28px;text-align:left;margin-top:-80px;">新书上架
               <hr style="margin-top:-50px;">
             </el-col>
@@ -24,16 +24,35 @@
             class="goods" >
                   <img @click='lookDetail(book.itemId)' class='goods-img' :src="book.pictureAddress">
                   <div @click='lookDetail(book.itemId)' style="margin-top:-100px;"> 
-                      <p style="margin-top:-50px;margin-left:10px;font-weight:900;">{{book.itemTitle}}</p>
-                      <p style="margin-top:-120px;margin-left:10px;">价格： {{book.price}}</p>
+                      <p style="margin-top:-120px;margin-left:-50px;color:red;font-weight:900;">￥ {{book.price}}</p>
+                      <p style="margin-top:-120px;margin-left:10px;">{{book.itemTitle}}</p>
                       <div style="margin-top:-120px;margin-left:10px;">
                           <el-button type="primary" @click='lookDetail(book.itemId)'>查看详情</el-button>
                       </div>
                   </div>
               </div>
+            </div> -->
 
-            
-            </div>
+              <!-- 新书上架组件  6/28 16:30 修改测试-->
+          <div class="newBookBox" >
+            <el-col style="color: #99a9bf;font-size:28px;text-align:left;margin-top:-80px;">新书上架
+              <hr style="margin-top:-50px;">
+            </el-col>
+            <el-row style="margin-left:10px;margin-right:20px;">
+              <el-col :span="5" v-for="book in newBooks" :key='"recent"+book.itemId' :offset="1">
+                <el-card :body-style="{ padding: '5px' }" class="goods" >
+                  <img @click='lookDetail(book.itemId)'  class="image" :src="book.pictureAddress">
+                  <div style="text-align:left;padding-left:10px;margin-top:-50px">
+                    <span style="font-weight:900;font-size:20px;"> {{book.itemTitle}}</span>
+                    <div class="bottom clearfix" @click='lookDetail(book.itemId)'>
+                      <p style="margin-top:-60px;font-weight:500;color:red;">￥ {{book.price}}</p>
+                      <el-button type="text" @click='lookDetail(book.itemId)' class="button">查看详情</el-button>
+                    </div>
+                  </div>
+                </el-card>
+              </el-col>
+             </el-row> 
+          </div>
     </el-main>
   </div>
 </template>
@@ -139,15 +158,12 @@ body > .el-container {
   }
 .goods {
   float: left;
-  margin: 20px 5%;
-
+  margin: 15px 1%;
   border-style: dashed;
   border-color: #e9eef3;
+  padding-bottom: 0%;
 }
-.goods-img {
-  width: 120px;
-  height: 160px;
-}
+
 .search-box {
   margin-top: -50px;
   padding:10px;
@@ -156,4 +172,32 @@ body > .el-container {
   margin:0 20px 30px 20px;
   background-color: rgb(240, 239, 239);
 }
+
+
+
+
+.bottom {
+    margin-top: 13px;
+    line-height: 12px;
+    padding-bottom: 0px;
+    padding-right: 15px;
+  }
+  .button {
+    margin-top: -30px;
+    padding: 0;
+    float: right;
+  }
+  .image {
+    width: 100%;
+    height: 250px;
+    display: block;
+  }
+  .clearfix:before,
+  .clearfix:after {
+      display: table;
+      content: "";
+  }
+  .clearfix:after {
+      clear: both
+  }
 </style>
