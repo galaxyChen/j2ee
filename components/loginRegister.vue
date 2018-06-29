@@ -84,19 +84,23 @@ export default {
   },
   data() {
     var validatePw = (rule, value, callback) => {
+      let p = /^(?=.*\d)(?=.*[a-zA-Z])(?=.*[_])[\da-zA-Z_]+/;
+      let p1 = /^[\da-zA-Z_]+$/;
       if (value == "") {
         callback(new Error("请输入密码"));
       } 
+      else if(!p1.test(value)){
+        callback(new Error("只能包含数字、字母和下划线"))
+      }
       else if (value.length > 16 || value.length < 6) {
         callback(new Error("长度在 6 到 16 个字符"));
       } 
-      else {
-        let p = /^(?=.*\d)(?=.*[a-zA-Z])(?=.*[_])[\da-zA-Z_]+/;
-        
-        if(!p.test(value)){
+      else if(!p.test(value)){
           callback(new Error("最少包含数字、字母和下划线"))
-        }
-        else if (this.regForm.password2 !== "") {
+      }
+      else {
+
+        if (this.regForm.password2 !== "") {
           this.$refs.regForm.validateField("password2");
         }
         callback();
