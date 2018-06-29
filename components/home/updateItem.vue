@@ -1,5 +1,10 @@
 <template>
-    <el-col v-loading='loading' element-loading-text='发布中，请稍后' :span='12' :push='1' style="margin-top:30px;margin-bottom:30px;">
+<el-container>
+    <el-header>
+        <el-button @click="goBack" class="back-button" size="medium" type='text' icon="el-icon-back">返回</el-button>
+    </el-header>
+    <el-main>
+            <el-col v-loading='loading' element-loading-text='加载中，请稍后' :span='12' :push='1' style="margin-bottom:30px;">
         <div class='AddGoods-box'>
             <el-form :model="Goods" :rules="rules" ref="Goods" label-width="100px">
                 <el-form-item label="商品标题: " prop="itemTitle">
@@ -18,7 +23,7 @@
                     <el-date-picker v-model="Goods.publicationDate" type="month" placeholder="选择日期" value-format='yyyy-MM'> </el-date-picker>
                 </el-form-item>
                 <el-form-item label="图书类别: " prop="options">
-                   <el-cascader class="index-input-box" :options="Goods.options" @change='changeType' change-on-select></el-cascader>
+                   <el-cascader class="index-input-box" :options="Goods.options" v-model="type" change-on-select></el-cascader>
                 </el-form-item>
                 <el-form-item label="价格: "  prop="price">
                      <el-input-number v-model="Goods.price" :precision="2" :step="1" :min='0'></el-input-number>
@@ -37,13 +42,13 @@
                   <el-input  v-model='Goods.addressDetail'  placeholder='默认退货地址'></el-input>
                 </el-form-item>
                 <el-form-item label="联系人: " prop='seller'>
-                  <el-input  v-model='Goods.seller'  placeholder='默认退货联系人'></el-input>
+                  <el-input  v-model='Goods.sellerName'  placeholder='默认退货联系人'></el-input>
                 </el-form-item>
                 <el-form-item label="联系电话: " prop='phoneNumber'>
                   <el-input  v-model='Goods.phoneNumber'  placeholder='默认退货联系电话'></el-input>
                 </el-form-item>
                  <el-form-item label="商品描述: ">
-                      <el-input  type="textarea"  :rows="2"  :value='Goods.description' placeholder="请输入商品描述" ></el-input>
+                      <el-input  type="textarea"  :rows="2"  v-model='Goods.description' placeholder="请输入商品描述" ></el-input>
                 </el-form-item>
                  <el-form-item label="上传图片: ">
                     <el-upload class="upload-pic" 
@@ -52,6 +57,7 @@
                             ref='upload'
                             :before-remove="beforeRemove" 
                             :limit="1"
+                            :file-list="fileList"
                             :on-exceed="handleExceed"
                             :auto-upload="false"
                             list-type="picture">
@@ -66,6 +72,9 @@
             </el-form>
         </div>
     </el-col>
+    </el-main>
+</el-container>
+
 </template>
 
 <script >
@@ -75,6 +84,10 @@ export default {
   components: {
     mapLinkage
   },
+  mounted() {
+    this.setData();
+  },
+  props: ["item"],
   data() {
     var validPhone = (rule, value, callback) => {
       if (value == "") {
@@ -91,6 +104,9 @@ export default {
     return {
       radio: "0",
       loading: false,
+      area:[],
+      type:['全部'],
+      fileList:[],
       Goods: {
         itemTitle: "",
         bookName: "",
@@ -98,12 +114,11 @@ export default {
         press: "",
         publicationDate: "",
         price: 0,
-        originAddress: "",
         quantity: 0,
         description: "",
         addressDetail: "",
         phoneNumber: "",
-        seller: "",
+        sellerName: "",
         //选择图书类别
         options: [
           //小说 -> 其子分类
@@ -268,7 +283,6 @@ export default {
           }
         ]
       },
-
       //验证必填项是否填写
       rules: {
         itemTitle: [
@@ -308,7 +322,7 @@ export default {
           },
           { min: 1, max: 50, message: "长度不超过50个字符", trigger: "change" }
         ],
-        seller: [
+        sellerName: [
           {
             required: true,
             message: "退货联系人不能为空",
@@ -341,6 +355,59 @@ export default {
     };
   },
   methods: {
+    async setData() {
+      let query = {
+        query: "getItemDetail",
+        data: {
+          itemId: this.item + ""
+        }
+      };
+      this.loading = true;
+      let response = await this.$axios.send(query);
+      if (response.status == 1) {
+        let data = {
+          itemTitle: response.data.product.itemTitle, //商品标题
+          bookName: response.data.product.bookName, //书的名字
+          author: response.data.product.author, //作者
+          press: response.data.product.press, //出版社
+          publicationDate: response.data.product.publicationDate, //出版日期
+          bookCategory: this.type, //标签，用于搜索的筛选，是一个字符串数组
+          price: response.data.product.price + "", //价格
+          quantity: response.data.product.quantity + "", //库存
+          freePostage: this.radio + "", //是否包邮，0/1
+          addressDetail: response.data.product.addressDetail,
+          description: response.data.product.description, //详细描述
+          pictureAddress: response.data.product.pictureAddress, //图片的链接。在发布商品之前会先执行上传图片操作，成功获得图片的url之后才会发送这个请求
+          phoneNumber: response.data.product.phoneNumber,
+          sellerName: response.data.product.sellerName
+        };
+        let pictureName = data.pictureAddress.split('/')
+        pictureName = pictureName[pictureName.length - 1]
+        this.fileList.push({
+          name:pictureName,
+          url:data.pictureAddress
+        })
+        this.$refs.area.set(response.data.product.province,response.data.product.city)
+        let options = this.Goods.options;
+        data.options = options;
+        this.Goods = data;
+        this.loading = false;
+        this.type = response.data.product.bookCategory.split('/')
+        console.log(this.type)
+      } else if (response.status == 0) {
+        this.$message.error("发生错误" + response.err);
+      } else {
+        this.$message.error("登录超时！");
+        Cookies.remove("userId");
+        Cookies.remove("sessionId");
+        Cookies.remove("userName");
+        this.$router.push({ path: "/" });
+      }
+    },
+    goBack() {
+      this.$emit("goBack")
+    },
+    //选择发货地地区
     handleExceed(files, fileList) {
       this.$message.warning(
         `当前限制选择 1 个文件，本次选择了 ${
@@ -358,7 +425,11 @@ export default {
       file = this.$refs.upload.getFile(file);
       // console.log(file.raw instanceof File)
       // console.log(this.$refs.upload.$refs['upload-inner'].upload)
+      if (!file.raw){
+        return undefined;
+      }
       let data = new FormData();
+      console.log(file.raw)
       data.append("file", file.raw);
       data.append("query", "uploadImg");
       data.append("userId", Cookies.get("userId"));
@@ -378,6 +449,7 @@ export default {
       }
     },
     changeType(value) {
+      return;
       if (value.length == 2) {
         this.type = value;
       }
@@ -402,12 +474,14 @@ export default {
               this.loading = false;
               return;
             }
+            if (!url) url = this.Goods.pictureAddress;
             //发送请求
             let data = {
-              query: "addBook",
+              query: "updateBook",
               data: {
                 userId: Cookies.get("userId"),
                 sessionId: Cookies.get("sessionId"), //常规验证
+                itemId:this.item + "",
                 itemTitle: this.Goods.itemTitle, //商品标题
                 bookName: this.Goods.bookName, //书的名字
                 author: this.Goods.author, //作者
@@ -430,14 +504,13 @@ export default {
             let response = await this.$axios.send(data);
             if (response.status == 1) {
               this.$message({
-                message: "发布成功！",
+                message: "修改成功！",
                 type: "success"
               });
               this.loading = false;
-              let userId = Cookies.get('userId')
-              this.$router.push({path:`/home/${userId}`,query:{index:'4-2'}})
+              this.$emit("updateItem")
             } else if (response.status == 0) {
-              this.$message.error("发送错误:" + response.err);
+              this.$message.error("发生错误:" + response.err);
             } else {
               Cookies.remove("userId");
               Cookies.remove("sessionId");
@@ -460,4 +533,9 @@ export default {
 
 
 <style>
+.back-button {
+  color: #999;
+  font-size: 24px;
+  /* margin-top: 16px; */
+}
 </style>
