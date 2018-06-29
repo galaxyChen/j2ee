@@ -1641,6 +1641,12 @@ export default {
       // }
       console.log("haha")
     },
+    set: function(province,city){
+        this.area = {
+          selectProv:province,
+          selectCity:city
+        }
+    },
     test: function() {
       console.log('test the mapform')
       this.$refs.area.validateField("selectProv");

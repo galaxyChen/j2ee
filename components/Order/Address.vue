@@ -50,12 +50,13 @@ export default {
     },
     async mounted() {
         await this.getAddress();
+        let defaultIndex = 0;
         for(let i=0;i< this.addressList.length;i++){
             if(this.addressList[i].isDefaultAddress)
-                this.defaultIndex = i;
+                defaultIndex = i;
         }
         if(this.addressList.length>0)
-            this.addressItem = this.addressList[this.defaultIndex]
+            this.addressItem = this.addressList[defaultIndex]
     },
     watch: {
         addressItem(){

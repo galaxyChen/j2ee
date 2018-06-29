@@ -81,7 +81,7 @@
 </style>
 
 <script>
-import Cookies from 'js-cookie'
+import Cookies from "js-cookie";
 export default {
   props: ["item"],
   computed: {
@@ -100,23 +100,39 @@ export default {
       this.$router.push({ path: `/item/${this.item.itemId}` });
     },
     changeItem() {
-        this.$emit('changeItem',this.item.itemId)
+      this.$emit("changeItem", this.item.itemId);
     },
     cancelItem() {
       this.$confirm("确认下架吗?", "下架确认", {
         confirmButtonText: "确定",
         cancelButtonText: "取消",
         type: "danger"
-      }).then(async ()=>{
-          let data = {
-              query:"deleteItem",
-              data:{
-                  userId:Cookies.get('userId'),
-                  sessionId:Cookies.get('sessionId'),
-                  itemId:this.item.itemId
-              }
+      }).then(async () => {
+        let data = {
+          query: "deleteItem",
+          data: {
+            userId: Cookies.get("userId"),
+            sessionId: Cookies.get("sessionId"),
+            itemId: this.item.itemId
           }
-      })
+        };
+        let response = await this.$axios.send(data);
+        if (response.status == 1) {
+            this.$message({
+                message:"下架成功！",
+                type:"success"
+            })
+            this.$emit('deleteItem',this.item.itemId)
+        } else if (response.status == 0) {
+          this.$message.error("发生错误：" + response.err);
+        } else {
+          this.$message.error("登录超时！");
+          Cookies.remove("userId");
+          Cookies.remove("sessionId");
+          Cookies.remove("userName");
+          this.$router.push({ path: "/" });
+        }
+      });
     }
   }
 };
