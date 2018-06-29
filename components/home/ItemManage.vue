@@ -1,7 +1,7 @@
 <template>
     <el-container>
       <el-main v-if="edit">
-            <Update :item='editItemNo'></Update>
+            <Update @goBack='goBack' :item='editItemNo'></Update>
         </el-main>
         <el-main v-else>
             <el-col :span='18'>
@@ -39,6 +39,9 @@ export default {
     }
   },
   methods: {
+    goBack(){
+      this.edit = false;
+    },
     deleteItem(itemId) {
       let index = 0;
       while (this.itemList[index].itemId != itemId) index++;

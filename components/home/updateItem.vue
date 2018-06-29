@@ -23,7 +23,7 @@
                     <el-date-picker v-model="Goods.publicationDate" type="month" placeholder="选择日期" value-format='yyyy-MM'> </el-date-picker>
                 </el-form-item>
                 <el-form-item label="图书类别: " prop="options">
-                   <el-cascader class="index-input-box" :options="Goods.options" @change='changeType' change-on-select></el-cascader>
+                   <el-cascader class="index-input-box" :options="Goods.options" v-model="type" change-on-select></el-cascader>
                 </el-form-item>
                 <el-form-item label="价格: "  prop="price">
                      <el-input-number v-model="Goods.price" :precision="2" :step="1" :min='0'></el-input-number>
@@ -42,7 +42,7 @@
                   <el-input  v-model='Goods.addressDetail'  placeholder='默认退货地址'></el-input>
                 </el-form-item>
                 <el-form-item label="联系人: " prop='seller'>
-                  <el-input  v-model='Goods.seller'  placeholder='默认退货联系人'></el-input>
+                  <el-input  v-model='Goods.sellerName'  placeholder='默认退货联系人'></el-input>
                 </el-form-item>
                 <el-form-item label="联系电话: " prop='phoneNumber'>
                   <el-input  v-model='Goods.phoneNumber'  placeholder='默认退货联系电话'></el-input>
@@ -57,6 +57,7 @@
                             ref='upload'
                             :before-remove="beforeRemove" 
                             :limit="1"
+                            :file-list="fileList"
                             :on-exceed="handleExceed"
                             :auto-upload="false"
                             list-type="picture">
@@ -104,6 +105,8 @@ export default {
       radio: "0",
       loading: false,
       area:[],
+      type:['全部'],
+      fileList:[],
       Goods: {
         itemTitle: "",
         bookName: "",
@@ -115,7 +118,7 @@ export default {
         description: "",
         addressDetail: "",
         phoneNumber: "",
-        seller: "",
+        sellerName: "",
         //选择图书类别
         options: [
           //小说 -> 其子分类
@@ -319,7 +322,7 @@ export default {
           },
           { min: 1, max: 50, message: "长度不超过50个字符", trigger: "change" }
         ],
-        seller: [
+        sellerName: [
           {
             required: true,
             message: "退货联系人不能为空",
@@ -376,13 +379,21 @@ export default {
           description: response.data.product.description, //详细描述
           pictureAddress: response.data.product.pictureAddress, //图片的链接。在发布商品之前会先执行上传图片操作，成功获得图片的url之后才会发送这个请求
           phoneNumber: response.data.product.phoneNumber,
-          sellerName: response.data.product.seller
+          sellerName: response.data.product.sellerName
         };
+        let pictureName = data.pictureAddress.split('/')
+        pictureName = pictureName[pictureName.length - 1]
+        this.fileList.push({
+          name:pictureName,
+          url:data.pictureAddress
+        })
         this.$refs.area.set(response.data.product.province,response.data.product.city)
         let options = this.Goods.options;
         data.options = options;
         this.Goods = data;
         this.loading = false;
+        this.type = response.data.product.bookCategory.split('/')
+        console.log(this.type)
       } else if (response.status == 0) {
         this.$message.error("发生错误" + response.err);
       } else {
@@ -393,7 +404,9 @@ export default {
         this.$router.push({ path: "/" });
       }
     },
-    goBack() {},
+    goBack() {
+      this.$emit("goBack")
+    },
     //选择发货地地区
     handleExceed(files, fileList) {
       this.$message.warning(
@@ -432,6 +445,7 @@ export default {
       }
     },
     changeType(value) {
+      return;
       if (value.length == 2) {
         this.type = value;
       }
@@ -462,6 +476,7 @@ export default {
               data: {
                 userId: Cookies.get("userId"),
                 sessionId: Cookies.get("sessionId"), //常规验证
+                itemId:this.item + "",
                 itemTitle: this.Goods.itemTitle, //商品标题
                 bookName: this.Goods.bookName, //书的名字
                 author: this.Goods.author, //作者
@@ -489,7 +504,7 @@ export default {
               });
               this.loading = false;
             } else if (response.status == 0) {
-              this.$message.error("发送错误:" + response.err);
+              this.$message.error("发生错误:" + response.err);
             } else {
               Cookies.remove("userId");
               Cookies.remove("sessionId");
