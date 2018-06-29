@@ -2,12 +2,12 @@
     <div>
         <NavTop></NavTop>
         <el-row>
-            <el-col :span='12'>
-                <div>
+            <el-col :span='11' :offset="1">
+                <div style="border-style:solid;border-color:#cccccc;margin-top:10px;margin-left:10px;">
                     <img class='item-img' :src='item.pictureAddress'/>
                 </div>
             </el-col>
-            <el-col :span='9'>
+            <el-col :span='9'  style="margin-top:10px;margin-left:130px;">
                 <Detail :item='item'></Detail>
             </el-col>
         </el-row>
@@ -36,8 +36,9 @@
     }
     .item-img{
         margin: 30px;
+        padding-bottom:60px;
         height: 400px;
-        width: 300px;
+        width: 400px;
         position: relative;
         left: 120px;
         top: 30px;
