@@ -2,40 +2,57 @@
 <div>
   <NavTop></NavTop>
 
-    <el-main>
-        <el-carousel :interval="4000" type="card" height="320px">
-              <el-carousel-item v-for="item in 5" :key="item">
-                  <!-- 待修改，此处仅作静态页面展示 -->
-                  <img src="../assets/6.jpg">
-                  <h3>{{ item }}</h3>
-                  
+    <el-main class="show-box">
+      
+           <el-carousel indicator-position="outside">
+              <el-carousel-item v-for="item in 4" :key="item">
+                <!-- <img src="../assets/6.jpg"> -->
               </el-carousel-item>
           </el-carousel>
 
           <!-- 搜索框组件 -->
-          <SearchBox ref = 'searchbox' class="search-box"></SearchBox>
-          
+          <SearchBox @doSearch='doSearch' ref = 'searchbox' class="search-box"></SearchBox>
 
           <!-- 新书上架组件 -->
-          <div id="newBookBox"  style="text-align:left;">
-            <p type="text" style="color:green;font-size:28px;">新书上架</p> 
-            <hr style="margin-top:-50px;">
+          <!-- <div class="newBookBox" >
+            <el-col style="color: #99a9bf;font-size:28px;text-align:left;margin-top:-80px;">新书上架
+              <hr style="margin-top:-50px;">
+            </el-col>
             <div
             v-for="book in newBooks"
             :key='"recent"+book.itemId'
             class="goods" >
                   <img @click='lookDetail(book.itemId)' class='goods-img' :src="book.pictureAddress">
                   <div @click='lookDetail(book.itemId)' style="margin-top:-100px;"> 
-                      <p style="margin-top:-50px;margin-left:10px;">{{book.itemTitle}}</p>
-                      <p style="margin-top:-100px;margin-left:10px;">价格： {{book.price}}</p>
-                      <div style="margin-top:-100px;margin-left:10px;">
+                      <p style="margin-top:-120px;margin-left:-50px;color:red;font-weight:900;">￥ {{book.price}}</p>
+                      <p style="margin-top:-120px;margin-left:10px;">{{book.itemTitle}}</p>
+                      <div style="margin-top:-120px;margin-left:10px;">
                           <el-button type="primary" @click='lookDetail(book.itemId)'>查看详情</el-button>
                       </div>
                   </div>
               </div>
+            </div> -->
 
-            
-            </div>
+              <!-- 新书上架组件  6/28 16:30 修改测试-->
+          <div class="newBookBox" >
+            <el-col style="color: #99a9bf;font-size:28px;text-align:left;margin-top:-80px;">新书上架
+              <hr style="margin-top:-50px;">
+            </el-col>
+            <el-row style="margin-left:10px;margin-right:20px;">
+              <el-col :span="5" v-for="book in newBooks" :key='"recent"+book.itemId' :offset="1">
+                <el-card :body-style="{ padding: '5px' }" class="goods" >
+                  <img @click='lookDetail(book.itemId)'  class="image" :src="book.pictureAddress">
+                  <div style="text-align:left;padding-left:10px;margin-top:-50px">
+                    <span style="font-weight:900;font-size:20px;"> {{book.itemTitle}}</span>
+                    <div class="bottom clearfix" @click='lookDetail(book.itemId)'>
+                      <p style="margin-top:-60px;font-weight:500;color:red;">￥ {{book.price}}</p>
+                      <el-button type="text" @click='lookDetail(book.itemId)' class="button">查看详情</el-button>
+                    </div>
+                  </div>
+                </el-card>
+              </el-col>
+             </el-row> 
+          </div>
     </el-main>
   </div>
 </template>
@@ -44,55 +61,62 @@
 import NavTop from "~/components/NavTop";
 import SearchBox from "~/components/SearchBox";
 export default {
-  async mounted(){
-    let data = {
-      query:'getRecent',
-      data:{
-        number:5
-      }
-    }
-    let response = await this.$axios.send(data);
-    if (response.status==1){
-      this.newBooks = response.data.products;
-    } else {
-      this.$message.error("发生错误："+response.err)
-    }
+  mounted() {
+    this.getRecent();
   },
   data() {
     return {
-      newBooks:[]
+      newBooks: []
     };
   },
   components: {
     NavTop,
     SearchBox
   },
-  
+
   methods: {
-    lookDetail(item_id){
+    async getRecent() {
+      let data = {
+        query: "getRecent",
+        data: {
+          number: 5
+        }
+      };
+      let response = await this.$axios.send(data);
+      if (response.status == 1) {
+        this.newBooks = response.data.items;
+      } else {
+        this.$message.error("发生错误：" + response.err);
+      }
+    },
+    lookDetail(item_id) {
       // console.log(item_id)
-      this.$router.push({ path: `/item/${item_id}` })
+      this.$router.push({ path: `/item/${item_id}` });
+    },
+    doSearch(text, tag) {
+      this.$router.push({ path: "/search", query: { text: text, tag: tag } });
     }
   },
+  watch: {
+    $route(to, from) {
+      this.getRecent();
+    }
+  }
 };
 </script>
 
 <style scoped>
-.search-box{
-  margin-top: -100px;
-}
 
-body {
-  background-color: #d3dce6;
+/* body {
+  background-color: #050505;
   font-family: Hiragino Sans GB;
-}
+} */
 
 .index-input-box {
   font-size: 20px;
 }
 
-.el-header,
-.el-footer {
+.el-header,.el-footer {
   background-color: #b3c0d1;
   color: #333333;
   /* text-align: center; */
@@ -112,32 +136,68 @@ body > .el-container {
 .el-input__inner {
   height: 70px;
 }
-.el-carousel__item h3 {
-  color: #475669;
-  font-size: 14px;
-  opacity: 0.75;
-  line-height: 200px;
-  margin: 0;
-  text-align: left;
-}
 
-.el-carousel__item:nth-child(2n) {
-  background-color: #99a9bf;
-}
+  .el-carousel__item h3 {
+    color: #475669;
+    font-size: 18px;
+    opacity: 0.75;
+    line-height: 400px;
+    
+  }
+  .el-carousel__item:nth-child(2n) {
+    background-color:white;
+    background-image: url("../assets/6.jpg");
+    height: 430px;
 
-.el-carousel__item:nth-child(2n + 1) {
-  background-color: #d3dce6;
-}
-
+  }
+  .el-carousel__item:nth-child(2n+1) {
+    background-color: #d3dce6;
+    background-image: url("../assets/7.jpg");
+    height: 430px; 
+     
+  }
 .goods {
   float: left;
-  margin: 20px 4%;
-
+  margin: 15px 1%;
   border-style: dashed;
   border-color: #e9eef3;
+  padding-bottom: 0%;
 }
-.goods-img{
-  width: 120px;
-  height: 160px;
+
+.search-box {
+  margin-top: -50px;
+  padding:10px;
 }
+.show-box{
+  margin:0 20px 30px 20px;
+  background-color: rgb(240, 239, 239);
+}
+
+
+
+
+.bottom {
+    margin-top: 13px;
+    line-height: 12px;
+    padding-bottom: 0px;
+    padding-right: 15px;
+  }
+  .button {
+    margin-top: -30px;
+    padding: 0;
+    float: right;
+  }
+  .image {
+    width: 100%;
+    height: 250px;
+    display: block;
+  }
+  .clearfix:before,
+  .clearfix:after {
+      display: table;
+      content: "";
+  }
+  .clearfix:after {
+      clear: both
+  }
 </style>

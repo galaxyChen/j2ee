@@ -1,5 +1,6 @@
 <template>
     <el-col :span='5' :push="2">
+      <el-card :body-style="{ padding: '5px' }">
         <img @click="goDetail" class="search-img" :src="item.pictureAddress"/>
         <div @click="goDetail" class="search-text-box">
             <h4 class="search-title">{{item.itemTitle}}</h4>
@@ -8,13 +9,14 @@
                 <a class="search-time">{{item.launchDate}}</a>
             </div>
         </div>
+      </el-card>
     </el-col>    
 </template>
 
 <style scoped>
 .search-img {
   height: 320px;
-  width: 240px;
+  width: 100%;
 }
 .search-img:hover {
   cursor: pointer;
@@ -39,6 +41,10 @@
 }
 .search-text-box {
   margin-top: 20px;
+  padding-left: 5px;
+  padding-bottom: 30px;
+  padding-right: 10px;
+  
 }
 .search-text {
   margin-top: 10px;

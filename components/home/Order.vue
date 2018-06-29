@@ -38,7 +38,14 @@
         <el-dialog title="收货地址" :visible.sync="dialogFormVisible">
          <el-form :model="sendGood">
             <el-form-item label="快递公司" >
-              <el-input v-model="sendGood.sender" placeholder="请输入快递公司"></el-input>
+              <!-- <el-input v-model="sendGood.sender" placeholder="请输入快递公司"></el-input> -->
+              <el-cascader
+                :options="options"
+                v-model="sendGood.sender"
+                placeholder="请选择快递公司"
+                @change="handleChange"
+               >
+              </el-cascader>
             </el-form-item>
             <el-form-item label="快递单号" >
               <el-input v-model="sendGood.code" placeholder="请输入快递单号">
@@ -49,7 +56,7 @@
             <el-button @click="dialogFormVisible = false">取 消</el-button>
             <el-button type="primary" @click="sendOrder">确 定</el-button>
           </div>
-        </el-dialog>``
+        </el-dialog>
     </el-row>
 </template>
 
@@ -110,9 +117,60 @@ export default {
   props: ["order", "type"],
   data() {
     return {
+        options: [{
+          value: '顺丰',
+          label: '顺丰',
+          }, {
+            value: '京东',
+            label: '京东',
+          },{
+            value: '韵达',
+            label: '韵达'
+          },{
+            value: '中通',
+            label: '中通',
+          },{
+            value: '圆通',
+            label: '圆通',
+          },{
+            value: '申通',
+            label: '申通',
+          },{
+            value: '百世汇通',
+            label: '百世汇通'
+          },{
+            value: '天天',
+            label: '天天'
+          },{
+            value: '邮政',
+            label: '邮政'
+          },{
+            value: '当当',
+            label: '当当'
+          },{
+            value: '亚马逊',
+            label: '亚马逊'
+          },{
+            value: '如风达',
+            label: '如风达'
+          },{
+            value: '快捷',
+            label: '快捷'
+          },{
+            value: '德邦',
+            label: '德邦'
+          },{
+            value: '万象',
+            label: '万象'
+          },{
+            value: '其他',
+            label: '其他'
+          }],
+         
+
       dialogFormVisible: false,
       sendGood: {
-        sender: "",
+        sender: [],
         code: ""
       }
     };
@@ -167,6 +225,9 @@ export default {
     }
   },
   methods: {
+    handleChange(){
+      console.log(this.sendGood.sender);
+    },
     signout() {
       this.$message.error("登录超时！")
       Cookies.remove('userId')
@@ -179,6 +240,18 @@ export default {
     },
     payForOrder() {
       //进入结算页面
+      let orderId = []
+      orderId.push(this.order.orderId)
+      this.$router.push({ 
+          name: 'Pay' ,
+          params: { 
+              totalPay: this.order.price + this.order.postage ,
+              orderId : orderId,
+              time_limit :'2小时0分',
+          }  
+      });
+
+
     },
     signOrder() {
       this.$confirm("确认收货吗?", "收货确认", {
@@ -244,7 +317,7 @@ export default {
     lookServive() {},
     async sendOrder() {
       this.dialogFormVisible = false;
-      let sender = this.sendGood.sender;
+      let sender = this.sendGood.sender[0];
       let code = this.sendGood.code;
       if (sender != "" && code != "") {
         let data = {
@@ -287,7 +360,7 @@ export default {
           data: {
             userId: Cookies.get("userId"),
             sessionId: Cookies.get("sessionId"),
-            orderId: this.order.orderId
+            orderId: this.order.orderId+"",
           }
         };
         let response = await this.$axios.send(data);

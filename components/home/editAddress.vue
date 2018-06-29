@@ -4,16 +4,16 @@
         <el-form status-icon :model="addressItem" ref="addressItem" :rules="addressRule">
 
             <el-form-item label="姓名" prop="recipientName">
-                <el-input @input='check("recipientName")' v-model="addressItem.recipientName" ></el-input>
+                <el-input  v-model="addressItem.recipientName" ></el-input>
             </el-form-item>
             <el-form-item label="手机号" prop="phoneNumber">
-                <el-input  @input='check("phoneNumber")' v-model="addressItem.phoneNumber"></el-input>
+                <el-input   v-model="addressItem.phoneNumber"></el-input>
             </el-form-item>
             
-            <mapLinkage ref="map" @updateArea="updateArea"></mapLinkage>
+            <mapLinkage ref="map" :province="addressItem.province" :city="addressItem.city"  @updateArea="updateArea"></mapLinkage>
 
             <el-form-item label="详细地址" prop="addressDetail"> 
-                <el-input @input='check("addressDetail")'  v-model="addressItem.addressDetail"></el-input>
+                <el-input   v-model="addressItem.addressDetail"></el-input>
             </el-form-item>
 
             <el-form-item>
@@ -41,8 +41,9 @@ export default {
             this.addressItem.phoneNumber = this.item.phoneNumber
             this.addressItem.addressDetail = this.item.addressDetail
             this.addressItem.province = this.item.province
-            this.addressItem.city = this.item.city
-            // this.$refs.map.init(this.addressItem.province,this.addressItem.city)
+            this.addressItem.city = this.item.city,
+            this.addressItem.addreddId = this.item.addressId
+            this.addressItem.isDefaultAddress = this.item.isDefaultAddress
         });
         this.$on("closeDialog", function() {
             this.visible = false;
@@ -75,26 +76,24 @@ export default {
             },
             addressRule:{
                 recipientName: [
-                    { required: true, message: "收货人不能为空", trigger: "blur" },
-                    { min: 1, max: 16, message: "长度小于16个字符", trigger: "blur" }
+                    { required: true, message: "收货人不能为空", trigger: "blur" , trigger: "change"},
+                    { min: 1, max: 16, message: "长度小于16个字符", trigger: "blur", trigger: "change" }
                 ],
                 phoneNumber:[
-                    { validator:validPhone ,trigger:"blur" }
+                    {required: true, validator:validPhone ,trigger:"blur", trigger: "change" }
                 ],
                 addressDetail:[
-                    { required: true, message: "请输入详细地址", trigger: "blur" },
-                    { min: 1, max: 50, message: "长度不超过50个字符", trigger: "blur" }
+                    { required: true, message: "请输入详细地址", trigger: "blur", trigger: "change" },
+                    { min: 1, max: 50, message: "长度不超过50个字符", trigger: "blur", trigger: "change" }
                 ],
             }
         
         };
     },
     methods: {
-        check(item){
-            this.$refs['addressItem'].validateField(item);
-        },
+ 
         resetForm() {
-            this.$refs['addressItem'].resetFields()
+            this.$refs.addressItem.resetFields()
             this.$refs.map.reset()
         },
         submitForm() {
@@ -107,7 +106,9 @@ export default {
                         phoneNumber: this.addressItem.phoneNumber,
                         addressDetail:this.addressItem.addressDetail,
                         province : this.addressItem.province,
-                        city :this.addressItem.city
+                        city :this.addressItem.city,
+                        addressId : this.addressItem.addreddId,
+                        isDefaultAddress : this.addressItem.isDefaultAddress,
                     }
                     this.visible = false;
                     this.$emit('submitForm',this.index,newAddress)
@@ -120,14 +121,12 @@ export default {
 
         },
         updateArea(province,city){
-            console.log('什么玩意')
-            console.log(province+ ' '+city)
             this.addressItem.province = province
             this.addressItem.city = city
         },
         closeDialog() {
             this.$refs["addressItem"].resetFields();
-            this.$refs.map.reset()
+            // this.$refs.map.reset()
         }
     }
 };

@@ -11,27 +11,37 @@
             <span slot="title">地址簿管理</span>
         </el-menu-item>
 
+        
         <el-submenu index="3">
             <template slot="title">
                 <i class="el-icon-star-on"></i>
                 <span>交易管理</span>
             </template>
-            <el-menu-item-group>
+            <el-menu-item-group> 
             <el-menu-item index="3-1">购买管理</el-menu-item>
             <el-menu-item index="3-2">出售管理</el-menu-item>
+            <el-menu-item index="3-3">售后服务</el-menu-item>
+            <el-menu-item index="3-4">退货管理</el-menu-item>
+            </el-menu-item-group>
+        </el-submenu>
+
+        <el-submenu index="4">
+            <template slot="title">
+                <i class="el-icon-star-on"></i>
+                <span>商品管理</span>
+            </template>
+            <el-menu-item-group> 
+            <el-menu-item index="4-1">发布商品</el-menu-item>
+            <el-menu-item index="4-2">上架管理</el-menu-item>
             </el-menu-item-group>
         </el-submenu>
 
 
-        <el-menu-item index="4">
+        <el-menu-item index="5">
             <i class="el-icon-message"></i>
             <span slot="title">消息管理</span>
         </el-menu-item>
 
-        <el-menu-item index="5">
-            <i class="el-icon-message"></i>
-            <span slot="title">发布商品</span>
-        </el-menu-item>
 
     </el-menu>
 </template>

@@ -1,14 +1,18 @@
 <template>
 <div>
-  <el-table ref="Table" :data="tableData"  style="width: 100%" @selection-change="handleSelectionChange"  >
+  <el-table ref="Table" :data="tableData"  style="width: 100%"  @selection-change="handleSelectionChange"  >
     <el-table-column type="selection"  >
         <template slot-scope="scope">
-            <el-checkbox v-model="scope.row.chosen" @change="selectChange(scope.$index)"></el-checkbox>
+            <el-checkbox v-model="scope.row.chosen"  @change="selectChange(scope.$index)"></el-checkbox>
         </template>
     </el-table-column>
-    <el-table-column label="商品信息" align="center">
+    <el-table-column label="商品标题" align="center">
         <template slot-scope="scope">
-            <p>{{scope.row.information}}</p>
+            <div>
+              <img  class="img1" :src='scope.row.pictureAddress'/>
+              <p>{{scope.row.itemTitle}}</p>
+              <p v-if="scope.row.itemState!='等待拍下'" style="color:red">[商品已下架]</p>
+            </div>
         </template>
     </el-table-column>
     <el-table-column label="库存" align="center">
@@ -21,9 +25,9 @@
             <p>￥{{scope.row.price}}</p>
         </template>
     </el-table-column>
-    <el-table-column label="数量" align="center">
+    <el-table-column label="数量" align="center" >
         <template slot-scope="scope">
-            <el-input-number  v-model="scope.row.nums"  :min="1" :max="scope.row.quantity" @change="changeNums"></el-input-number>
+            <el-input-number :disabled="!scope.row.canChosen" v-model="scope.row.nums"  :min="1" :max="scope.row.quantity" @change="changeNums(scope.$index)"></el-input-number>
         </template>
     </el-table-column>
     <el-table-column label="小计" align="center">
@@ -63,11 +67,17 @@
 .el-row1{
   margin-top: 30px
 }
+.img1{
+  width: 70px;
+  height: 70px;
+  margin: 10px;
 
+}
 </style>
 
 
 <script>
+import Cookies from "js-cookie";
   export default {
     mounted(){
       this.getShoppingCarList();
@@ -80,10 +90,20 @@
       }
     },
     methods:{
-
+        checkSelectable(){
+            return false
+        },
         selectChange(index){
-            this.$refs.Table.toggleRowSelection(this.tableData[index])
-            this.updateTotal()
+            // 判断是否库存为0 或者 下架了
+            if(this.tableData[index].canChosen ){
+              this.$refs.Table.toggleRowSelection(this.tableData[index])
+              this.updateTotal()
+            }
+            else{
+              this.tableData[index].chosen = false
+              this.$message('商品库存不足或已下架')
+            }
+
         },
         handleSelectionChange(val){
             if(val.length==0){
@@ -92,9 +112,18 @@
               });
             }
             else if(val.length==this.tableData.length){
-              this.tableData.forEach(element => {
-                element.chosen = true
-              });
+              // this.tableData.forEach(element => {
+              //   element.chosen = true
+              // });
+              for(let i =0;i<this.tableData.length;i++){
+                if(this.tableData[i].canChosen){
+                  this.tableData[i].chosen = true
+                }
+                else{
+                  this.$refs.Table.toggleRowSelection(this.tableData[i])
+                }
+              }
+
             }
             this.updateTotal()
         },
@@ -103,25 +132,58 @@
             confirmButtonText: '确定',
             cancelButtonText: '取消',
             type: 'warning'
-          }).then( ()=>{
-            this.$message({
-              type: 'success',
-              message: '删除成功!'
-            });
+          }).then( async ()=>{
 
-            this.tableData.splice(index,1)
-            this.updateTotal()
+
+            //发送给后台 删除了那一项
+            let data = {
+              query : "deleteItemFromCar",
+              data : {
+                userId : Cookies.get('userId'),
+                sessionId : Cookies.get('sessionId'),
+                itemId : this.tableData[index].itemId+"",
+              }
+            }
+            let response = await this.$axios.send(data)
+            if(response.status===1){
+              this.tableData.splice(index,1)
+              this.$message({
+                type: 'success',
+                message: '删除成功!'
+              });
+            
+              this.updateTotal()
+            }
+            else{
+              this.$message.error('发生错误：'+response.err);
+            }
+            //////
+
+
 
           }).catch( ()=>{
-            this.$message({
-            type: 'info',
-            message: '已取消删除'
-          });   
+            // this.$message({ type: 'info', message: '已取消删除'});   
           })
 
         },
-        changeNums(){
-          this.updateTotal()
+        async changeNums(index){
+          let data = {
+            query : "changeShoppingCarNums",
+            data : {
+              userId : Cookies.get('userId'),
+              sessionId : Cookies.get('sessionId'),
+              itemId : this.tableData[index].itemId+"",
+              nums : this.tableData[index].nums+"",
+            }
+          }
+          let response = await this.$axios.send(data)
+          if(response.status===1){
+            this.updateTotal()
+          }
+          else{
+            this.$message.error('发生错误：'+response.err);
+          }
+
         },
         updateTotal(){
           let tmp = 0
@@ -136,19 +198,27 @@
           this.totalPay = tmp
           this.chosenNum = tmp1
         },
+
+        // 获取购物车列表
         async getShoppingCarList(){
           let data = {
             query : "getShoppingCarList",
             data : {
-              userId : '',
-              sessionId : ''
+                userId : Cookies.get('userId'),
+                sessionId : Cookies.get('sessionId'),
             }
           }
           let response = await this.$axios.send(data)
           if(response.status===1){
             let tmp =  response.data.shoppingCarList
             tmp.forEach(element => {
-              element.chosen = false
+              element.chosen = false;
+              if(element.quantity>0 && element.itemState=='等待拍下'){
+                element.canChosen = true;
+              }
+              else{
+                element.canChosen = false;
+              }
             });
             this.tableData = tmp;
             
@@ -157,10 +227,57 @@
             this.$message.error('发生错误：'+response.err);
           }
         },
-        submitBill(){
-          this.updateTotal()
-          console.log(this.tableData)
-           this.$router.push({ path: `/Pay/` });
+
+        // 下单
+        async submitBill(){
+
+          let userId = Cookies.get("userId");
+          let sessionId = Cookies.get("sessionId");
+          if (userId && sessionId) {
+            let data = {
+              query: "check",
+              data: {
+                userId: userId,
+                sessionId: sessionId
+              }
+            };
+            let check = await this.$axios.send(data);
+            if (check.status == 1) {
+              this.updateTotal()
+              
+              let toBuyList = []
+              this.tableData.forEach(ele =>{
+                if(ele.chosen==true){
+                  let newItem = {
+                    price : ele.price,
+                    nums : ele.nums,
+                    itemTitle : ele.itemTitle,
+                    province : ele.province,
+                    itemId : ele.itemId,
+                  }
+                  toBuyList.push(newItem)
+                }
+              });
+
+              if(toBuyList.length==0){
+                this.$message('购物车为空，无法下单')
+              }
+              else{
+                Cookies.set("itemList", toBuyList);
+                this.$router.push({ path: `/order/${userId}` });
+
+                
+                // this.$router.push({ 
+                //       path: `/order/${userId}` ,
+                //       params : { toBuyList },
+                //       query : { sessionId},   
+                // });
+              }
+
+            } else {
+              this.signout()
+            }
+          }
         },
 
     }

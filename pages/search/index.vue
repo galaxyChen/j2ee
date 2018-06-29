@@ -11,6 +11,7 @@
                 <ItemRow v-for="(row,index) in rows" :row='row' :key='"row"+index'></ItemRow>
             </el-row>
         </el-main>
+        
         <el-footer class="footer">
             <el-pagination
               class="pager"
@@ -90,8 +91,8 @@ export default {
         query: "search",
         data: {
           name: text,
-          pageNo: this.current,
-          itemsPerPage: 10,
+          pageNo: this.current+"",
+          itemsPerPage: 10+"",
           bookCategory: tag
         }
       };
