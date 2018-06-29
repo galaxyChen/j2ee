@@ -11,6 +11,7 @@
                 <ItemRow v-for="(row,index) in rows" :row='row' :key='"row"+index'></ItemRow>
             </el-row>
         </el-main>
+        
         <el-footer class="footer">
             <el-pagination
               class="pager"
