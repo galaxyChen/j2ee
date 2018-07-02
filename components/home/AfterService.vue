@@ -64,9 +64,9 @@ export default {
     },
         data(){
             return{
-                showList:false,
+                showList:true,
 
-                service:'second',
+                service:'first',
                 order:{
                     pictureAddress:'',
                     purchaseTime: "2018/7/3 12:00",
