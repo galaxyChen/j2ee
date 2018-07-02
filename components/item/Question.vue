@@ -10,7 +10,7 @@
             </el-col>
         </el-row>
         <el-row class="item-question-area">
-            <QuestionItem v-for='q in questions' :key='q.id' :question='q' :is_seller='nowUserId==q.sellerId'></QuestionItem>
+            <QuestionItem v-for='q in questions' :key='q.id' :question='q' :is_seller='is_seller'  @sendAnswer="getQA"></QuestionItem>
         </el-row>
     </div>
 </template>
@@ -36,7 +36,7 @@ import Cookies from 'js-cookie'
 export default {
   mounted(){
     this.getQA();
-    this.nowUserId = Cookies.get("userId")
+    this.is_seller = Cookies.get("userId")==this.item.sellerId
   },
   components: {
     QuestionItem
@@ -48,11 +48,6 @@ export default {
       is_seller: false,
       questions: [
         {
-          // id: 1,
-          // question: "有没有签名啊",
-          // time: "2018.4.1 16:59",
-          // asker: "李四",
-          // answer: "没有的"
           questionContent : '',
           responseContent : '',
           askerId : '',
@@ -83,6 +78,7 @@ export default {
         let response = await this.$axios.send(data)
         if(response.status===1){
             this.$message("提问成功")
+            this.questions = response.data.QAList;
         }
         else if (response.status == -1) {
           this.$message.error("登录超时！");
@@ -105,7 +101,6 @@ export default {
         }
         let response = await this.$axios.send(data)
         if(response.status===1){
-            this.$message("提问成功")
             this.questions = response.data.QAList;
         }
         else {

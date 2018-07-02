@@ -113,7 +113,7 @@ export default {
           data: {
             userId: Cookies.get("userId"),
             sessionId: Cookies.get("sessionId"),
-            itemId: this.item.itemId
+            itemId: this.item.itemId+""
           }
         };
         let response = await this.$axios.send(data);
