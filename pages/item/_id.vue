@@ -34,7 +34,7 @@
 
 </template>
 
-<style>
+<style scoped>
 .item-more {
   position: relative;
   top: 60px;

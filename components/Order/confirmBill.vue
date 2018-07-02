@@ -35,6 +35,7 @@
         </el-col>
     </el-row>
     <el-row type="flex" justify="end" class="el-row1">
+        <el-button @click="cancelBill">取消订单</el-button>
         <el-button type="primary" @click="submitBill">提交订单</el-button>
     </el-row>
 </div>
@@ -54,7 +55,9 @@
 export default {
     props:["totalList"],
     methods:{
-
+        cancelBill(){
+            this.$router.go(-1);
+        },
 
         submitBill(){
             this.$emit('submitBill')
