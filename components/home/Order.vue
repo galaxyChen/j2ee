@@ -264,7 +264,7 @@ export default {
           data: {
             userId: Cookies.get("userId"),
             sessionId: Cookies.get("sessionId"),
-            orderId: this.order.orderId
+            orderId: this.order.orderId+""
           }
         };
         let response = await this.$axios.send(data);
@@ -295,7 +295,7 @@ export default {
           data: {
             userId: Cookies.get("userId"),
             sessionId: Cookies.get("sessionId"),
-            orderId: this.order.orderId
+            orderId: this.order.orderId+""
           }
         };
         let response = await this.$axios.send(data);
@@ -325,7 +325,7 @@ export default {
           data: {
             userId: Cookies.get("userId"),
             sessionId: Cookies.get("sessionId"),
-            orderId:this.order.orderId, 
+            orderId:this.order.orderId+"", 
             expressCode: code,
             express_company: sender
           }
