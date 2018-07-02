@@ -39,7 +39,7 @@
 
         <el-menu-item index="5">
             <i class="el-icon-message"></i>
-            <span slot="title">消息管理</span>
+            <span slot="title">系统通知</span>
         </el-menu-item>
 
 

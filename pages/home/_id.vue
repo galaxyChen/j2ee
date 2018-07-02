@@ -18,6 +18,7 @@ import addressBook from "~/components/home/addressBook";
 import AfterService from "~/components/home/AfterService";
 import ApplyReturn from "~/components/home/ApplyReturn";
 import ItemManage from "~/components/home/ItemManage";
+import Message from "~/components/home/Message";
 import Cookies from "js-cookie";
 
 export default {
@@ -30,7 +31,8 @@ export default {
     addressBook,
     ItemManage,
     AfterService,
-    ApplyReturn
+    ApplyReturn,
+    Message
   },
   async mounted() {
     
