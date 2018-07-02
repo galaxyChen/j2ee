@@ -54,12 +54,15 @@
              </el-row> 
           </div>
     </el-main>
+
+    <NavBottom></NavBottom>
   </div>
 </template>
 
 <script>
 import NavTop from "~/components/NavTop";
 import SearchBox from "~/components/SearchBox";
+import NavBottom from "~/components/NavBottom";
 export default {
   mounted() {
     this.getRecent();
@@ -71,7 +74,8 @@ export default {
   },
   components: {
     NavTop,
-    SearchBox
+    SearchBox,
+    NavBottom
   },
 
   methods: {
@@ -169,7 +173,7 @@ body > .el-container {
   padding:10px;
 }
 .show-box{
-  margin:0 20px 30px 20px;
+  margin:0 20px 0 20px;
   background-color: rgb(240, 239, 239);
 }
 
