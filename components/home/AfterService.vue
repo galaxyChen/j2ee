@@ -41,7 +41,7 @@
         </el-header>
         
             <ApplyReturn v-if="service=='first'" style="margin-top:50px;margin-left:-100px;"></ApplyReturn>
-            <AfterDetail v-if="service=='second'" :afterService="afterServiceList[0]"></AfterDetail>
+            <AfterDetail v-if="service=='second'" :afterService="afterServiceList[1]"></AfterDetail>
     </el-container>
 
 
@@ -85,7 +85,15 @@ export default {
                         phoneNumber : '13631433767',
                         purchaseTime : '2018-6-27',
                         orderId : '312',
-                        itemTitle : '10001个为什么'
+                        itemTitle : '10001个为什么',
+                        pictureAddress:'',
+
+                        afterServiceState:'等待审核',
+                        sellerMessage: '等待审核中',
+                        addressDetail: '广东省广州市番禺区小谷围街道',
+                        sellerName: '张三',
+                        sellerPhoneNumber: '13622334455',
+                        
                     },
                     {
                         afterServiceId : 163,
@@ -97,7 +105,33 @@ export default {
                         phoneNumber : '13631433767',
                         purchaseTime : '2018-6-27',
                         orderId : '356',
-                        itemTitle : '10001个为什么'
+                        itemTitle : '10001个为什么',
+                        pictureAddress:'',
+
+                        afterServiceState:'等待退货',
+                        sellerMessage: '同意就同意吧，没什么好说的。',
+                        addressDetail: '广东省广州市番禺区小谷围街道',
+                        sellerName: '张三',
+                        sellerPhoneNumber: '13622334455',
+                    },
+                     {
+                        afterServiceId : 187,
+                        launchTime : '2018-6-28',
+                        returnReason : '图书价格不符',
+                        totalPrice : '20.5',
+                        description : '买的时候说要10块，结果收我20块',
+                        buyerName : 'lwz',
+                        phoneNumber : '13631433767',
+                        purchaseTime : '2018-6-27',
+                        orderId : '356',
+                        itemTitle : '10001个为什么',
+                        pictureAddress:'',
+
+                        afterServiceState:'拒绝退货',
+                        sellerMessage: '莫须有的事情，不同意。',
+                        addressDetail: '广东省广州市番禺区小谷围街道',
+                        sellerName: '张三',
+                        sellerPhoneNumber: '13622334455',
                     }
                 ]
             }
