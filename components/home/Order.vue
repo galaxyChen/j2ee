@@ -325,6 +325,7 @@ export default {
           data: {
             userId: Cookies.get("userId"),
             sessionId: Cookies.get("sessionId"),
+            orderId:this.order.orderId, 
             expressCode: code,
             express_company: sender
           }

@@ -17,7 +17,7 @@
         <div class='item-line'></div>
         <el-row class = 'item-row'>
             <el-col :span='8'>
-                <h4>发布者：{{item.sellerId}}</h4>
+                <h4>发布者：{{item.sellerName}}</h4>
             </el-col>
         </el-row>
         <el-row class = 'item-row'>
@@ -41,7 +41,7 @@
                 </template>
             </el-col>
         </el-row>
-        <el-row>
+        <el-row type="flex" justify="end">
             <el-button v-if="showAddButton" @click="addBook" class='item-add' round type='danger'>加入购物车</el-button>
         </el-row>
     </div>
