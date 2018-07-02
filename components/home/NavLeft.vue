@@ -21,7 +21,7 @@
             <el-menu-item index="3-1">购买管理</el-menu-item>
             <el-menu-item index="3-2">出售管理</el-menu-item>
             <el-menu-item index="3-3">售后服务</el-menu-item>
-            <el-menu-item index="3-4">退货管理</el-menu-item>
+            <el-menu-item index="3-4">售后审核（卖家）</el-menu-item>
             </el-menu-item-group>
         </el-submenu>
 
