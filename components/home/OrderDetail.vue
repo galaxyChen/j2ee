@@ -390,7 +390,8 @@ export default {
             userId: Cookies.get("userId"),
             sessionId: Cookies.get("sessionId"),
             expressCode: code,
-            express_company: sender
+            express_company: sender,
+            orderId:this.item.orderId
           }
         };
         let response = await this.$axios.send(data);
@@ -424,7 +425,7 @@ export default {
           data: {
             userId: Cookies.get("userId"),
             sessionId: Cookies.get("sessionId"),
-            orderId: this.order.orderId
+            orderId: this.order.orderId+""
           }
         };
         let response = await this.$axios.send(data);

@@ -21,7 +21,7 @@
             <el-menu-item index="3-1">购买管理</el-menu-item>
             <el-menu-item index="3-2">出售管理</el-menu-item>
             <el-menu-item index="3-3">售后服务</el-menu-item>
-            <el-menu-item index="3-4">退货管理</el-menu-item>
+            <el-menu-item index="3-4">售后审核（卖家）</el-menu-item>
             </el-menu-item-group>
         </el-submenu>
 
@@ -39,7 +39,7 @@
 
         <el-menu-item index="5">
             <i class="el-icon-message"></i>
-            <span slot="title">消息管理</span>
+            <span slot="title">系统通知</span>
         </el-menu-item>
 
 

@@ -32,8 +32,8 @@
                      <el-input-number v-model="Goods.quantity"  :min="1"  label="描述文字"></el-input-number>
                 </el-form-item>
                 <el-form-item label="配送方式: ">
-                     <el-radio v-model="radio" label='0'>包邮</el-radio>
-                     <el-radio v-model="radio" label='1'>邮费自理</el-radio>
+                     <el-radio v-model="radio" label='1'>包邮</el-radio>
+                     <el-radio v-model="radio" label='0'>邮费自理</el-radio>
                 </el-form-item>
                  <el-form-item label="发货城市: ">
                    <mapLinkage ref='area'></mapLinkage>
@@ -102,7 +102,7 @@ export default {
       }
     };
     return {
-      radio: "0",
+      radio: "1",
       loading: false,
       area:[],
       type:['全部'],
@@ -392,6 +392,7 @@ export default {
         data.options = options;
         this.Goods = data;
         this.loading = false;
+        this.radio = response.data.product.freePostage+""
         this.type = response.data.product.bookCategory.split('/')
         console.log(this.type)
       } else if (response.status == 0) {

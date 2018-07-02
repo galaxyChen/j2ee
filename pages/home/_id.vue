@@ -18,6 +18,7 @@ import addressBook from "~/components/home/addressBook";
 import AfterService from "~/components/home/AfterService";
 import AfterSellerService from "~/components/home/AfterSellerService";
 import ItemManage from "~/components/home/ItemManage";
+import Message from "~/components/home/Message";
 import Cookies from "js-cookie";
 
 export default {
@@ -30,6 +31,7 @@ export default {
     addressBook,
     ItemManage,
     AfterService,
+    Message,
     AfterSellerService
   },
   async mounted() {
