@@ -110,7 +110,8 @@ export default {
             type: "success",
             message: "支付成功!"
           });
-          this.$router.push({ path: `/home/${userId}`, query: { index: "1" } });
+          
+          this.$router.push({ path: `/home/${userId}`, query: { index: "1",time:new Date() } });
         } else if (response.status == -1) {
           this.$message.error("登录超时！");
           Cookies.remove("userId");
