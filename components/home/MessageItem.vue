@@ -83,7 +83,7 @@ export default {
         data: {
           userId: Cookies.get("userId"),
           sessionId: Cookies.get("sessionId"),
-          questionId: this.message.questionId,
+          questionId: this.message.questionId+"",
           answerContent: this.answer
         }
       };
