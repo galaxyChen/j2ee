@@ -16,7 +16,7 @@ import Transaction from "~/components/home/Transaction";
 import AddGoods from "~/components/home/AddGoods";
 import addressBook from "~/components/home/addressBook";
 import AfterService from "~/components/home/AfterService";
-import ApplyReturn from "~/components/home/ApplyReturn";
+import AfterSellerService from "~/components/home/AfterSellerService";
 import ItemManage from "~/components/home/ItemManage";
 import Message from "~/components/home/Message";
 import Cookies from "js-cookie";
@@ -31,8 +31,8 @@ export default {
     addressBook,
     ItemManage,
     AfterService,
-    ApplyReturn,
-    Message
+    Message,
+    AfterSellerService
   },
   async mounted() {
     
@@ -84,7 +84,7 @@ export default {
         '5':"Message",
         '4-1':"AddGoods",
         '3-3':"AfterService",
-        '3-4':'ApplyReturn'
+        '3-4':'AfterSellerService'
       };
       this.currentMain = name[index];
       this.currentMainIndex = index;

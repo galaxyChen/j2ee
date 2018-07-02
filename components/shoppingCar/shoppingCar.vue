@@ -1,6 +1,6 @@
 <template>
-<div>
-  <el-table ref="Table" :data="tableData"  style="width: 100%"  @selection-change="handleSelectionChange"  >
+<div class="shopping-car-big-container">
+  <el-table ref="Table" :data="tableData"    @selection-change="handleSelectionChange"  >
     <el-table-column type="selection"  >
         <template slot-scope="scope">
             <el-checkbox v-model="scope.row.chosen"  @change="selectChange(scope.$index)"></el-checkbox>
@@ -46,7 +46,7 @@
 
 
   <el-row class="el-row1">
-    <el-col :span="17">
+    <el-col :span="18">
       <span >
           共<span :model="tableData" style="color:red" >{{tableData.length}}</span>件商品，
           已选择<span :model="chosenNum" style="color:red">{{chosenNum}}</span>件 |
@@ -72,6 +72,10 @@
   height: 70px;
   margin: 10px;
 
+}
+.shopping-car-big-container{
+  width: 70%;
+  margin: 20px auto
 }
 </style>
 
