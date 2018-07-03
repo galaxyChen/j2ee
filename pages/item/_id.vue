@@ -3,7 +3,7 @@
         <NavTop></NavTop>
         <el-main>
             <el-row type="flex" justify="center">
-                <el-col :xs="20" :sm="18" :md="18" :lg="18" :xl="12">
+                <el-col :xs="20" :sm="18" :md="18" :lg="18" :xl="14">
                     <el-card shadow="never" body-style="{ padding: '20px'}" >
                         <el-container>
                             <el-aside><img class='item-img' :src='item.pictureAddress'/></el-aside>
@@ -13,8 +13,8 @@
                 </el-col>
             </el-row>
         </el-main>
-        <el-row class='item-more'>
-            <el-col :span='17' :push='3'>
+        <el-row class='item-more' type="flex" justify="center">
+            <el-col :xs="20" :sm="18" :md="18" :lg="18" :xl="14">
                 <el-container>
                     <el-header>
                         <el-tabs v-model='activeTab' type='card' @tab-click="handleClick">
@@ -40,12 +40,10 @@
   top: 60px;
 }
 .item-img {
-  margin: 5px;
-  height: 380px;
-  width: 280px;
+  height: 360px;
+  width: 270px;
   position: relative;
   left: 5px;
-  top: 40px;
   border-style: solid;
   border-width: 2px;
   border-color:gainsboro;
