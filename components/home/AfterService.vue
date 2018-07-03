@@ -5,32 +5,12 @@
             <div>
                 <el-tabs v-model="service" type="card" @tab-click="handleClick">
                     <el-tab-pane label="售后申请" name="first">
-                        <!-- 一个可以申请退货的商品 -->
-                        <el-row>
-                            <div class="header">
-                                <el-col class="header-text" :span='6'>下单时间：{{order.purchaseTime}}</el-col>
-                                <el-col class="header-text" :span='6'>订单编号:{{order.orderId}}</el-col>
-                            </div>
-                        </el-row>
-                        <el-row>
-                            <el-col class='order-box' :span='4'>
-                                <div >
-                                    <img class='order-book' :src='order.pictureAddress'/>
-                                </div>
-                            </el-col>
-                            <el-col class='order-box' :span="12">
-                                <h4 class="order-title-text">{{order.itemTitle}}</h4>
-                                <a class="order-title-text">数量：{{order.quantity}}</a>
-                            </el-col>
-                            <el-col class="order-box" :span="8">
-                                <el-button class="ApplyBtn" @click="applyBtn">申请退货</el-button>  
-                            </el-col>
-                        </el-row>
-                </el-tab-pane>  
+                       <AfterOrderDetail v-for="(order,index) in orderList"  :key="order.orderId" :index="index" :order="order" @applyReturn="applyBtn"></AfterOrderDetail>
+                    </el-tab-pane>  
 
-                <el-tab-pane label="申请记录" name="second">
-                    <AfterRecord  @seeDetail="applyBtn" :afterServiceList="afterServiceList"></AfterRecord>
-                </el-tab-pane>
+                    <el-tab-pane label="申请记录" name="second">
+                        <AfterRecord  @seeDetail="applyBtn2" :afterServiceList="afterServiceList"></AfterRecord>
+                    </el-tab-pane>
                 </el-tabs>
             </div>
         </el-main>
@@ -41,8 +21,8 @@
             <el-button @click="goBack" class="back-button" size="medium" type='text' icon="el-icon-back">返回</el-button>
         </el-header>
         
-            <ApplyReturn v-if="service=='first'" style="margin-top:50px;margin-left:-100px;"></ApplyReturn>
-            <AfterDetail v-if="service=='second'" :afterService="afterServiceList[1]"></AfterDetail>
+            <ApplyReturn v-if="service=='first'" @applyReturnSuccess="applyReturnSuccess" :order="orderList[firstOrderIndex]" style="margin-top:50px;margin-left:-100px;"></ApplyReturn>
+            <AfterDetail v-if="service=='second'" :afterService="afterServiceList[secondDetailIndex]"></AfterDetail>
     </el-container>
 
 
@@ -55,6 +35,8 @@ import NavLeft from "~/components/home/NavLeft";
 import ApplyReturn from "~/components/home/ApplyReturn";
 import AfterDetail from "~/components/home/AfterDetail";
 import AfterRecord from "~/components/home/AfterRecord";
+import AfterOrderDetail from "~/components/home/AfterOrderDetail";
+import Cookies from 'js-cookie'
 export default {
      components: {
           NavTop,
@@ -62,93 +44,90 @@ export default {
           ApplyReturn,
           AfterRecord ,
           AfterDetail,
+          AfterOrderDetail,
     },
-        data(){
-            return{
-                showList:true,
+    mounted(){
+        this.getOrderList()
+        this.getAfterServiceList()
+    },
+    data(){
+        return{
+            showList:true,
 
-                service:'first',
-                order:{
-                    pictureAddress:'',
-                    purchaseTime: "2018/7/3 12:00",
-                    orderId:12345,
-                    itemTitle: "三体",
-                    quantity : 4,
-                },
-                afterServiceList :[
-                    {
-                        afterServiceId : 123,
-                        launchTime : '2018-6-28',
-                        returnReason : '图书图片不符',
-                        totalPrice : '20.5',
-                        description : '买的时候网上看的图书封面是蓝色，买下来发现是红色',
-                        buyerName : 'lwz',
-                        phoneNumber : '13631433767',
-                        purchaseTime : '2018-6-27',
-                        orderId : '312',
-                        itemTitle : '10001个为什么',
-                        pictureAddress:'',
+            service:'first',
+            orderList:[],
+            secondDetailIndex : 0,
+            firstOrderIndex : 0,
 
-                        afterServiceState:'等待审核',
-                        sellerMessage: '等待审核中',
-                        addressDetail: '广东省广州市番禺区小谷围街道',
-                        sellerName: '张三',
-                        sellerPhoneNumber: '13622334455',
-                        
-                    },
-                    {
-                        afterServiceId : 163,
-                        launchTime : '2018-6-28',
-                        returnReason : '图书价格不符',
-                        totalPrice : '20.5',
-                        description : '买的时候说要10块，结果收我20块',
-                        buyerName : 'lwz',
-                        phoneNumber : '13631433767',
-                        purchaseTime : '2018-6-27',
-                        orderId : '356',
-                        itemTitle : '10001个为什么',
-                        pictureAddress:'',
 
-                        afterServiceState:'等待退货',
-                        sellerMessage: '同意就同意吧，没什么好说的。',
-                        addressDetail: '广东省广州市番禺区小谷围街道',
-                        sellerName: '张三',
-                        sellerPhoneNumber: '13622334455',
-                    },
-                     {
-                        afterServiceId : 187,
-                        launchTime : '2018-6-28',
-                        returnReason : '图书价格不符',
-                        totalPrice : '20.5',
-                        description : '买的时候说要10块，结果收我20块',
-                        buyerName : 'lwz',
-                        phoneNumber : '13631433767',
-                        purchaseTime : '2018-6-27',
-                        orderId : '356',
-                        itemTitle : '10001个为什么',
-                        pictureAddress:'',
-
-                        afterServiceState:'拒绝退货',
-                        sellerMessage: '莫须有的事情，不同意。',
-                        addressDetail: '广东省广州市番禺区小谷围街道',
-                        sellerName: '张三',
-                        sellerPhoneNumber: '13622334455',
-                    }
-                ]
+            afterServiceList :[]
+        }
+    },
+    methods:{
+        handleClick(tab, event) {
+            console.log(tab, event);
+        },
+        applyBtn(index){
+            this.showList = false;
+            this.firstOrderIndex = index;
+        },
+        applyBtn2(index){
+            this.showList = false;
+            this.secondDetailIndex = index;
+        },
+        goBack() {
+            this.showList = true;
+        },
+        async getOrderList(){
+            let data = {
+                query : 'getAfterOrder',
+                data : {
+                    userId : Cookies.get("userId"),
+                    sessionId : Cookies.get("sessionId"),
+                }
+            }
+            let response = await this.$axios.send(data)
+            if(response.status===1){
+                this.orderList = response.data.orderList
+            }
+            else if (response.status == -1) {
+                this.$message.error("登录超时！");
+                Cookies.remove("userId");
+                Cookies.remove("sessionId");
+                Cookies.remove("userName");
+                this.$router.push({ path: "/" });
+            } else {
+                this.$message.error("发生错误：" + response.err);
             }
         },
-        methods:{
-            handleClick(tab, event) {
-                console.log(tab, event);
-            },
-            applyBtn(){
-                this.showList = false;
-            },
-             goBack() {
-                this.showList = true;
-             },
-
+        async getAfterServiceList(){
+            let data = {
+                query : 'getAfterServiceList',
+                data : {
+                    userId : Cookies.get("userId"),
+                    sessionId : Cookies.get("sessionId"),
+                }
+            }
+            let response = await this.$axios.send(data)
+            if(response.status===1){
+                this.afterServiceList = response.data.afterServiceList
+            }
+            else if (response.status == -1) {
+                this.$message.error("登录超时！");
+                Cookies.remove("userId");
+                Cookies.remove("sessionId");
+                Cookies.remove("userName");
+                this.$router.push({ path: "/" });
+            } else {
+                this.$message.error("发生错误：" + response.err);
+            }
+        },
+        applyReturnSuccess(){
+            this.getAfterServiceList()
+            this.service = 'second';
+            this.showList = true
         }
+    }
 }
 </script>
 

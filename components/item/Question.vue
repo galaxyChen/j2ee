@@ -1,14 +1,15 @@
 <template>
     <div class="item-question">
-        <el-row>
+        <el-row v-if="!is_seller">
             <el-col :span='16'>
-                <el-input type="textarea" :rows="2" placeholder="请输入内容" v-model="ask">
+                <el-input  type="textarea"  :rows="2" placeholder="请输入内容" v-model="ask">
                 </el-input>
             </el-col>
             <el-col :span='4'>
                 <el-button class="item-ask-button" type="success" @click="sendAsk">提交提问</el-button>
             </el-col>
         </el-row>
+          
         <el-row class="item-question-area">
             <QuestionItem v-for='q in showQuestions' :key='q.id' :question='q' 
             :is_seller='is_seller'  @sendAnswer="getQA"></QuestionItem>
@@ -69,6 +70,10 @@ export default {
       this.showQuestions = JSON.parse(JSON.stringify(this.questions)).splice(begin,5);
     },
     async sendAsk() {
+      if(this.ask.length>200){
+        this.$message.error("留言不可以超过200字");
+        return;
+      }
       let userId = Cookies.get("userId");
       let sessionId = Cookies.get("sessionId");
       let data = {

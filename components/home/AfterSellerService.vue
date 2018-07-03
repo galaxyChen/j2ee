@@ -19,7 +19,7 @@
                                 <!-- 按钮合集 -->
                                 <el-col :span="3" class="el-row-body-text">{{item.afterServiceState}}</el-col>
                                 <el-col :span="4" class="el-row-body-text">
-                                    <el-button v-if="item.afterServiceState=='等待审核'" @click="seeDetail(index)">审核</el-button>
+                                    <el-button v-if="item.afterServiceState=='等待审核'" @click="applyReview(index)">审核</el-button>
                                     <el-button v-if="item.afterServiceState=='等待售后收货'" @click="checkReceive(index)">售后收货</el-button>
                                     <el-button v-if="item.afterServiceState=='卖家已签收'" @click="completeAfterService(index)" style="margin-top:15px;">完成售后</el-button>
                                     <el-button v-if="item.afterServiceState=='卖家已签收'" @click="requestService(index)">申请介入</el-button>
@@ -31,9 +31,50 @@
                                 </el-col>
                             </el-row>
                         </div>
+
+                        
+
+
+
                     </el-card>
                 </el-tab-pane>
             </el-tabs>
+
+            <!-- 填写审核相关信息 -->
+            <el-dialog title="售后审核" :visible.sync="reviewFormVisible">
+                <el-form :model="reviewGood">
+                    <!-- 卖家角度 审核内容 -->
+                    <el-form-item>
+                        <el-switch v-model="reviewGood.flag" active-text="审核通过" inactive-text="审核不通过"></el-switch>
+                    </el-form-item>
+            
+                    <el-form-item label="审核留言">
+                        <el-input v-model="reviewGood.message" placeholder="请输入审核留言"></el-input>
+                    </el-form-item>
+
+
+                    <div v-if="reviewGood.flag">
+                        <el-form-item label="联系人">
+                            <el-input v-model="reviewGood.sellerName" ></el-input>
+                        </el-form-item>
+                        <mapLinkage ref="map" :province="reviewGood.province" :city="reviewGood.city"  @updateArea="updateArea"></mapLinkage>
+                        <el-form-item label="详细地址">
+                            <el-input v-model="reviewGood.addressDetail" ></el-input>
+                        </el-form-item>
+                    </div>
+
+
+
+
+                    
+
+
+                    <!-- 确认提交审核信息  -->
+                    <el-button type="primary" style="margin-left:85%;margin-top:20px;">确认</el-button>
+                </el-form>
+            </el-dialog>
+
+
         </el-main>
     </el-container>
 
@@ -79,15 +120,28 @@
 
 <script>
 import AfterSellerDetail from "~/components/home/AfterSellerDetail";
+import mapLinkage from '~/components/home/mapLinkage'
+import Cookies from 'js-cookie'
 export default {
     components:{
         AfterSellerDetail,
+        mapLinkage,
     },
    
     data() {
         return {
+            reviewFormVisible:false,
             showList:true,
             service : 'seeList',
+            reviewGood :{
+                flag : false,
+                message : '',
+                province:'',
+                city:'',
+                addressDetail:'',
+                sellerName : '',
+
+            },
             afterSellerServiceList :[
                 {
                     afterServiceId : 123,
@@ -139,21 +193,43 @@ export default {
             console.log(afterSellerServiceList)
             this.showList = false;
         },
+        applyReview(index){
+            this.reviewFormVisible = true;
+        },
+        updateArea(province,city){
+
+        },
         checkReceive(index){
             this.$confirm('请问是否确认收货？','提示',{
                 confirmButtonText: '确定',
                 cancelButtonText: '取消',
                 type: 'warning'
-            }).then(() => {
-                this.$message({
-                    type:'success',
-                    message:'收货成功！'
-                });
-                }).catch(()=>{
-                     this.$message({
-                    type: 'info',
-                    message: '已取消收货'
-                });
+            }).then( async() => {
+
+                let data = {
+                    query : 'afterSalesReceipt',
+                    data : {
+                        userId:Cookkes.get("userId"),
+                        sessionId: Cookies.get("sessionId"),
+                        afterServiceId:this.afterSellerServiceList[index].afterServiceId,
+                    }
+                }
+
+                let response = await this.$axios.send(data);
+                if (response.status == 1) {
+                    await this.getSellerAfterServiceList()
+                    this.$message({ message: "发布成功！",type: "success"});
+                } else if (response.status == 0) {
+                    this.$message.error("发送错误:" + response.err);
+                } else {
+                    Cookies.remove("userId");
+                    Cookies.remove("sessionId");
+                    Cookies.remove("userName");
+                    this.$router.push({ path: "/" });
+                }
+                
+            }).catch(()=>{
+                this.$message({  type: 'info', message: '已取消收货'});
             });
         },
         requestService(index){
@@ -164,11 +240,29 @@ export default {
                 confirmButtonText: '确定',
                 cancelButtonText: '取消',
                 type: 'warning'
-            }).then(()=>{
-                this.$message({
-                    type: 'success',
-                    message: '确认完成售后成功!'
-                });
+            }).then( async()=>{
+                let data = {
+                    query : 'finishReturn',
+                    data : {
+                        userId:Cookkes.get("userId"),
+                        sessionId: Cookies.get("sessionId"),
+                        afterServiceId:this.afterSellerServiceList[index].afterServiceId,
+                    }
+                }
+
+                let response = await this.$axios.send(data);
+                if (response.status == 1) {
+                    await  this.getSellerAfterServiceList()
+                    this.$message({ message: "发布成功！",type: "success"});
+                } else if (response.status == 0) {
+                    this.$message.error("发送错误:" + response.err);
+                } else {
+                    Cookies.remove("userId");
+                    Cookies.remove("sessionId");
+                    Cookies.remove("userName");
+                    this.$router.push({ path: "/" });
+                }
+
             }).catch(()=>{
                 this.$message({
                     type:'info',
@@ -179,7 +273,28 @@ export default {
         goBack(){
             this.showList=true;
         },
-        
+        async getSellerAfterServiceList(){
+            let data = {
+                query : 'getSellerAfterServiceList',
+                data : {
+                    userId:Cookkes.get("userId"),
+                    sessionId: Cookies.get("sessionId"),
+                }
+            }
+
+            let response = await this.$axios.send(data);
+            if (response.status == 1) {
+                this.afterSellerServiceList = response.data.afterSellerServiceList
+
+            } else if (response.status == 0) {
+                this.$message.error("发送错误:" + response.err);
+            } else {
+                Cookies.remove("userId");
+                Cookies.remove("sessionId");
+                Cookies.remove("userName");
+                this.$router.push({ path: "/" });
+            }
+        }
     }
 }
 </script>

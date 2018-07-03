@@ -33,7 +33,7 @@
                 </el-row>
                 <el-row class="msg">
                     <el-col :span="4" class="col-title">联系电话</el-col>
-                    <el-col :span="20" class="col-text">{{afterService.phoneNumber}}</el-col>     
+                    <el-col :span="20" class="col-text">{{afterService.buyerPhoneNumber}}</el-col>     
                 </el-row>
             </div>
         </div>
@@ -44,8 +44,8 @@
             
         </el-row>
 
-        <div class="check">
-            <!-- 未想好何时展示，应根据状态决定是否展示信息 -->
+        <div class="check" v-if="afterService.afterServiceState=='已审核'">
+            <!-- 状态为 已审核 才显示这个框 -->
             <h3 style="color:#cccccc;">审核留言</h3>
             <div style="border-style:solid;border-color:rgb(238, 238, 238);margin-top:10px;padding:20px;line-height:25px;">
                 <p style="margin-bottom:30px;">{{afterService.sellerMessage}}</p>
