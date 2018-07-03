@@ -11,7 +11,17 @@
         </el-row>
           
         <el-row class="item-question-area">
-            <QuestionItem v-for='q in questions' :key='q.id' :question='q' :is_seller='is_seller'  @sendAnswer="getQA"></QuestionItem>
+            <QuestionItem v-for='q in showQuestions' :key='q.id' :question='q' 
+            :is_seller='is_seller'  @sendAnswer="getQA"></QuestionItem>
+        </el-row>
+        <el-row style="margin-top:40px;" type="flex" justify="center">
+              <el-pagination
+                @current-change="handleCurrentChange"
+                :current-page.sync="currentPage"
+                :page-size="5"
+                layout="total, prev, pager, next"
+                :total="questions.length">
+              </el-pagination>
         </el-row>
     </div>
 </template>
@@ -34,11 +44,11 @@
 
 <script>
 import QuestionItem from "~/components/item/QuestionItem";
-import Cookies from 'js-cookie'
+import Cookies from "js-cookie";
 export default {
-  mounted(){
+  mounted() {
     this.getQA();
-    this.is_seller = Cookies.get("userId")==this.item.sellerId
+    this.is_seller = Cookies.get("userId") == this.item.sellerId;
   },
   components: {
     QuestionItem
@@ -46,75 +56,68 @@ export default {
   props: ["item"],
   data() {
     return {
-      errorVisible:false,
+      currentPage: 1,
+      nowUserId: "",
       is_seller: false,
-      questions: [
-        {
-          questionContent : '',
-          responseContent : '',
-          askerId : '',
-          sellerId : '',
-          askerName : '',
-          sellerName : '',
-          askTime : '',
-          answerTime : '',
-          questionId : ''
-        },
-      ],
-      ask : '',
+      questions: [],
+      showQuestions: [],
+      ask: ""
     };
   },
-  methods : { 
-    async sendAsk(){
-        // 检验是不是200字内
-        if(this.ask.length>200){
-          this.$message.error("留言不可超过200字")
-          return 
-        }
-
-        let userId = Cookies.get("userId")
-        let sessionId = Cookies.get("sessionId")
-        let data = {
-          query : "sendAsk",
-          data : {
-            userId : userId ,
-            sessionId : sessionId , 
-            itemId : this.item.itemId+"",
-            questionContent : this.ask
-          }
-        }
-        let response = await this.$axios.send(data)
-        if(response.status===1){
-            this.$message.success("提问成功")
-            this.ask = ''
-            this.questions = response.data.QAList;
-        }
-        else if (response.status == -1) {
-          this.$message.error("登录超时！");
-          Cookies.remove("userId");
-          Cookies.remove("sessionId");
-          Cookies.remove("userName");
-          this.$router.push({ path: "/" });
-        } else {
-          this.$message.error("发生错误：" + response.err);
-        }
+  methods: {
+    handleCurrentChange(page) {
+      let begin = 5 * (page - 1);
+      this.showQuestions = JSON.parse(JSON.stringify(this.questions)).splice(begin,5);
     },
-    async getQA(){
-        let userId = Cookies.get("userId")
-        let sessionId = Cookies.get("sessionId")
-        let data = {
-          query : "getQA",
-          data : {
-            itemId : this.item.itemId+"",
-          }
+    async sendAsk() {
+      if(this.ask.length>200){
+        this.$message.error("留言不可以超过200字");
+        return;
+      }
+      let userId = Cookies.get("userId");
+      let sessionId = Cookies.get("sessionId");
+      let data = {
+        query: "sendAsk",
+        data: {
+          userId: userId,
+          sessionId: sessionId,
+          itemId: this.item.itemId + "",
+          questionContent: this.ask
         }
-        let response = await this.$axios.send(data)
-        if(response.status===1){
-            this.questions = response.data.QAList;
+      };
+      let response = await this.$axios.send(data);
+      if (response.status === 1) {
+        this.$message("提问成功");
+        this.questions = response.data.QAList;
+        this.showQuestions = JSON.parse(JSON.stringify(this.questions)).splice(0,5);
+        this.currentPage = 1;
+      } else if (response.status == -1) {
+        this.$message.error("登录超时！");
+        Cookies.remove("userId");
+        Cookies.remove("sessionId");
+        Cookies.remove("userName");
+        this.$router.push({ path: "/" });
+      } else {
+        this.$message.error("发生错误：" + response.err);
+      }
+    },
+    async getQA() {
+      let userId = Cookies.get("userId");
+      let sessionId = Cookies.get("sessionId");
+      let data = {
+        query: "getQA",
+        data: {
+          itemId: this.item.itemId + ""
         }
-        else {
-          this.$message.error("发生错误：" + response.err);
-        }
+      };
+      let response = await this.$axios.send(data);
+      if (response.status === 1) {
+        this.questions = response.data.QAList;
+        this.showQuestions = JSON.parse(JSON.stringify(this.questions)).splice(0,5);
+        this.currentPage = 1;
+      } else {
+        this.$message.error("发生错误：" + response.err);
+      }
     }
   }
 };
