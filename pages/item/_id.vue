@@ -30,8 +30,6 @@
         </el-row>
 
     </div>
-
-
 </template>
 
 <style scoped>
@@ -46,7 +44,7 @@
   left: 5px;
   border-style: solid;
   border-width: 2px;
-  border-color:gainsboro;
+  border-color: gainsboro;
 }
 .item-line {
   width: 100%;
@@ -59,7 +57,6 @@
 }
 .item-detail {
   position: relative;
-
 }
 .item-row {
   margin-top: 50px;

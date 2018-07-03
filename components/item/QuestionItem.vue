@@ -2,7 +2,7 @@
     <el-card class="item-question-item">
         <el-row>
             <el-col :span="16">用户<h4 class='item-user'>{{question.askerName}}</h4>:{{question.questionContent}}</el-col>
-            <el-col class="item-time" :span="8">{{question.askTime}}</el-col>
+            <el-col class="item-time" :span="7" :push="1">{{question.askTime}}</el-col>
         </el-row>
         <el-row class="item-answer" v-if='hasAnswer'>店家回复:{{question.responseContent}}</el-row>
         <el-row class="item-answer-iput" v-if='showResponse'>

@@ -37,15 +37,16 @@
                 价格：<a class='item-price'>￥<b>{{item.price}}</b></a>
             </el-col>
         </el-row>
-        <el-row v-if="showAddButton" style="margin-top:40px;" type="flex" justify="end">
-            <el-col :span='8'>
-                <el-input-number size='small' v-model="number" @change="handleChange" :min="1" :max="item.quantity" label="描述文字"></el-input-number>
-                <a>&nbsp;&nbsp;库存：{{item.quantity}}</a>
-            </el-col>
-            <el-col :span="6">
-                <el-button size='small'  @click="addBook" class='item-add' round type='danger'>加入购物车</el-button>
-            </el-col>
+        <el-row  style="margin-top:40px;" type="flex" justify="end">
+              <el-col v-if="showAddButton" :span='8'>
+                  <el-input-number size='small' v-model="number" @change="handleChange" :min="1" :max="item.quantity" label="描述文字"></el-input-number>
+                  <a>&nbsp;&nbsp;库存：{{item.quantity}}</a>
+              </el-col>
+              <el-col v-if="showAddButton" :span="6">
+                  <el-button size='small'  @click="addBook" class='item-add' round type='danger'>加入购物车</el-button>
+              </el-col>
         </el-row>
+        
     </div>
 </template>
 
