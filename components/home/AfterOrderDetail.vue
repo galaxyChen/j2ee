@@ -26,31 +26,34 @@
 <script>
 import Cookies from 'js-cookie'
 export default {
-    props :["order"],
+    props :["order","index"],
     methods : {
-        async applyBtn(){
-            let data = {
-                query : 'applyReturn',
-                data : {
-                    userId : Cookies.get("userId"),
-                    sessionId : Cookies.get("sessionId"),
-                    orderId : this.order.orderId
-                }
-            }
-            let response = await this.$axios.send(data)
-            if(response.status===1){
-                this.$emit("applyReturn")
-            }
-            else if (response.status == -1) {
-                this.$message.error("登录超时！");
-                Cookies.remove("userId");
-                Cookies.remove("sessionId");
-                Cookies.remove("userName");
-                this.$router.push({ path: "/" });
-            } else {
-                this.$message.error("发生错误：" + response.err);
-            }
+        // async applyBtn(){
+        //     let data = {
+        //         query : 'applyReturn',
+        //         data : {
+        //             userId : Cookies.get("userId"),
+        //             sessionId : Cookies.get("sessionId"),
+        //             orderId : this.order.orderId
+        //         }
+        //     }
+        //     let response = await this.$axios.send(data)
+        //     if(response.status===1){
+        //         this.$emit("applyReturn")
+        //     }
+        //     else if (response.status == -1) {
+        //         this.$message.error("登录超时！");
+        //         Cookies.remove("userId");
+        //         Cookies.remove("sessionId");
+        //         Cookies.remove("userName");
+        //         this.$router.push({ path: "/" });
+        //     } else {
+        //         this.$message.error("发生错误：" + response.err);
+        //     }
             
+        // }
+        applyBtn(){
+            this.$emit("applyReturn",this.index)
         }
     }
 }

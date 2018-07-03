@@ -1,14 +1,15 @@
 <template>
     <div class="item-question">
-        <el-row>
+        <el-row v-if="!is_seller">
             <el-col :span='16'>
-                <el-input type="textarea" :rows="2" placeholder="请输入内容" v-model="ask">
+                <el-input  type="textarea"  :rows="2" placeholder="请输入内容" v-model="ask">
                 </el-input>
             </el-col>
             <el-col :span='4'>
                 <el-button class="item-ask-button" type="success" @click="sendAsk">提交提问</el-button>
             </el-col>
         </el-row>
+          
         <el-row class="item-question-area">
             <QuestionItem v-for='q in questions' :key='q.id' :question='q' :is_seller='is_seller'  @sendAnswer="getQA"></QuestionItem>
         </el-row>
@@ -45,7 +46,7 @@ export default {
   props: ["item"],
   data() {
     return {
-      nowUserId : '',
+      errorVisible:false,
       is_seller: false,
       questions: [
         {
@@ -63,8 +64,14 @@ export default {
       ask : '',
     };
   },
-  methods : {
+  methods : { 
     async sendAsk(){
+        // 检验是不是200字内
+        if(this.ask.length>200){
+          this.$message.error("留言不可超过200字")
+          return 
+        }
+
         let userId = Cookies.get("userId")
         let sessionId = Cookies.get("sessionId")
         let data = {
@@ -78,7 +85,8 @@ export default {
         }
         let response = await this.$axios.send(data)
         if(response.status===1){
-            this.$message("提问成功")
+            this.$message.success("提问成功")
+            this.ask = ''
             this.questions = response.data.QAList;
         }
         else if (response.status == -1) {

@@ -26,26 +26,21 @@
             <el-col class='el-row-body-text ' :span="6">
                 <el-button @click="seeDetail(index)">查看服务详情</el-button>
                  <!-- 等待审核状态 对应按钮 -->
-                <el-button @click="cancelApply" v-if="cancel(index)" type="text" class="stateBtn" size='small'>取消售后申请</el-button>  
+                <el-button @click="cancelApply(item.afterServiceId)" v-if="cancel(index)" type="text" class="stateBtn" size='small'>取消售后申请</el-button>  
                 <!-- 等待退货状态 对应按钮 -->
-                <el-button @click="returnOfGoods" v-if='returnGoods(index)' type="text" class="stateBtn" size="small">退货</el-button>
+                <el-button @click="returnOfGoods(item.afterServiceId)" v-if='returnGoods(index)' type="text" class="stateBtn" size="small">退货</el-button>
                <!-- 拒绝退货状态 对应按钮 -->
                <el-button @click="requestService" v-if='service(index)'  type="text warning" class="stateBtn" size='small'>申诉</el-button>
             </el-col>
 
             <!-- 填写退货物流相关信息 -->
             <el-dialog title="收货地址" :visible.sync="returnFormVisible">
-                <el-form :model="sendGood">
+                <el-form :model="returnGood">
                     <el-form-item label="快递公司" >
-                        <el-cascader
-                            :options="options"
-                            v-model="sendGood.sender"
-                            placeholder="请选择快递公司">
-                        </el-cascader>
+                        <el-cascader :options="options" v-model="returnGood.sender" placeholder="请选择快递公司"></el-cascader>
                     </el-form-item>
                     <el-form-item label="快递单号" >
-                    <el-input v-model="sendGood.code" placeholder="请输入快递单号">
-                    </el-input>
+                        <el-input v-model="returnGood.code" placeholder="请输入快递单号"></el-input>
                     </el-form-item>
                     <!-- 确认提交退货物流信息  -->
                     <el-button @click="doReturn(item.afterServiceId)" type="primary" style="margin-left:85%;margin-top:20px;">确认</el-button>
@@ -53,18 +48,10 @@
             </el-dialog>
 
             <!-- 填写申诉相关信息 -->
-            <el-dialog title="收货地址" :visible.sync="appealFormVisible">
-                <el-form :model="sendGood">
-                    <el-form-item label="快递公司" >
-                        <el-cascader
-                            :options="options"
-                            v-model="sendGood.sender"
-                            placeholder="请选择快递公司">
-                        </el-cascader>
-                    </el-form-item>
-                    <el-form-item label="快递单号" >
-                    <el-input v-model="sendGood.code" placeholder="请输入快递单号">
-                    </el-input>
+            <el-dialog title="买家申诉" :visible.sync="appealFormVisible">
+                <el-form :model="appealGood">
+                    <el-form-item label="申诉理由" >
+                        <el-input v-model="appealGood.reason" placeholder="请输入请输入申诉理由"></el-input>
                     </el-form-item>
                     <!-- 确认提交申诉信息  -->
                     <el-button @click="doReturn(item.afterServiceId)" type="primary" style="margin-left:85%;margin-top:20px;">确认</el-button>
@@ -125,6 +112,7 @@
 </style>
 
 <script>
+import Cookies from 'js-cookie'
 export default { 
     mounted(){
     },
@@ -198,9 +186,13 @@ export default {
             ],
             returnFormVisible:false,
             appealFormVisible:false,
-            sendGood: {
+            returnGood: {
                 sender: [],
                 code: ""
+            },
+            appealGood : {
+                reason : '',
+
             },
         }
     },
@@ -226,8 +218,29 @@ export default {
             this.visible = true
         },
         
-        cancelApply(){
+        async cancelApply(afterServiceId){
             console.log("现在点击了 取消申请售后");
+            let data = {
+                query : 'cancelAfterService',
+                data : {
+                    userId : Cookies.get("userId"),
+                    sessionId : Cookies.get("sessionId"),
+                    afterServiceId : afterServiceId+"",
+                }
+            }
+            let response = await this.$axios.send(data)
+            if(response.status===1){
+                this.returnFormVisible = false;
+            }
+            else if (response.status == -1) {
+                this.$message.error("登录超时！");
+                Cookies.remove("userId");
+                Cookies.remove("sessionId");
+                Cookies.remove("userName");
+                this.$router.push({ path: "/" });
+            } else {
+                this.$message.error("发生错误：" + response.err);
+            }
         },
         returnOfGoods(){
             console.log("现在点击了 退货按钮，准备填写退货信息");
@@ -237,11 +250,15 @@ export default {
             console.log("现在点击了 申请平台介入 按钮");
         },
         async doReturn(afterServiceId){
+
             let data = {
                 query : 'doReturn',
                 data : {
                     userId : Cookies.get("userId"),
                     sessionId : Cookies.get("sessionId"),
+                    afterServiceId : afterServiceId+"",
+                    expressCompany : this.returnGood.sender[0],
+                    expressCode : this.returnGood.code,
                 }
             }
             let response = await this.$axios.send(data)

@@ -62,6 +62,12 @@ export default {
   },
   methods: {
     async sendAnswer() {
+
+      if(this.answer.length>200){
+          this.$message.error("留言不可超过200字")
+          return 
+      }
+
       let userId = Cookies.get("userId");
       let sessionId = Cookies.get("sessionId");
       let data = {
@@ -75,7 +81,7 @@ export default {
       };
       let response = await this.$axios.send(data);
       if (response.status === 1) {
-        this.$message("回复成功");
+        this.$message.success("回复成功");
         this.answer = "";
         // this.hasAnswer = true;
         this.$emit("sendAnswer");

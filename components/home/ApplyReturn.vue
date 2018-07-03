@@ -96,7 +96,7 @@
                     </div>
                 </div>
 
-                <el-button type="primary" style="margin-left:43%;margin-top:30px;margin-bottom:30px;">确认提交</el-button>
+                <el-button type="primary" @click="applyReturn" style="margin-left:43%;margin-top:30px;margin-bottom:30px;">确认提交</el-button>
             
                 <!-- 4、温馨提示 -->
                 <div class="tips-box">
@@ -114,11 +114,13 @@
 <script>
 import NavTop from "~/components/NavTop";
 import NavLeft from "~/components/home/NavLeft";
+import Cookies from 'js-cookie'
 export default {
   components: {
     NavTop,
     NavLeft
   },
+  props :["order"],
   data() {
     var checkContacts = (rule, value, callback) => {
       if (!value) {
@@ -147,13 +149,6 @@ export default {
     };
 
     return {
-      order: {
-        pictureAddress: "",
-        itemTitle: "三体",
-        quantity: 3,
-        price: 30,
-        pay: 90
-      },
       ApplyForm: {
         reason: "",
         dsc: "",
@@ -163,23 +158,23 @@ export default {
 
       options: [
         {
-          value: "选项1",
+          value: "质量问题",
           label: "质量问题"
         },
         {
-          value: "选项2",
+          value: "少件/漏发",
           label: "少件/漏发"
         },
         {
-          value: "选项3",
+          value: "与商品描述不符",
           label: "与商品描述不符"
         },
         {
-          value: "选项4",
+          value: "包装/商品残破",
           label: "包装/商品残破"
         },
         {
-          value: "选项5",
+          value: "其他",
           label: "其他"
         }
       ],
@@ -205,6 +200,38 @@ export default {
     };
   },
   methods: {
+    async applyReturn(){
+      let data = {
+          query : 'applyReturn',
+          data : {
+              userId : Cookies.get("userId"),
+              sessionId : Cookies.get("sessionId"),
+              orderId : this.order.orderId+"",
+              returnReason : this.ApplyForm.reason,
+              returnVoucher : [
+                'http://193.112.63.219.8080/BookStore/image/1.jpg',
+                'http://193.112.63.219.8080/BookStore/image/1.jpg'
+              ], 
+              description : this.ApplyForm.dsc , 
+              buyerPhoneNumber : this.ApplyForm.phone,
+              buyerName : this.ApplyForm.contacts,
+          }
+      }
+      let response = await this.$axios.send(data)
+      if(response.status===1){
+          this.$message.success("您已成功申请退货，请等待审核")
+          this.$emit("applyReturnSuccess")
+      }
+      else if (response.status == -1) {
+          this.$message.error("登录超时！");
+          Cookies.remove("userId");
+          Cookies.remove("sessionId");
+          Cookies.remove("userName");
+          this.$router.push({ path: "/" });
+      } else {
+          this.$message.error("发生错误：" + response.err);
+      }
+    },
     handleExceed(files, fileList) {
       this.$message.warning(
         `当前限制选择 3 个文件，本次选择了 ${
