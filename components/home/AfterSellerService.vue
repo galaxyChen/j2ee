@@ -1,49 +1,56 @@
 <template>
-    <el-container>
+    <el-container v-if="showList">
         <el-main>
-
-        
-        <el-tabs v-model="service" >
-            <el-tab-pane name="seeList" label="查看售后申请列表">
-                <el-card v-for="(item,index) in afterServiceList" :key="index">
-                    <div>
-                        <el-row class="header">
-                            <el-col class="header-text" :span="4">下单时间:{{item.purchaseTime}}</el-col>
-                            <el-col class="header-text" :span="4"> 订单编号:{{item.orderId}} </el-col>
-                        </el-row>
-                        <el-row class="el-row-body">
-                            <el-col :span="4" class="el-row-body-text"><img :src="item.pictureAddress"/> </el-col>
-                            <el-col :span="4" class="el-row-body-text">{{item.itemTitle}}</el-col>
-                            <el-col :span="4" class="el-row-body-text">
-                                <el-row style="margin-bottom:20px">服务单号:{{item.afterServiceId}}</el-row>
-                                <el-row>申请时间:{{item.launchTime}}</el-row>
-                            </el-col>
-                            <el-col :span="5" class="el-row-body-text">
-                                <el-row style="margin-bottom:20px">买家申诉信息</el-row>
-                                <el-row>卖家申诉信息</el-row>
-                            </el-col>
-                            <el-col :span="4" class="el-row-body-text">
-                                <el-button v-if="item.afterServiceState==0" @click="seeDetail(index)">审核</el-button>
-                                <el-button v-if="item.afterServiceState==1" @click="seeDetail(index)">查看详情</el-button>
-                                <el-button v-if="item.afterServiceState==2" @click="seeDetail(index)">售后收货</el-button>
-                            </el-col>
-                        </el-row>
-
-
-                    </div>
-                </el-card>
-
-            </el-tab-pane>
-        </el-tabs>
-
+            <el-tabs v-model="service" >
+                <el-tab-pane name="seeList" label="查看售后申请列表">
+                    <el-card v-for="(item,index) in afterSellerServiceList" :key="index">
+                        <div class="oneRequestMsg">
+                            <el-row class="header">
+                                <el-col class="header-text" :span="4">下单时间:{{item.purchaseTime}}</el-col>
+                                <el-col class="header-text" :span="4"> 订单编号:{{item.orderId}} </el-col>
+                            </el-row>
+                            <el-row class="el-row-body">
+                                <el-col :span="3" class="el-row-body-text"><img :src="item.pictureAddress"/> </el-col>
+                                <el-col :span="3" class="el-row-body-text">{{item.itemTitle}}</el-col>
+                                <el-col :span="3" class="el-row-body-text">
+                                    <el-row style="margin-bottom:20px">服务单号:{{item.afterServiceId}}</el-row>
+                                    <el-row>申请时间:{{item.launchTime}}</el-row>
+                                </el-col>   
+                                <!-- 按钮合集 -->
+                                <el-col :span="3" class="el-row-body-text">{{item.afterServiceState}}</el-col>
+                                <el-col :span="4" class="el-row-body-text">
+                                    <el-button v-if="item.afterServiceState=='等待审核'" @click="seeDetail(index)">审核</el-button>
+                                    <el-button v-if="item.afterServiceState=='等待售后收货'" @click="checkReceive(index)">售后收货</el-button>
+                                    <el-button v-if="item.afterServiceState=='卖家已签收'" @click="completeAfterService(index)" style="margin-top:15px;">完成售后</el-button>
+                                    <el-button v-if="item.afterServiceState=='卖家已签收'" @click="requestService(index)">申请介入</el-button>
+                                    <el-button type="text" size="small" class="button-text" @click="seeDetail(index)">查看详情</el-button>
+                                </el-col>
+                                <el-col :span="4" class="el-row-body-text">
+                                    <el-row style="margin-bottom:20px">买家申诉信息</el-row>
+                                    <el-row>卖家申诉信息</el-row>
+                                </el-col>
+                            </el-row>
+                        </div>
+                    </el-card>
+                </el-tab-pane>
+            </el-tabs>
         </el-main>
     </el-container>
 
+     <el-container v-else>
+        <el-header>
+            <el-button @click="goBack" class="back-button" size="medium" type='text' icon="el-icon-back">返回</el-button>
+        </el-header>
+        <AfterSellerDetail></AfterSellerDetail>
+    </el-container>
 </template>
 
 <style scoped>
-
-
+.back-button {
+  color: #999;
+  font-size: 30px;
+  margin-top: 16px;
+}
 .header {
   background-color: rgb(249, 249, 249);
   /* height: 40px; */
@@ -60,15 +67,28 @@
   margin-bottom: 10px;
   margin-top: 20px;
 }
+.button-text {
+  margin-left: 10px;
+  margin-top: 10px;
+  margin-bottom: -20px;
+  font-size: 14px;
+  display: block;
+  text-decoration: none;
+}
 </style>
 
-
 <script>
+import AfterSellerDetail from "~/components/home/AfterSellerDetail";
 export default {
+    components:{
+        AfterSellerDetail,
+    },
+   
     data() {
         return {
+            showList:true,
             service : 'seeList',
-            afterServiceList :[
+            afterSellerServiceList :[
                 {
                     afterServiceId : 123,
                     launchTime : '2018-6-28',
@@ -80,7 +100,7 @@ export default {
                     purchaseTime : '2018-6-27',
                     orderId : '312',
                     pictureAddress : '2' , 
-                    afterServiceState : '0',
+                    afterServiceState : '等待审核',
                     itemTitle : '10001个为什么'
                 },
                 {
@@ -94,7 +114,21 @@ export default {
                     purchaseTime : '2018-6-27',
                     orderId : '356',
                     pictureAddress : '1' , 
-                    afterServiceState : '1',
+                    afterServiceState : '卖家已签收',
+                    itemTitle : '10001个为什么'
+                },
+                {
+                    afterServiceId : 163,
+                    launchTime : '2018-6-28',
+                    returnReason : '图书价格不符',
+                    totalPrice : '20.5',
+                    description : '买的时候说要10块，结果收我20块',
+                    buyerName : 'lwz',
+                    phoneNumber : '13631433767',
+                    purchaseTime : '2018-6-27',
+                    orderId : '356',
+                    pictureAddress : '1' , 
+                    afterServiceState : '等待售后收货',
                     itemTitle : '10001个为什么'
                 }
             ]
@@ -102,8 +136,50 @@ export default {
     },
     methods:{
         seeDetail(index){
+            console.log(afterSellerServiceList)
+            this.showList = false;
+        },
+        checkReceive(index){
+            this.$confirm('请问是否确认收货？','提示',{
+                confirmButtonText: '确定',
+                cancelButtonText: '取消',
+                type: 'warning'
+            }).then(() => {
+                this.$message({
+                    type:'success',
+                    message:'收货成功！'
+                });
+                }).catch(()=>{
+                     this.$message({
+                    type: 'info',
+                    message: '已取消收货'
+                });
+            });
+        },
+        requestService(index){
 
-        }
+        },
+        completeAfterService(index){
+            this.$confirm('是否确认完成售后？','提示',{
+                confirmButtonText: '确定',
+                cancelButtonText: '取消',
+                type: 'warning'
+            }).then(()=>{
+                this.$message({
+                    type: 'success',
+                    message: '确认完成售后成功!'
+                });
+            }).catch(()=>{
+                this.$message({
+                    type:'info',
+                    message: '取消确认售后完成。'
+                });
+            });
+        },
+        goBack(){
+            this.showList=true;
+        },
+        
     }
 }
 </script>

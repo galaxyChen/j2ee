@@ -1,4 +1,5 @@
 <template>
+    <!-- 买家角度： 查看申请记录列表 -->
 <div>
     <el-card  v-for="(item,index) in afterServiceList" :key="index"  class="container">
         <el-row class="header">
