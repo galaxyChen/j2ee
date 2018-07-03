@@ -215,7 +215,8 @@ export default {
           path: "search",
           query: {
             text: text,
-            tag: tag
+            tag: tag,
+            time_stamp:new Date()-0
           }
         });
       }

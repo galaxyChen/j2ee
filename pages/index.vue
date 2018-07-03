@@ -54,12 +54,15 @@
              </el-row> 
           </div>
     </el-main>
+
+    <NavBottom></NavBottom>
   </div>
 </template>
 
 <script>
 import NavTop from "~/components/NavTop";
 import SearchBox from "~/components/SearchBox";
+import NavBottom from "~/components/NavBottom";
 export default {
   mounted() {
     this.getRecent();
@@ -71,7 +74,8 @@ export default {
   },
   components: {
     NavTop,
-    SearchBox
+    SearchBox,
+    NavBottom
   },
 
   methods: {
@@ -94,7 +98,14 @@ export default {
       this.$router.push({ path: `/item/${item_id}` });
     },
     doSearch(text, tag) {
-      this.$router.push({ path: "/search", query: { text: text, tag: tag } });
+      if (text==''){
+        this.$message({
+          message:'搜索内容不能为空！',
+          type:'info'
+        })
+        return ;
+      }
+      this.$router.push({ path: "/search", query: { text: text, tag: tag ,time_stamp:new Date()-0} });
     }
   },
   watch: {
@@ -169,7 +180,7 @@ body > .el-container {
   padding:10px;
 }
 .show-box{
-  margin:0 20px 30px 20px;
+  margin:0 20px 0 20px;
   background-color: rgb(240, 239, 239);
 }
 

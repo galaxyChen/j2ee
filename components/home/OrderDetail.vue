@@ -305,6 +305,17 @@ export default {
     },
     payOrder() {
       //进入结算页面
+      let orderId = []
+      orderId.push(this.order.orderId)
+      this.$router.push({ 
+          name: 'Pay' ,
+          params: { 
+              totalPay: this.order.price + this.order.postage ,
+              orderId : orderId,
+              time_limit :'2小时0分',
+          }  
+      });
+
     },
     signOrder() {
       this.$confirm("确认收货吗?", "收货确认", {
@@ -379,7 +390,8 @@ export default {
             userId: Cookies.get("userId"),
             sessionId: Cookies.get("sessionId"),
             expressCode: code,
-            express_company: sender
+            express_company: sender,
+            orderId:this.item.orderId
           }
         };
         let response = await this.$axios.send(data);
@@ -413,7 +425,7 @@ export default {
           data: {
             userId: Cookies.get("userId"),
             sessionId: Cookies.get("sessionId"),
-            orderId: this.order.orderId
+            orderId: this.order.orderId+""
           }
         };
         let response = await this.$axios.send(data);

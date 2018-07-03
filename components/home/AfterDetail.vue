@@ -1,35 +1,129 @@
 <template>
-    <div>
-        <el-row>
-            <el-col :span="4">服务单号：{{afterService.afterServiceId}}</el-col>
-            <el-col :span="4">申请时间：{{afterService.launchTime}}</el-col>
+    <!-- 查看 单笔订单的退货详情 -->
+    <el-main style=" margin:70px 40px 30px -80px;border-style: solid;border-color: rgb(238, 238, 238);">    
+        <el-row class="row1 status" >
+            <el-col :span="6" style="color:red">售后服务状态：{{afterService.afterServiceState}}</el-col>
+            <el-col :span="6" :offset="2">服务单号：{{afterService.afterServiceId}}</el-col>
+            <el-col :span="10"  >申请时间：{{afterService.launchTime}}</el-col>
         </el-row>
-        <el-row>
-            服务单信息：
-        </el-row>
-        <el-row>
-            <el-card>
-                <p>退货原因：{{afterService.returnReason}}</p>
-                <p>退款金额：￥{{afterService.totalPrice}}</p>
-                <p>联系人：{{afterService.buyerName}}</p>
-                <p>联系电话：{{afterService.phoneNumber}}</p>
-                <p>售后服务状态：</p>
-            </el-card>
-        </el-row>
-        <el-row>
-           <p>问题描述：{{afterService.description}}</p>
+        <div class="serviceMsg">
+            <el-row class="row1">
+                <h3 style="color:#cccccc;">服务单信息：</h3>
+            </el-row>
+            <div class="row1">
+                <el-row class="msg"> 
+                    <el-col :span="4" class="col-title">服务单号</el-col>
+                    <el-col :span="20" class="col-text">{{afterService.afterServiceId}}</el-col>      
+                </el-row>
+                <el-row class="msg"> 
+                    <el-col :span="4" class="col-title">申请时间</el-col>
+                    <el-col :span="20" class="col-text">{{afterService.launchTime}}</el-col>      
+                </el-row>
+                <el-row class="msg"> 
+                    <el-col :span="4" class="col-title">退货原因</el-col>
+                    <el-col :span="20" class="col-text">{{afterService.returnReason}}</el-col>      
+                </el-row>
+                <el-row class="msg">
+                    <el-col :span="4" class="col-title">退款金额</el-col>
+                    <el-col :span="20" class="col-text">￥{{afterService.totalPrice}}</el-col>     
+                </el-row>
+                <el-row class="msg">
+                    <el-col :span="4" class="col-title">联系人</el-col> 
+                    <el-col :span="20" class="col-text">{{afterService.buyerName}}</el-col>     
+                </el-row>
+                <el-row class="msg">
+                    <el-col :span="4" class="col-title">联系电话</el-col>
+                    <el-col :span="20" class="col-text">{{afterService.phoneNumber}}</el-col>     
+                </el-row>
+            </div>
+        </div>
+        <el-row class="row1">
+            <h3 style="color:#cccccc;">问题描述</h3>
+            <p style="border-style:solid;border-color:rgb(238, 238, 238);margin-top:10px;padding:20px;">{{afterService.description}}</p>
         </el-row>
 
-    </div>
+        <div class="check">
+            <!-- 未想好何时展示，应根据状态决定是否展示信息 -->
+            <h3 style="color:#cccccc;">审核留言</h3>
+            <div style="border-style:solid;border-color:rgb(238, 238, 238);margin-top:10px;padding:20px;line-height:25px;">
+                <p style="margin-bottom:30px;">{{afterService.sellerMessage}}</p>
+                <li>收货地址： {{afterService.addressDetail}}</li>
+                <li>联系姓名： {{afterService.sellerName}}</li>
+                <li>联系电话： {{afterService.sellerPhoneNumber}}</li>
+            </div>
+        </div>
+
+        <!-- 未想好 点击取消之后，页面如何变化 -->
+        <el-button type="primary" class="cancelBtn" @click="confirmCancel">取消</el-button>
+    </el-main>
 </template>
 
 <style scope>
+.cancelBtn{
+    float:right;
+    margin-top:30px;
+}
+.container{
+    margin-top: 0px;
+}
+.col-title{
+    text-align: center;
+    background-color: rgb(249, 249, 249);
+    border-style: solid;
+    border-width: 1px;
+    border-color: rgb(228, 228, 228);
+    font-size: 18px;
+}
+.col-text{
+    text-align: left;
+    left : 80px;
+    border-style: solid;
+    border-width: 1px;
+    border-color: rgb(228, 228, 228);
+    padding-left: 20px;
+}
 
+.msg{
+    margin-bottom: 3px;
+    padding:1px;
+}
+.row1 {
+    margin-bottom: 30px;
+    /* margin-top: 30px;  */
+}
+.status{
+    background-color: #eeebeb;
+    width:100%;
+    padding:20px;
+    
+}
 </style>
 
 
 <script>
 export default {
-    props:["afterService"]
+    props:["afterService"],
+    methods:{
+       confirmCancel() {
+            this.$confirm('是否取消申请售后?', '提示', {
+            confirmButtonText: '确定',
+            cancelButtonText: '取消',
+            type: 'warning'
+            }).then( async () => {
+            this.$message({
+                type: 'success',
+                message: '取消成功!'
+            });
+            
+            // 接口未写
+            // let response = await this.$send();
+            }).catch(() => {
+            this.$message({
+                // type: 'info',
+                // message: ''
+            });          
+            });
+        }
+    }
 }
 </script>

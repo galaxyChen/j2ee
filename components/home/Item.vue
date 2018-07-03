@@ -86,9 +86,11 @@ export default {
   props: ["item"],
   computed: {
     change() {
+      if (this.item.itemState == '交易中') return false;
       return true;
     },
     cancel() {
+      if (this.item.itemState == '已下架' || this.item.itemState == '已完成') return false;
       return true;
     },
     detail() {
@@ -113,7 +115,7 @@ export default {
           data: {
             userId: Cookies.get("userId"),
             sessionId: Cookies.get("sessionId"),
-            itemId: this.item.itemId
+            itemId: this.item.itemId+""
           }
         };
         let response = await this.$axios.send(data);
