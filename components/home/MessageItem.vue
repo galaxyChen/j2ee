@@ -6,9 +6,12 @@
                 <h4 class="title" @click="handleClick" v-if="message.unread">{{title}}</h4>
                 <div class="title" @click="handleClick" v-else>{{title}}</div>
             </el-col>
+            <el-col :span='4'>
+              <a style="color:#999;">{{message.launchTime}}</a>
+            </el-col>
             <el-col :span='10'>
                 <el-button size='small' type='text' @click="lookItemDetail" v-if="itemDetail">查看商品详情</el-button>
-                <el-button size='small' type='text' @click="replyMessage" v-if="reply">回复</el-button>
+                <el-button size='small' type='text' @clizck="replyMessage" v-if="reply">回复</el-button>
                 <el-button size='small' type='text' @click="lookOrderDetail" v-if="orderDetail">查看订单详情</el-button>
                 <el-button size='small' type='text' @click="lookServiceDetail" v-if="service">查看售后服务详情</el-button>
                 <el-button size='small' type='text' @click="lookDealDetail" v-if="deal">查看申诉处理结果</el-button>
@@ -53,7 +56,7 @@
 import Cookies from "js-cookie";
 export default {
   mounted() {
-    console.log(this.message);
+    // console.log(this.message);
   },
   data() {
     return {

@@ -15,6 +15,15 @@
                 :message="item"
                 :name='index'></MessageItem>           
         </el-main>
+        <el-footer>
+              <el-pagination
+                @current-change="handleCurrentChange"
+                :current-page.sync="currentPage"
+                :page-size="10"
+                layout="total, prev, pager, next"
+                :total="totalSize">
+              </el-pagination>
+        </el-footer>
     </el-container>
     <el-container v-else>
             <el-header>
@@ -47,6 +56,8 @@ export default {
       activeTab: "all",
       showList: true,
       type: 1,
+      currentPage: 1,
+      totalSize: 0,
       activeMessage: [1],
       onShowOrder: {},
       messageList: [],
@@ -104,26 +115,37 @@ export default {
       this.updateShowList();
     },
     updateShowList() {
-      if (this.activeTab == "all") this.onShowList = this.messageList;
+      let showList = []
+      if (this.activeTab == "all") showList = this.messageList;
       else if (this.activeTab == "item") {
-        let showList = this.messageList.filter((value, index) => {
+        let show_list = this.messageList.filter((value, index) => {
           if (value.messageType < 3) return true;
           else return false;
         });
-        this.onShowList = showList;
+        showList = show_list;
       } else if (this.activeTab == "order") {
-        let showList = this.messageList.filter((value, index) => {
-          if (value.messageType < 5 && value.messageType>3) return true;
+        let show_list = this.messageList.filter((value, index) => {
+          if (value.messageType < 5 && value.messageType > 3) return true;
           else return false;
         });
-        this.onShowList = showList;
+        showList = show_list;
       } else if (this.activeTab == "service") {
-        let showList = this.messageList.filter((value, index) => {
+        let show_list = this.messageList.filter((value, index) => {
           if (value.messageType > 5) return true;
           else return false;
         });
-        this.onShowList = showList;
+        showList = show_list;
       }
+
+      this.totalSize = showList.length;
+      this.currentPage = 1;
+      this.totalShowList = showList;
+      this.onShowList = JSON.parse(JSON.stringify(this.totalShowList)).splice(0, 10);
+    },
+    handleCurrentChange(page){
+      console.log(page)
+      let begin = 10*(page-1);
+      this.onShowList = JSON.parse(JSON.stringify(this.totalShowList)).splice(begin,10);
     },
     async getMessage() {
       let query = {
@@ -135,7 +157,7 @@ export default {
       };
       let response = await this.$axios.send(query);
       if (response.status == 1) {
-        this.messageList = response.data.messageList;
+        this.messageList = response.data.messageList.reverse();
         this.updateShowList();
       } else if (response.status == 0) {
         this.$message.error("发生错误" + response.err);
