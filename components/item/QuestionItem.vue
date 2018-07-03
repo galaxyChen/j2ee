@@ -6,7 +6,7 @@
         </el-row>
         <el-row class="item-answer" v-if='hasAnswer'>店家回复:{{question.responseContent}}</el-row>
         <el-row class="item-answer-iput" v-if='showResponse'>
-            <el-col :span='16'>
+            <el-col style="margin:10px;" :span='14'>
                 <el-input
                     type="textarea"
                     :rows="2"
@@ -15,7 +15,7 @@
                     >
                 </el-input>
             </el-col>
-            <el-col :span='8'>
+            <el-col style="margin-top:20px;" :span='8' :push="1">
                 <el-button class="item-ask-button" type="primary" @click="sendAnswer" >提交回复</el-button>
             </el-col>
         </el-row>
@@ -76,7 +76,7 @@ export default {
       let response = await this.$axios.send(data);
       if (response.status === 1) {
         this.$message("回复成功");
-
+        this.answer = "";
         // this.hasAnswer = true;
         this.$emit("sendAnswer");
       } else if (response.status == -1) {
