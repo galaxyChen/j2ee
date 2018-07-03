@@ -1,4 +1,5 @@
 <template>
+    <!-- 买家角度： 查看所有可申请售后服务的商品的列表 -->
     <el-container v-if="showList">
         <el-main style="margin-top:20px;">
             <div>

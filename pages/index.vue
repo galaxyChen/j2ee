@@ -39,7 +39,7 @@
               <hr style="margin-top:-50px;">
             </el-col>
             <el-row style="margin-left:10px;margin-right:20px;">
-              <el-col :span="5" v-for="book in newBooks" :key='"recent"+book.itemId' :offset="1">
+              <el-col :span="3" v-for="book in newBooks" :key='"recent"+book.itemId' :offset="1">
                 <el-card :body-style="{ padding: '5px' }" class="goods" >
                   <img @click='lookDetail(book.itemId)'  class="image" :src="book.pictureAddress">
                   <div style="text-align:left;padding-left:10px;margin-top:-50px">
@@ -54,7 +54,7 @@
              </el-row> 
           </div>
     </el-main>
-
+    
     <NavBottom></NavBottom>
   </div>
 </template>
@@ -179,6 +179,11 @@ body > .el-container {
   margin-top: -50px;
   padding:10px;
 }
+.service-box{
+  margin:0 20px 30px 20px;
+  background-color: white;
+  
+}
 .show-box{
   margin:0 20px 0 20px;
   background-color: rgb(240, 239, 239);
@@ -199,8 +204,8 @@ body > .el-container {
     float: right;
   }
   .image {
-    width: 100%;
-    height: 250px;
+    width: 210px;
+    height: 280px;
     display: block;
   }
   .clearfix:before,
