@@ -86,6 +86,13 @@ export default {
   methods: {
     async doSearch(searchText, searchTag) {
       let text = searchText || this.text;
+      if (text==''){
+        this.$message({
+          message:'搜索内容不能为空！',
+          type:'info'
+        })
+        return ;
+      }
       let tag = searchTag || this.tag;
       let data = {
         query: "search",

@@ -5,7 +5,7 @@
                 <el-input type="textarea" :rows="2" placeholder="请输入内容" v-model="ask">
                 </el-input>
             </el-col>
-            <el-col :span='8'>
+            <el-col :span='4'>
                 <el-button class="item-ask-button" type="success" @click="sendAsk">提交提问</el-button>
             </el-col>
         </el-row>
@@ -18,6 +18,7 @@
 <style scoped>
 .item-question {
   min-height: 400px;
+  margin-bottom: 120px;
 }
 .item-ask-button {
   margin-top: 10px;

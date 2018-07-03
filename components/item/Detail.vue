@@ -3,49 +3,64 @@
         <el-row class = 'item-row'>
             <h3>{{item.itemTitle}}</h3>
         </el-row>
+        <el-row class="item-row">
+            <h4 style="color:#999;">《{{item.bookName}}》</h4>
+        </el-row>
         <el-row class = 'item-row'>
             <el-col :span='8'>
-                <h4>作者：{{item.author}}</h4>
+                <div>作者：{{item.author}}</div>
             </el-col>
             <el-col :span='8'>
-                <h4>出版社：{{item.press}}</h4>
+                <div>出版社：{{item.press}}</div>
             </el-col>
             <el-col :span='8'>
-                <h4>出版日期：{{item.publicationTime}}</h4>
+                <div>出版日期：{{item.publicationDate}}</div>
             </el-col>
         </el-row>
         <div class='item-line'></div>
         <el-row class = 'item-row'>
             <el-col :span='8'>
-                <h4>发布者：{{item.sellerName}}</h4>
+                <div>发布者：{{item.sellerName}}</div>
             </el-col>
         </el-row>
         <el-row class = 'item-row'>
             <el-col :span='8'>
-                <h4>包邮：{{item.freePostage==1?'是':'否'}}</h4>
+                <div>包邮：{{item.freePostage==1?'是':'否'}}</div>
             </el-col>
             <el-col :span='9'>
-                <h4>上架时间：{{item.launchDate}}</h4>
+                <div>上架时间：{{item.launchDate}}</div>
             </el-col>
         </el-row>
         <div class='item-line'></div>
         <el-row class = 'item-row'>
             <el-col :span='12'>
-                价格：<a class='item-price'>￥{{item.price}}</a>
-            </el-col>
-            <el-col :span='12'>
-                <template>
-                    <a>数量&nbsp;&nbsp;</a>
-                    <el-input-number size='small' v-model="number" @change="handleChange" :min="1" :max="item.quantity" label="描述文字"></el-input-number>
-                    <a>&nbsp;&nbsp;库存：{{item.quantity}}</a>
-                </template>
+                价格：<a class='item-price'>￥<b>{{item.price}}</b></a>
             </el-col>
         </el-row>
-        <el-row type="flex" justify="end">
-            <el-button v-if="showAddButton" @click="addBook" class='item-add' round type='danger'>加入购物车</el-button>
+        <el-row v-if="showAddButton" style="margin-top:40px;" type="flex" justify="end">
+            <el-col :span='8'>
+                <el-input-number size='small' v-model="number" @change="handleChange" :min="1" :max="item.quantity" label="描述文字"></el-input-number>
+                <a>&nbsp;&nbsp;库存：{{item.quantity}}</a>
+            </el-col>
+            <el-col :span="6">
+                <el-button size='small'  @click="addBook" class='item-add' round type='danger'>加入购物车</el-button>
+            </el-col>
         </el-row>
     </div>
 </template>
+
+<style scoped>
+.item-row {
+  margin-bottom: 20px;
+  margin-top: 10px;
+}
+.item-line {
+  width: 100%;
+  height: 0;
+  border-width: 1px;
+  border-style: dashed;
+}
+</style>
 
 
 <script>

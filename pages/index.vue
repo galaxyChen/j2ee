@@ -98,7 +98,14 @@ export default {
       this.$router.push({ path: `/item/${item_id}` });
     },
     doSearch(text, tag) {
-      this.$router.push({ path: "/search", query: { text: text, tag: tag } });
+      if (text==''){
+        this.$message({
+          message:'搜索内容不能为空！',
+          type:'info'
+        })
+        return ;
+      }
+      this.$router.push({ path: "/search", query: { text: text, tag: tag ,time_stamp:new Date()-0} });
     }
   },
   watch: {

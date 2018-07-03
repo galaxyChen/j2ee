@@ -86,9 +86,11 @@ export default {
   props: ["item"],
   computed: {
     change() {
+      if (this.item.itemState == '交易中') return false;
       return true;
     },
     cancel() {
+      if (this.item.itemState == '已下架' || this.item.itemState == '已完成') return false;
       return true;
     },
     detail() {
