@@ -153,10 +153,11 @@ export default {
               userId: Cookies.get("userId"),
               sessionId: Cookies.get("sessionId"),
               afterServiceId: this.$route.query["id"],
-              reason: this.data.reason,
+              description: this.data.reason,
               pictureAddress: url,
               name: this.data.name,
-              phoneNumber: this.data.phone
+              phoneNumber: this.data.phone,
+              complaintType:this.$route.query['type']
             }
           };
           let response = await this.$axios.send(query);

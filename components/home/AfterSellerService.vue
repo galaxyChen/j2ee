@@ -125,13 +125,13 @@
 
 <style scoped>
 .buttons {
-    margin-top: 10px;
-    margin-left: 20px;
+  margin-top: 10px;
+  margin-left: 20px;
 }
 .buttons-text {
-    margin-top: 10px;
-    margin-left: 30px;
-    font-size: 14px;
+  margin-top: 10px;
+  margin-left: 30px;
+  font-size: 14px;
 }
 .back-button {
   color: #999;
@@ -146,22 +146,22 @@
   display: block;
   text-decoration: none;
 }
-.col-title{
-    text-align: center;
-    background-color: rgb(249, 249, 249);
-    border-style: solid;
-    border-width: 1px;
-    border-color: rgb(228, 228, 228);
-    font-size: 18px;
+.col-title {
+  text-align: center;
+  background-color: rgb(249, 249, 249);
+  border-style: solid;
+  border-width: 1px;
+  border-color: rgb(228, 228, 228);
+  font-size: 18px;
 }
-.col-text{
-    text-align: left;
-    left : 80px;
-    border-style: solid;
-    border-width: 1px;
-    border-color: rgb(228, 228, 228);
-    padding-left: 20px;
-    font-size: 18px;
+.col-text {
+  text-align: left;
+  left: 80px;
+  border-style: solid;
+  border-width: 1px;
+  border-color: rgb(228, 228, 228);
+  padding-left: 20px;
+  font-size: 18px;
 }
 .header {
   background-color: rgb(249, 249, 249);
@@ -179,11 +179,10 @@
   margin-bottom: 10px;
   margin-top: 20px;
 }
-.msg{
-    margin-bottom: 3px;
-    margin-top: 8px;
-    padding:1px;
-    
+.msg {
+  margin-bottom: 3px;
+  margin-top: 8px;
+  padding: 1px;
 }
 </style>
 
@@ -192,78 +191,77 @@ import AfterSellerDetail from "~/components/home/AfterSellerDetail";
 import mapLinkage from "~/components/home/mapLinkage";
 import Cookies from "js-cookie";
 export default {
-    components:{
-        AfterSellerDetail,
-        mapLinkage,
-    },
-   
-    data() {
-        return {
-            reviewFormVisible:false,
-            showList:true,
-            service : 'seeList',
-            reviewGood :{
-                flag : false,
-                message : '',
-                province:'',
-                city:'',
-                addressDetail:'',
-                sellerName : '',
-            },
-            afterSellerServiceList :[
-                {
-                    afterServiceId : 123,
-                    launchTime : '2018-6-28',
-                    returnReason : '图书图片不符',
-                    totalPrice : '20.5',
-                    description : '买的时候网上看的图书封面是蓝色，买下来发现是红色',
-                    buyerName : 'lwz',
-                    phoneNumber : '13631433767',
-                    purchaseTime : '2018-6-27',
-                    orderId : '312',
-                    pictureAddress : '2' , 
-                    afterServiceState : '等待审核',
-                    itemTitle : '10001个为什么'
-                },
-                {
-                    afterServiceId : 163,
-                    launchTime : '2018-6-28',
-                    returnReason : '图书价格不符',
-                    totalPrice : '20.5',
-                    description : '买的时候说要10块，结果收我20块',
-                    buyerName : 'lwz',
-                    phoneNumber : '13631433767',
-                    purchaseTime : '2018-6-27',
-                    orderId : '356',
-                    pictureAddress : '1' , 
-                    afterServiceState : '卖家已签收',
-                    itemTitle : '10001个为什么'
-                },
-                {
-                    afterServiceId : 163,
-                    launchTime : '2018-6-28',
-                    returnReason : '图书价格不符',
-                    totalPrice : '20.5',
-                    description : '买的时候说要10块，结果收我20块',
-                    buyerName : 'lwz',
-                    phoneNumber : '13631433767',
-                    purchaseTime : '2018-6-27',
-                    orderId : '356',
-                    pictureAddress : '1' , 
-                    afterServiceState : '等待售后收货',
-                    itemTitle : '10001个为什么'
-                }
-            ]
-        }
-    },
-    methods:{
-        seeDetail(index){
-            console.log()
-            console.log(afterSellerServiceList)
-            this.afterSellerService = this.afterSellerServiceList[index]
-            this.showList = false;
+  components: {
+    AfterSellerDetail,
+    mapLinkage
+  },
 
+  data() {
+    return {
+      reviewFormVisible: false,
+      showList: true,
+      service: "seeList",
+      reviewGood: {
+        flag: false,
+        message: "",
+        province: "",
+        city: "",
+        addressDetail: "",
+        sellerName: ""
+      },
+      afterSellerServiceList: [
+        {
+          afterServiceId: 123,
+          launchTime: "2018-6-28",
+          returnReason: "图书图片不符",
+          totalPrice: "20.5",
+          description: "买的时候网上看的图书封面是蓝色，买下来发现是红色",
+          buyerName: "lwz",
+          phoneNumber: "13631433767",
+          purchaseTime: "2018-6-27",
+          orderId: "312",
+          pictureAddress: "2",
+          afterServiceState: "等待审核",
+          itemTitle: "10001个为什么"
         },
+        {
+          afterServiceId: 163,
+          launchTime: "2018-6-28",
+          returnReason: "图书价格不符",
+          totalPrice: "20.5",
+          description: "买的时候说要10块，结果收我20块",
+          buyerName: "lwz",
+          phoneNumber: "13631433767",
+          purchaseTime: "2018-6-27",
+          orderId: "356",
+          pictureAddress: "1",
+          afterServiceState: "卖家已签收",
+          itemTitle: "10001个为什么"
+        },
+        {
+          afterServiceId: 163,
+          launchTime: "2018-6-28",
+          returnReason: "图书价格不符",
+          totalPrice: "20.5",
+          description: "买的时候说要10块，结果收我20块",
+          buyerName: "lwz",
+          phoneNumber: "13631433767",
+          purchaseTime: "2018-6-27",
+          orderId: "356",
+          pictureAddress: "1",
+          afterServiceState: "等待售后收货",
+          itemTitle: "10001个为什么"
+        }
+      ]
+    };
+  },
+  methods: {
+    seeDetail(index) {
+      console.log();
+      console.log(afterSellerServiceList);
+      this.afterSellerService = this.afterSellerServiceList[index];
+      this.showList = false;
+    },
     applyReview(index) {
       this.reviewFormVisible = true;
     },
@@ -302,10 +300,16 @@ export default {
         });
     },
     requestService(index) {
-        console.log('request')
-        console.log(index)
-        
-        this.$router.push({path:'/Appeal',query:{'id':this.afterSellerServiceList[index].afterServiceId,type:1}})
+      console.log("request");
+      console.log(index);
+
+      this.$router.push({
+        path: "/Appeal",
+        query: {
+          id: this.afterSellerServiceList[index].afterServiceId,
+          type: 1
+        }
+      });
     },
     completeAfterService(index) {
       this.$confirm("是否确认完成售后？", "提示", {
