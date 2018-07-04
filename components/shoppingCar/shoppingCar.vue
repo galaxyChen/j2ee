@@ -11,7 +11,7 @@
             <div @click="seeItem(scope.$index)">
               <img  class="img1" :src='scope.row.pictureAddress'/>
               <p>{{scope.row.itemTitle}}</p>
-              <p v-if="scope.row.itemState!='等待拍下'" style="color:red">[商品已下架]</p>
+              <p v-if="scope.row.itemState=='已下架' " style="color:red">[商品已下架]</p>
             </div>
         </template>
     </el-table-column>
@@ -222,7 +222,7 @@ import Cookies from "js-cookie";
             let tmp =  response.data.shoppingCarList
             tmp.forEach(element => {
               element.chosen = false;
-              if(element.quantity>0 && element.itemState=='等待拍下'){
+              if(element.quantity>0 && element.itemState!='已下架'){
                 element.canChosen = true;
               }
               else{

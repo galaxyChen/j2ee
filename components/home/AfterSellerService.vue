@@ -42,47 +42,47 @@
 
             <!-- 填写审核相关信息 -->
             <el-dialog title="售后审核" :visible.sync="reviewFormVisible">
-                <el-row>
+                <!-- <el-row>
                     <el-col :span="10">服务单号：</el-col>
                     <el-col :span="8">申请时间：</el-col>
-                </el-row>
+                </el-row> -->
                 <div class="serviceMsg-box" style="margin-top:15px;">
                     <h3 class="text-title">服务单信息：</h3>
                     <div>
                         <el-row class="msg"> 
                             <el-col :span="5" class="col-title">服务单号</el-col>
                             <!-- 下方传入 服务单号 -->
-                            <el-col :span="14" class="col-text">1</el-col>      
+                            <el-col :span="14" class="col-text"> {{afterSellerServiceList[reviewIndex]?afterSellerServiceList[reviewIndex].afterServiceId :""}} </el-col>      
                         </el-row>
                         <el-row class="msg"> 
                             <el-col :span="5" class="col-title">申请时间</el-col>
                             <!-- 下方传入 申请时间 -->
-                            <el-col :span="14" class="col-text">1</el-col>      
+                            <el-col :span="14" class="col-text"> {{afterSellerServiceList[reviewIndex]?afterSellerServiceList[reviewIndex].launchTime :""}}</el-col>      
                         </el-row>
                         <el-row class="msg"> 
                             <el-col :span="5" class="col-title">退货原因</el-col>
                             <!-- 下方传入 退货原因 -->
-                            <el-col :span="14" class="col-text">1</el-col>      
+                            <el-col :span="14" class="col-text"> {{afterSellerServiceList[reviewIndex]?afterSellerServiceList[reviewIndex].returnReason :""}}</el-col>      
                         </el-row>
                         <el-row class="msg">
                             <el-col :span="5" class="col-title">退款金额</el-col>
                             <!-- 下方传入 退款金额 -->
-                            <el-col :span="14" class="col-text">￥ </el-col>     
+                            <el-col :span="14" class="col-text">￥ {{afterSellerServiceList[reviewIndex]?afterSellerServiceList[reviewIndex].totalPrice :""}} </el-col>     
                         </el-row>
                         <el-row class="msg">
                             <el-col :span="5" class="col-title">联系人</el-col> 
                             <!-- 下方传入 联系人 -->
-                            <el-col :span="14" class="col-text">1</el-col>     
+                            <el-col :span="14" class="col-text"> {{afterSellerServiceList[reviewIndex]?afterSellerServiceList[reviewIndex].buyerName :""}}</el-col>     
                         </el-row>
                         <el-row class="msg">
                             <el-col :span="5" class="col-title">联系电话</el-col>
                             <!-- 下方传入 联系电话 -->
-                            <el-col :span="14" class="col-text">1</el-col>     
+                            <el-col :span="14" class="col-text"> {{afterSellerServiceList[reviewIndex]?afterSellerServiceList[reviewIndex].buyerPhoneNumber :""}}</el-col>     
                         </el-row>
                         <el-row class="msg">
                             <el-col :span="5" class="col-title">售后服务状态</el-col>
                             <!-- 下方传入 售后服务状态 -->
-                            <el-col :span="14" class="col-text">1</el-col>     
+                            <el-col :span="14" class="col-text"> {{afterSellerServiceList[reviewIndex]?afterSellerServiceList[reviewIndex].afterServiceState :""}}</el-col>     
                         </el-row>
                     </div>
                 </div>
@@ -101,6 +101,9 @@
                         <el-form-item label="联系人">
                             <el-input v-model="reviewGood.sellerName" ></el-input>
                         </el-form-item>
+                        <el-form-item label="联系手机">
+                            <el-input v-model="reviewGood.phoneNumber" ></el-input>
+                        </el-form-item>
                         <mapLinkage ref="map" :province="reviewGood.province" :city="reviewGood.city"  @updateArea="updateArea"></mapLinkage>
                         <el-form-item label="详细地址">
                             <el-input v-model="reviewGood.addressDetail" ></el-input>
@@ -108,7 +111,7 @@
                     </div>
 
                     <!-- 确认提交审核信息  -->
-                    <el-button type="primary" style="margin-left:85%;margin-top:20px;">确认</el-button>
+                    <el-button type="primary" @click="submitReview"  style="margin-left:85%;margin-top:20px;">确认</el-button>
                 </el-form>
             </el-dialog>
 
@@ -119,7 +122,7 @@
         <el-header>
             <el-button @click="goBack" class="back-button" size="medium" type='text' icon="el-icon-back">返回</el-button>
         </el-header>
-        <AfterSellerDetail></AfterSellerDetail>
+        <AfterSellerDetail :afterSellerService=" afterSellerServiceList[detailIndex]"></AfterSellerDetail>
     </el-container>
 </template>
 
@@ -191,186 +194,176 @@ import AfterSellerDetail from "~/components/home/AfterSellerDetail";
 import mapLinkage from "~/components/home/mapLinkage";
 import Cookies from "js-cookie";
 export default {
-  components: {
-    AfterSellerDetail,
-    mapLinkage
-  },
-
-  data() {
-    return {
-      reviewFormVisible: false,
-      showList: true,
-      service: "seeList",
-      reviewGood: {
-        flag: false,
-        message: "",
-        province: "",
-        city: "",
-        addressDetail: "",
-        sellerName: ""
-      },
-      afterSellerServiceList: [
-        {
-          afterServiceId: 123,
-          launchTime: "2018-6-28",
-          returnReason: "图书图片不符",
-          totalPrice: "20.5",
-          description: "买的时候网上看的图书封面是蓝色，买下来发现是红色",
-          buyerName: "lwz",
-          phoneNumber: "13631433767",
-          purchaseTime: "2018-6-27",
-          orderId: "312",
-          pictureAddress: "2",
-          afterServiceState: "等待审核",
-          itemTitle: "10001个为什么"
+    components:{
+        AfterSellerDetail,
+        mapLinkage,
+    },
+    async mounted(){
+        await this.getSellerAfterServiceList()
+    },
+    data() {
+        return {
+            reviewFormVisible:false,
+            showList:true,
+            detailIndex : 0,
+            reviewIndex : 0,
+            service : 'seeList',
+            reviewGood :{
+                flag : false,
+                message : '',
+                province:'',
+                city:'',
+                addressDetail:'',
+                sellerName : '',
+                index : '',
+                phoneNumber : '',
+            },
+            afterSellerServiceList  :[]
+        }
+    },
+    methods:{
+        seeDetail(index){
+            this.detailIndex = index;
+            this.showList = false;
         },
-        {
-          afterServiceId: 163,
-          launchTime: "2018-6-28",
-          returnReason: "图书价格不符",
-          totalPrice: "20.5",
-          description: "买的时候说要10块，结果收我20块",
-          buyerName: "lwz",
-          phoneNumber: "13631433767",
-          purchaseTime: "2018-6-27",
-          orderId: "356",
-          pictureAddress: "1",
-          afterServiceState: "卖家已签收",
-          itemTitle: "10001个为什么"
+        applyReview(index){
+            this.reviewFormVisible = true;
+            this.reviewIndex = index
+            this.reviewGood.province = this.afterSellerServiceList[index].province
+            this.reviewGood.city = this.afterSellerServiceList[index].city
+            this.reviewGood.addressDetail = this.afterSellerServiceList[index].addressDetail
+            this.reviewGood.sellerName = this.afterSellerServiceList[index].sellerName   
+            this.reviewGood.phoneNumber = this.afterSellerServiceList[index].sellerPhoneNumber   
         },
-        {
-          afterServiceId: 163,
-          launchTime: "2018-6-28",
-          returnReason: "图书价格不符",
-          totalPrice: "20.5",
-          description: "买的时候说要10块，结果收我20块",
-          buyerName: "lwz",
-          phoneNumber: "13631433767",
-          purchaseTime: "2018-6-27",
-          orderId: "356",
-          pictureAddress: "1",
-          afterServiceState: "等待售后收货",
-          itemTitle: "10001个为什么"
-        }
-      ]
-    };
-  },
-  methods: {
-    seeDetail(index) {
-      console.log();
-      console.log(afterSellerServiceList);
-      this.afterSellerService = this.afterSellerServiceList[index];
-      this.showList = false;
-    },
-    applyReview(index) {
-      this.reviewFormVisible = true;
-    },
-    updateArea(province, city) {},
-    checkReceive(index) {
-      this.$confirm("请问是否确认收货？", "提示", {
-        confirmButtonText: "确定",
-        cancelButtonText: "取消",
-        type: "warning"
-      })
-        .then(async () => {
-          let data = {
-            query: "afterSalesReceipt",
-            data: {
-              userId: Cookkes.get("userId"),
-              sessionId: Cookies.get("sessionId"),
-              afterServiceId: this.afterSellerServiceList[index].afterServiceId
+        async submitReview(){
+            // 没想好怎么验证
+            console.log("提交审核")
+            let data = {
+                query : 'Review',
+                data : {
+                    userId:Cookies.get("userId"),
+                    sessionId: Cookies.get("sessionId"),
+                    afterServiceId:this.afterSellerServiceList[this.reviewIndex].afterServiceId+"",
+                    reviewFlag : this.reviewGood.flag,
+                    sellerMessage: this.reviewGood.message,
+                    addressDetail: this.reviewGood.addressDetail,
+                    sellerName: this.reviewGood.sellerName,
+                    province: this.reviewGood.province,
+                    city: this.reviewGood.city, 
+                    sellerPhoneNumber: this.reviewGood.phoneNumber,
+                }
             }
-          };
 
-          let response = await this.$axios.send(data);
-          if (response.status == 1) {
-            await this.getSellerAfterServiceList();
-            this.$message({ message: "发布成功！", type: "success" });
-          } else if (response.status == 0) {
-            this.$message.error("发送错误:" + response.err);
-          } else {
-            Cookies.remove("userId");
-            Cookies.remove("sessionId");
-            Cookies.remove("userName");
-            this.$router.push({ path: "/" });
-          }
-        })
-        .catch(() => {
-          this.$message({ type: "info", message: "已取消收货" });
-        });
-    },
-    requestService(index) {
-      console.log("request");
-      console.log(index);
-
-      this.$router.push({
-        path: "/Appeal",
-        query: {
-          id: this.afterSellerServiceList[index].afterServiceId,
-          type: 1
-        }
-      });
-    },
-    completeAfterService(index) {
-      this.$confirm("是否确认完成售后？", "提示", {
-        confirmButtonText: "确定",
-        cancelButtonText: "取消",
-        type: "warning"
-      })
-        .then(async () => {
-          let data = {
-            query: "finishReturn",
-            data: {
-              userId: Cookkes.get("userId"),
-              sessionId: Cookies.get("sessionId"),
-              afterServiceId: this.afterSellerServiceList[index].afterServiceId
+            let response = await this.$axios.send(data);
+            if (response.status == 1) {
+                await this.getSellerAfterServiceList()
+                this.$message({ message: "审核成功！",type: "success"});
+            } else if (response.status == 0) {
+                this.$message.error("发送错误:" + response.err);
+            } else {
+                Cookies.remove("userId");
+                Cookies.remove("sessionId");
+                Cookies.remove("userName");
+                this.$router.push({ path: "/" });
             }
-          };
+        },
+        checkReceive(index){
+            this.$confirm('请问是否确认收货？','提示',{
+                confirmButtonText: '确定',
+                cancelButtonText: '取消',
+                type: 'warning'
+            }).then( async() => {
 
-          let response = await this.$axios.send(data);
-          if (response.status == 1) {
-            await this.getSellerAfterServiceList();
-            this.$message({ message: "发布成功！", type: "success" });
-          } else if (response.status == 0) {
-            this.$message.error("发送错误:" + response.err);
-          } else {
-            Cookies.remove("userId");
-            Cookies.remove("sessionId");
-            Cookies.remove("userName");
-            this.$router.push({ path: "/" });
-          }
-        })
-        .catch(() => {
-          this.$message({
-            type: "info",
-            message: "取消确认售后完成。"
-          });
-        });
-    },
-    goBack() {
-      this.showList = true;
-    },
-    async getSellerAfterServiceList() {
-      let data = {
-        query: "getSellerAfterServiceList",
-        data: {
-          userId: Cookkes.get("userId"),
-          sessionId: Cookies.get("sessionId")
+                let data = {
+                    query : 'afterSalesReceipt',
+                    data : {
+                        userId:Cookies.get("userId"),
+                        sessionId: Cookies.get("sessionId"),
+                        afterServiceId:this.afterSellerServiceList[index].afterServiceId+"",
+                    }
+                }
+
+                let response = await this.$axios.send(data);
+                if (response.status == 1) {
+                    await this.getSellerAfterServiceList()
+                    this.$message({ message: "发布成功！",type: "success"});
+                } else if (response.status == -1) {
+                    Cookies.remove("userId");
+                    Cookies.remove("sessionId");
+                    Cookies.remove("userName");
+                    this.$router.push({ path: "/" });
+                    
+                } else {
+                    this.$message.error("发送错误:" + response.err);
+                }
+                
+            }).catch(()=>{
+                this.$message({  type: 'info', message: '已取消收货'});
+            });
+        },
+        requestService(index){
+
+        },
+        completeAfterService(index){
+            this.$confirm('是否确认完成售后？','提示',{
+                confirmButtonText: '确定',
+                cancelButtonText: '取消',
+                type: 'warning'
+            }).then( async()=>{
+                let data = {
+                    query : 'finishReturn',
+                    data : {
+                        userId:Cookies.get("userId"),
+                        sessionId: Cookies.get("sessionId"),
+                        afterServiceId:this.afterSellerServiceList[index].afterServiceId,
+                    }
+                }
+
+                let response = await this.$axios.send(data);
+                if (response.status == 1) {
+                    await  this.getSellerAfterServiceList()
+                    this.$message({ message: "发布成功！",type: "success"});
+                } else if (response.status == 0) {
+                    this.$message.error("发送错误:" + response.err);
+                } else {
+                    Cookies.remove("userId");
+                    Cookies.remove("sessionId");
+                    Cookies.remove("userName");
+                    this.$router.push({ path: "/" });
+                }
+
+            }).catch(()=>{
+                this.$message({
+                    type:'info',
+                    message: '取消确认售后完成。'
+                });
+            });
+        },
+        goBack(){
+            this.showList=true;
+        },
+        async getSellerAfterServiceList(){
+            let data = {
+                query : 'getSellerAfterServiceList',
+                data : {
+                    userId:Cookies.get("userId"),
+                    sessionId: Cookies.get("sessionId"),
+                }
+            }
+
+            let response = await this.$axios.send(data);
+            if (response.status == 1) {
+                this.afterSellerServiceList = response.data.afterServiceList
+
+            } else if (response.status == 0) {
+                this.$message.error("发送错误:" + response.err);
+            } else {
+                Cookies.remove("userId");
+                Cookies.remove("sessionId");
+                Cookies.remove("userName");
+                this.$router.push({ path: "/" });
+            }
         }
-      };
-
-      let response = await this.$axios.send(data);
-      if (response.status == 1) {
-        this.afterSellerServiceList = response.data.afterSellerServiceList;
-      } else if (response.status == 0) {
-        this.$message.error("发送错误:" + response.err);
-      } else {
-        Cookies.remove("userId");
-        Cookies.remove("sessionId");
-        Cookies.remove("userName");
-        this.$router.push({ path: "/" });
-      }
     }
-  }
-};
+}
 </script>
