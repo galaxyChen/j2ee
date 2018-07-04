@@ -44,7 +44,7 @@
             
         </el-row>
 
-        <div class="check" v-if="afterService.afterServiceState=='已审核'">
+        <div class="check" v-if="afterService.afterServiceState!='等待审核'">
             <!-- 状态为 已审核 才显示这个框 -->
             <h3 style="color:#cccccc;">审核留言</h3>
             <div style="border-style:solid;border-color:rgb(238, 238, 238);margin-top:10px;padding:20px;line-height:25px;">

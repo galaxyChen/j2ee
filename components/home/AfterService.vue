@@ -9,7 +9,7 @@
                     </el-tab-pane>  
 
                     <el-tab-pane label="申请记录" name="second">
-                        <AfterRecord  @seeDetail="applyBtn2" :afterServiceList="afterServiceList"></AfterRecord>
+                        <AfterRecord @freshList="getAfterServiceList" @seeDetail="applyBtn2" :afterServiceList="afterServiceList"></AfterRecord>
                     </el-tab-pane>
                 </el-tabs>
             </div>

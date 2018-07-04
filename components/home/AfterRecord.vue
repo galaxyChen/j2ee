@@ -231,6 +231,7 @@ export default {
             }
             let response = await this.$axios.send(data)
             if(response.status===1){
+                this.$emit("freshList")
                 this.returnFormVisible = false;
             }
             else if (response.status == -1) {
@@ -265,6 +266,7 @@ export default {
             }
             let response = await this.$axios.send(data)
             if(response.status===1){
+                this.$emit("freshList")
                 this.returnFormVisible = false;
             }
             else if (response.status == -1) {
