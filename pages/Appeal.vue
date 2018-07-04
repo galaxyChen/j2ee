@@ -150,14 +150,14 @@ export default {
           let query = {
             query: "appeal",
             data: {
-              userId: Cookies.get("userId"),
+              userId: Cookies.get("userId")+"",
               sessionId: Cookies.get("sessionId"),
               afterServiceId: this.$route.query["id"],
               description: this.data.reason,
               pictureAddress: url,
               name: this.data.name,
               phoneNumber: this.data.phone,
-              complaintType:this.$route.query['type']
+              complaintType:this.$route.query['type']+""
             }
           };
           let response = await this.$axios.send(query);

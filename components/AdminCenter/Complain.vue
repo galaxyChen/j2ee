@@ -1,19 +1,22 @@
 <template>
-    <el-row>
+    <el-row class='complaint-box'>
         <!-- 第一部分信息 -->
         <el-row>
             <div class="header">
-               <el-col class="header-text" :span="8">申诉时间: {{complain.launchTime}}</el-col>
-               <el-col class="header-text" :span="8">申诉编号: {{complain.complaintId}}</el-col>
-               <el-col style="text-align:center;" class="header-text" :span="4">状态: {{complain.complaintState}}</el-col>
+               <el-col class="header-text" :span="6">申诉时间: {{complaint.launchTime}}</el-col>
+               <el-col class="header-text" :span="6">申诉编号: {{complaint.complaintId}}</el-col>
+               <el-col class="header-text" :span="4">申诉人: {{complaint.name}}</el-col>
+               <el-col style="text-align:center;" class="header-text" :span="4">状态: {{complaint.complaintState}}</el-col>
             </div>
         </el-row>
         <!-- 第二部分信息 -->
         <el-row>
             <div>
-            <el-col class='order-box' :span='16'>{{complain.description}}</el-col>
-            <el-col  style="text-align:center;" class='order-box' :span='8'>
-                <el-button class="order-button">查看详情</el-button>
+            <el-col :span='20' >
+              <div class="description">{{complaint.description}}</div>
+            </el-col>
+            <el-col class="col-box"  :span='4'>
+                <el-button class="complaint-button">查看详情</el-button>
             </el-col>
             </div>
         </el-row>
@@ -29,56 +32,38 @@
   line-height: 30px;
   margin: 5px 0 5px 10px;
 }
-.order-book {
-  width: 90px;
-  height: 120px;
-  margin: 10px;
-}
 
-.order-box {
-  border-width: 2px 2px 2px 0;
+.complaint-box {
+  border-width: 2px 2px 2px 2px;
   border-style: solid;
   border-color: rgb(249, 249, 249);
   height: 140px;
 }
-.order-box:first-child {
-  border-left-width: 2px;
+.complaint-box:last-child {
+  border-bottom-width: 2px;
 }
-.order-title-text {
-  margin-left: 30px;
-  margin-bottom: 10px;
-  margin-top: 20px;
-}
-.order-title-text-middle {
-  margin-top: 40px;
-}
-.order-button {
-  margin-top: 10px;
-}
-.order-button-text {
-  margin-top: 10px;
-  margin-bottom: -20px;
-  font-size: 14px;
-  color: rgb(108, 105, 107);
+.col-box {
   text-align: center;
+  border-left: 2px solid rgb(249, 249, 249);
+  height: 100px;
 }
-.order-button-text:hover {
-  text-decoration: underline;
+.description {
+  margin: 10px 0 0 10px;
+  height: 82px;
+  overflow-y: auto;
+}
+.complaint-button{
+  margin-top: 10px;
 }
 </style>
 
 <script>
 export default {
-    data() {
-        return {
-            complain: {
-                complaintId: '111',
-                launchTime: "20180101 18:16",
-                description: "我看照片是红色的，结果发过来是绿色的",
-                complaintState: "等待处理"
-            }
-        };
-    }
-    
-}
+  props:['complaint'],
+  data() {
+    return {
+      
+    };
+  }
+};
 </script>
