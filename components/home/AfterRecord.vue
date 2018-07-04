@@ -249,6 +249,7 @@ export default {
         },
         requestService(){
             console.log("现在点击了 申请平台介入 按钮");
+            this.$router.push({paht:'/Appeal',query:{'id':this.item.orderId,'type':2}})
         },
         async doReturn(afterServiceId){
 
