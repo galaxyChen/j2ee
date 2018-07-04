@@ -2,9 +2,9 @@
     <!-- 卖家角度 查看申请售后服务商品的详细信息 -->
     <el-main style=" margin:70px 40px 30px -80px;border-style: solid;border-color: rgb(238, 238, 238);">    
         <el-row class="row1 status" >
-            <el-col :span="6" style="color:red">售后服务状态：{{afterSellerService[1].afterServiceState}}</el-col>
-            <el-col :span="6" :offset="2">服务单号：{{afterSellerService[1].afterServiceId}}</el-col>
-            <el-col :span="10"  >申请时间：{{afterSellerService[1].launchTime}}</el-col>
+            <el-col :span="6" style="color:red">售后服务状态：{{afterSellerService.afterServiceState}}</el-col>
+            <el-col :span="6" :offset="2">服务单号：{{afterSellerService.afterServiceId}}</el-col>
+            <el-col :span="10"  >申请时间：{{afterSellerService.launchTime}}</el-col>
         </el-row>
         <div class="serviceMsg">
             <el-row class="row1">
@@ -13,44 +13,44 @@
             <div class="row1">
                 <el-row class="msg"> 
                     <el-col :span="4" class="col-title">服务单号</el-col>
-                    <el-col :span="20" class="col-text">{{afterSellerService[1].aftersServiceId}}</el-col>      
+                    <el-col :span="20" class="col-text">{{afterSellerService.afterServiceId}}</el-col>      
                 </el-row>
                 <el-row class="msg"> 
                     <el-col :span="4" class="col-title">申请时间</el-col>
-                    <el-col :span="20" class="col-text">{{afterSellerService[1].launchTime}}</el-col>      
+                    <el-col :span="20" class="col-text">{{afterSellerService.launchTime}}</el-col>      
                 </el-row>
                 <el-row class="msg"> 
                     <el-col :span="4" class="col-title">退货原因</el-col>
-                    <el-col :span="20" class="col-text">{{afterSellerService[1].returnReason}}</el-col>      
+                    <el-col :span="20" class="col-text">{{afterSellerService.returnReason}}</el-col>      
                 </el-row>
                 <el-row class="msg">
                     <el-col :span="4" class="col-title">退款金额</el-col>
-                    <el-col :span="20" class="col-text">￥{{afterSellerService[1].totalPrice}}</el-col>     
+                    <el-col :span="20" class="col-text">￥{{afterSellerService.totalPrice}}</el-col>     
                 </el-row>
                 <el-row class="msg">
                     <el-col :span="4" class="col-title">联系人</el-col> 
-                    <el-col :span="20" class="col-text">{{afterSellerService[1].buyerName}}</el-col>     
+                    <el-col :span="20" class="col-text">{{afterSellerService.buyerName}}</el-col>     
                 </el-row>
                 <el-row class="msg">
                     <el-col :span="4" class="col-title">联系电话</el-col>
-                    <el-col :span="20" class="col-text">{{afterSellerService[1].phoneNumber}}</el-col>     
+                    <el-col :span="20" class="col-text">{{afterSellerService.phoneNumber}}</el-col>     
                 </el-row>
             </div>
         </div>
         <el-row class="row1">
             <h3 style="color:#cccccc;">问题描述</h3>
-            <p style="border-style:solid;border-color:rgb(238, 238, 238);margin-top:10px;margin-bottom:40px;padding:20px;">{{afterSellerService[1].description}}</p>
+            <p style="border-style:solid;border-color:rgb(238, 238, 238);margin-top:10px;margin-bottom:40px;padding:20px;">{{afterSellerService.description}}</p>
             <!-- 加入照片凭证 -->
             
         </el-row>
 
-        <div class="check">
+        <div class="check" v-if="afterSellerService.afterServiceState!='等待审核'">
             <h3 style="color:#cccccc;">审核信息</h3>
             <div style="border-style:solid;border-color:rgb(238, 238, 238);margin-top:10px;padding:20px;line-height:25px;">
-                <p style="margin-bottom:30px;">{{afterSellerService[1].sellerMessage}}</p>
-                <el-input label="收货地址："> {{afterSellerService[1].addressDetail}}</el-input>
-                <el-input label="联系姓名："> {{afterSellerService[1].sellerName}}</el-input>
-                <el-input label="联系电话：">{{afterSellerService[1].sellerPhoneNumber}}</el-input>
+                <p style="margin-bottom:30px;">{{afterSellerService.sellerMessage}}</p>
+                <el-input label="收货地址："> {{afterSellerService.addressDetail}}</el-input>
+                <el-input label="联系姓名："> {{afterSellerService.sellerName}}</el-input>
+                <el-input label="联系电话：">{{afterSellerService.sellerPhoneNumber}}</el-input>
             </div>
         </div>
 
@@ -102,7 +102,7 @@
 
 <script>
 export default {
-    props:["afterSellerServiceList"],
+    props:["afterSellerService"],
     methods:{
        confirmCancel() {
             this.$confirm('是否取消申请售后?', '提示', {

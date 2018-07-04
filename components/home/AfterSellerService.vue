@@ -42,6 +42,10 @@
 
             <!-- 填写审核相关信息 -->
             <el-dialog title="售后审核" :visible.sync="reviewFormVisible">
+                <div>
+
+                </div>
+
                 <el-form :model="reviewGood">
                     <!-- 卖家角度 审核内容 -->
                     <el-form-item>
@@ -82,7 +86,7 @@
         <el-header>
             <el-button @click="goBack" class="back-button" size="medium" type='text' icon="el-icon-back">返回</el-button>
         </el-header>
-        <AfterSellerDetail></AfterSellerDetail>
+        <AfterSellerDetail :afterSellerService="afterSellerServiceList[detailIndex]"></AfterSellerDetail>
     </el-container>
 </template>
 
@@ -127,11 +131,14 @@ export default {
         AfterSellerDetail,
         mapLinkage,
     },
-   
+    mounted(){
+        this.getSellerAfterServiceList()
+    },
     data() {
         return {
             reviewFormVisible:false,
             showList:true,
+            detailIndex : 0,
             service : 'seeList',
             reviewGood :{
                 flag : false,
@@ -140,61 +147,19 @@ export default {
                 city:'',
                 addressDetail:'',
                 sellerName : '',
-
+                index : '',
             },
-            afterSellerServiceList :[
-                {
-                    afterServiceId : 123,
-                    launchTime : '2018-6-28',
-                    returnReason : '图书图片不符',
-                    totalPrice : '20.5',
-                    description : '买的时候网上看的图书封面是蓝色，买下来发现是红色',
-                    buyerName : 'lwz',
-                    phoneNumber : '13631433767',
-                    purchaseTime : '2018-6-27',
-                    orderId : '312',
-                    pictureAddress : '2' , 
-                    afterServiceState : '等待审核',
-                    itemTitle : '10001个为什么'
-                },
-                {
-                    afterServiceId : 163,
-                    launchTime : '2018-6-28',
-                    returnReason : '图书价格不符',
-                    totalPrice : '20.5',
-                    description : '买的时候说要10块，结果收我20块',
-                    buyerName : 'lwz',
-                    phoneNumber : '13631433767',
-                    purchaseTime : '2018-6-27',
-                    orderId : '356',
-                    pictureAddress : '1' , 
-                    afterServiceState : '卖家已签收',
-                    itemTitle : '10001个为什么'
-                },
-                {
-                    afterServiceId : 163,
-                    launchTime : '2018-6-28',
-                    returnReason : '图书价格不符',
-                    totalPrice : '20.5',
-                    description : '买的时候说要10块，结果收我20块',
-                    buyerName : 'lwz',
-                    phoneNumber : '13631433767',
-                    purchaseTime : '2018-6-27',
-                    orderId : '356',
-                    pictureAddress : '1' , 
-                    afterServiceState : '等待售后收货',
-                    itemTitle : '10001个为什么'
-                }
-            ]
+            afterSellerServiceList :[]
         }
     },
     methods:{
         seeDetail(index){
-            console.log(afterSellerServiceList)
+            this.detailIndex = index;
             this.showList = false;
         },
         applyReview(index){
             this.reviewFormVisible = true;
+            this.reviewGood.index = index
         },
         updateArea(province,city){
 
@@ -209,7 +174,7 @@ export default {
                 let data = {
                     query : 'afterSalesReceipt',
                     data : {
-                        userId:Cookkes.get("userId"),
+                        userId:Cookies.get("userId"),
                         sessionId: Cookies.get("sessionId"),
                         afterServiceId:this.afterSellerServiceList[index].afterServiceId,
                     }
@@ -244,7 +209,7 @@ export default {
                 let data = {
                     query : 'finishReturn',
                     data : {
-                        userId:Cookkes.get("userId"),
+                        userId:Cookies.get("userId"),
                         sessionId: Cookies.get("sessionId"),
                         afterServiceId:this.afterSellerServiceList[index].afterServiceId,
                     }
@@ -277,14 +242,14 @@ export default {
             let data = {
                 query : 'getSellerAfterServiceList',
                 data : {
-                    userId:Cookkes.get("userId"),
+                    userId:Cookies.get("userId"),
                     sessionId: Cookies.get("sessionId"),
                 }
             }
 
             let response = await this.$axios.send(data);
             if (response.status == 1) {
-                this.afterSellerServiceList = response.data.afterSellerServiceList
+                this.afterSellerServiceList = response.data.afterServiceList
 
             } else if (response.status == 0) {
                 this.$message.error("发送错误:" + response.err);
