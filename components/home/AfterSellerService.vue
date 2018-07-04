@@ -128,13 +128,13 @@
 
 <style scoped>
 .buttons {
-    margin-top: 10px;
-    margin-left: 20px;
+  margin-top: 10px;
+  margin-left: 20px;
 }
 .buttons-text {
-    margin-top: 10px;
-    margin-left: 30px;
-    font-size: 14px;
+  margin-top: 10px;
+  margin-left: 30px;
+  font-size: 14px;
 }
 .back-button {
   color: #999;
@@ -149,22 +149,22 @@
   display: block;
   text-decoration: none;
 }
-.col-title{
-    text-align: center;
-    background-color: rgb(249, 249, 249);
-    border-style: solid;
-    border-width: 1px;
-    border-color: rgb(228, 228, 228);
-    font-size: 18px;
+.col-title {
+  text-align: center;
+  background-color: rgb(249, 249, 249);
+  border-style: solid;
+  border-width: 1px;
+  border-color: rgb(228, 228, 228);
+  font-size: 18px;
 }
-.col-text{
-    text-align: left;
-    left : 80px;
-    border-style: solid;
-    border-width: 1px;
-    border-color: rgb(228, 228, 228);
-    padding-left: 20px;
-    font-size: 18px;
+.col-text {
+  text-align: left;
+  left: 80px;
+  border-style: solid;
+  border-width: 1px;
+  border-color: rgb(228, 228, 228);
+  padding-left: 20px;
+  font-size: 18px;
 }
 .header {
   background-color: rgb(249, 249, 249);
@@ -182,11 +182,10 @@
   margin-bottom: 10px;
   margin-top: 20px;
 }
-.msg{
-    margin-bottom: 3px;
-    margin-top: 8px;
-    padding:1px;
-    
+.msg {
+  margin-bottom: 3px;
+  margin-top: 8px;
+  padding: 1px;
 }
 </style>
 
@@ -267,9 +266,6 @@ export default {
             this.reviewGood.addressDetail = this.afterSellerServiceList[index].addressDetail
             this.reviewGood.sellerName = this.afterSellerServiceList[index].sellerName   
             this.reviewGood.phoneNumber = this.afterSellerServiceList[index].sellerPhoneNumber   
-        },
-        updateArea(province,city){
-
         },
         async submitReview(){
             // 没想好怎么验证
