@@ -16,7 +16,7 @@
               <div class="description">{{complaint.description}}</div>
             </el-col>
             <el-col class="col-box"  :span='4'>
-                <el-button class="complaint-button">查看详情</el-button>
+                <el-button @click="lookDetail" class="complaint-button">查看详情</el-button>
             </el-col>
             </div>
         </el-row>
@@ -64,6 +64,11 @@ export default {
     return {
       
     };
+  },
+  methods:{
+    lookDetail(){
+      this.$emit('lookComplain',this.complaint.complaintId)
+    }
   }
 };
 </script>
