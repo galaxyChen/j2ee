@@ -87,25 +87,25 @@
                     </div>
                 </div>
 
-                <el-form :model="reviewGood">
+                <el-form :model="reviewGood" :rules="reviewRules">
                     <!-- 卖家角度 审核内容 -->
                     <el-form-item>
                         <el-switch v-model="reviewGood.flag" active-text="审核通过" inactive-text="审核不通过"></el-switch>
                     </el-form-item>
             
-                    <el-form-item label="审核留言">
+                    <el-form-item label="审核留言" prop="message">
                         <el-input v-model="reviewGood.message" placeholder="请输入审核留言"></el-input>
                     </el-form-item>
 
                     <div v-if="reviewGood.flag">
-                        <el-form-item label="联系人">
+                        <el-form-item label="联系人" prop="name">
                             <el-input v-model="reviewGood.sellerName" ></el-input>
                         </el-form-item>
-                        <el-form-item label="联系手机">
+                        <el-form-item label="联系手机" prop="phoneNumber">
                             <el-input v-model="reviewGood.phoneNumber" ></el-input>
                         </el-form-item>
                         <mapLinkage ref="map" :province="reviewGood.province" :city="reviewGood.city"  @updateArea="updateArea"></mapLinkage>
-                        <el-form-item label="详细地址">
+                        <el-form-item label="详细地址" prop="addressDetail">
                             <el-input v-model="reviewGood.addressDetail" ></el-input>
                         </el-form-item>
                     </div>
@@ -219,6 +219,38 @@ export default {
                 index : '',
                 phoneNumber : '',
             },
+            reviewRules :{
+                name : [
+                    { required: true, message: '请输入联系人名称', trigger: 'blur',trigger:'change'},
+                    { min: 1, max: 15, message: '输入不超过15个字', trigger: 'blur',trigger:'change' }
+                ],
+                phoneNumber : [
+                    {   required :true,validator: (rule,value,callback)=>{
+                            if(value==""){
+                                callback(new Error("请输入手机号"));
+                            }
+                            else{
+                                let p = /^1[3|4|5|7|8][0-9]\d{8}$/;
+                                if(!p.test(value)){
+                                    callback(new Error("请输入正确的手机号"));
+                                }
+                                else{
+                                    callback();
+                                }
+                            }
+                        },
+                        trigger: 'blur',trigger:'change'
+                    }
+                ],
+                addressDetail : [
+                    { required: true, message: '请输入详细地址', trigger: 'blur',trigger:'change'},
+                    { min: 1, max: 100, message: '输入不超过15个字', trigger: 'blur',trigger:'change' }
+                ],
+                message : [
+                    { required: true, message: '请输入审核留言', trigger: 'blur',trigger:'change'},
+                    { min: 1, max: 300, message: '输入不超过300个字', trigger: 'blur',trigger:'change' }
+                ],
+            },
             afterSellerServiceList  :[]
         }
     },
@@ -241,35 +273,43 @@ export default {
         },
         async submitReview(){
             // 没想好怎么验证
-            console.log("提交审核")
-            let data = {
-                query : 'Review',
-                data : {
-                    userId:Cookies.get("userId"),
-                    sessionId: Cookies.get("sessionId"),
-                    afterServiceId:this.afterSellerServiceList[this.reviewIndex].afterServiceId+"",
-                    reviewFlag : this.reviewGood.flag,
-                    sellerMessage: this.reviewGood.message,
-                    addressDetail: this.reviewGood.addressDetail,
-                    sellerName: this.reviewGood.sellerName,
-                    province: this.reviewGood.province,
-                    city: this.reviewGood.city, 
-                    sellerPhoneNumber: this.reviewGood.phoneNumber,
-                }
-            }
 
-            let response = await this.$axios.send(data);
-            if (response.status == 1) {
-                await this.getSellerAfterServiceList()
-                this.$message({ message: "审核成功！",type: "success"});
-            } else if (response.status == 0) {
-                this.$message.error("发送错误:" + response.err);
-            } else {
-                Cookies.remove("userId");
-                Cookies.remove("sessionId");
-                Cookies.remove("userName");
-                this.$router.push({ path: "/" });
-            }
+            this.$refs[formName].validate(async valid => {
+                if(valid){
+                    let data = {
+                        query : 'Review',
+                        data : {
+                            userId:Cookies.get("userId"),
+                            sessionId: Cookies.get("sessionId"),
+                            afterServiceId:this.afterSellerServiceList[this.reviewIndex].afterServiceId+"",
+                            reviewFlag : this.reviewGood.flag,
+                            sellerMessage: this.reviewGood.message,
+                            addressDetail: this.reviewGood.addressDetail,
+                            sellerName: this.reviewGood.sellerName,
+                            province: this.reviewGood.province,
+                            city: this.reviewGood.city, 
+                            sellerPhoneNumber: this.reviewGood.phoneNumber,
+                        }
+                    }
+
+                    let response = await this.$axios.send(data);
+                    if (response.status == 1) {
+                        await this.getSellerAfterServiceList()
+                        this.$message({ message: "审核成功！",type: "success"});
+                    } else if (response.status == -1) {
+                        Cookies.remove("userId");
+                        Cookies.remove("sessionId");
+                        Cookies.remove("userName");
+                        this.$router.push({ path: "/" });
+                        
+                    } else {
+                        this.$message.error("发送错误:" + response.err);
+                    }
+                }
+
+            })
+            
+
         },
         checkReceive(index){
             this.$confirm('请问是否确认收货？','提示',{
