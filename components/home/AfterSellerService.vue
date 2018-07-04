@@ -1,4 +1,5 @@
 <template>
+    <!-- 卖家角度 查看所有申请售后的商品列表 -->
     <el-container v-if="showList">
         <el-main>
             <el-tabs v-model="service" >
@@ -31,17 +32,57 @@
                                 </el-col>
                             </el-row>
                         </div>
-
-                        
-
-
-
                     </el-card>
                 </el-tab-pane>
             </el-tabs>
 
             <!-- 填写审核相关信息 -->
             <el-dialog title="售后审核" :visible.sync="reviewFormVisible">
+                <el-row>
+                    <el-col :span="10">服务单号：</el-col>
+                    <el-col :span="8">申请时间：</el-col>
+                </el-row>
+                <div class="serviceMsg-box" style="margin-top:15px;">
+                    <h3 class="text-title">服务单信息：</h3>
+                    <div>
+                        <el-row class="msg"> 
+                            <el-col :span="5" class="col-title">服务单号</el-col>
+                            <!-- 下方传入 服务单号 -->
+                            <el-col :span="14" class="col-text">1</el-col>      
+                        </el-row>
+                        <el-row class="msg"> 
+                            <el-col :span="5" class="col-title">申请时间</el-col>
+                            <!-- 下方传入 申请时间 -->
+                            <el-col :span="14" class="col-text">1</el-col>      
+                        </el-row>
+                        <el-row class="msg"> 
+                            <el-col :span="5" class="col-title">退货原因</el-col>
+                            <!-- 下方传入 退货原因 -->
+                            <el-col :span="14" class="col-text">1</el-col>      
+                        </el-row>
+                        <el-row class="msg">
+                            <el-col :span="5" class="col-title">退款金额</el-col>
+                            <!-- 下方传入 退款金额 -->
+                            <el-col :span="14" class="col-text">￥ </el-col>     
+                        </el-row>
+                        <el-row class="msg">
+                            <el-col :span="5" class="col-title">联系人</el-col> 
+                            <!-- 下方传入 联系人 -->
+                            <el-col :span="14" class="col-text">1</el-col>     
+                        </el-row>
+                        <el-row class="msg">
+                            <el-col :span="5" class="col-title">联系电话</el-col>
+                            <!-- 下方传入 联系电话 -->
+                            <el-col :span="14" class="col-text">1</el-col>     
+                        </el-row>
+                        <el-row class="msg">
+                            <el-col :span="5" class="col-title">售后服务状态</el-col>
+                            <!-- 下方传入 售后服务状态 -->
+                            <el-col :span="14" class="col-text">1</el-col>     
+                        </el-row>
+                    </div>
+                </div>
+
                 <el-form :model="reviewGood">
                     <!-- 卖家角度 审核内容 -->
                     <el-form-item>
@@ -51,7 +92,6 @@
                     <el-form-item label="审核留言">
                         <el-input v-model="reviewGood.message" placeholder="请输入审核留言"></el-input>
                     </el-form-item>
-
 
                     <div v-if="reviewGood.flag">
                         <el-form-item label="联系人">
@@ -63,17 +103,10 @@
                         </el-form-item>
                     </div>
 
-
-
-
-                    
-
-
                     <!-- 确认提交审核信息  -->
                     <el-button type="primary" style="margin-left:85%;margin-top:20px;">确认</el-button>
                 </el-form>
             </el-dialog>
-
 
         </el-main>
     </el-container>
@@ -92,6 +125,31 @@
   font-size: 30px;
   margin-top: 16px;
 }
+.button-text {
+  margin-left: 10px;
+  margin-top: 10px;
+  margin-bottom: -20px;
+  font-size: 14px;
+  display: block;
+  text-decoration: none;
+}
+.col-title{
+    text-align: center;
+    background-color: rgb(249, 249, 249);
+    border-style: solid;
+    border-width: 1px;
+    border-color: rgb(228, 228, 228);
+    font-size: 18px;
+}
+.col-text{
+    text-align: left;
+    left : 80px;
+    border-style: solid;
+    border-width: 1px;
+    border-color: rgb(228, 228, 228);
+    padding-left: 20px;
+    font-size: 18px;
+}
 .header {
   background-color: rgb(249, 249, 249);
   /* height: 40px; */
@@ -108,13 +166,11 @@
   margin-bottom: 10px;
   margin-top: 20px;
 }
-.button-text {
-  margin-left: 10px;
-  margin-top: 10px;
-  margin-bottom: -20px;
-  font-size: 14px;
-  display: block;
-  text-decoration: none;
+.msg{
+    margin-bottom: 3px;
+    margin-top: 8px;
+    padding:1px;
+    
 }
 </style>
 
@@ -140,7 +196,6 @@ export default {
                 city:'',
                 addressDetail:'',
                 sellerName : '',
-
             },
             afterSellerServiceList :[
                 {
@@ -190,8 +245,11 @@ export default {
     },
     methods:{
         seeDetail(index){
+            console.log()
             console.log(afterSellerServiceList)
+            this.afterSellerService = this.afterSellerServiceList[index]
             this.showList = false;
+
         },
         applyReview(index){
             this.reviewFormVisible = true;
