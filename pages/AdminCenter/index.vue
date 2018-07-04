@@ -69,6 +69,7 @@ export default {
     changeTab(index, indexPath) {},
     goback() {
       this.showDetail = false;
+      this.getData()
     },
     handleClick() {
       this.updateShowList();
