@@ -231,6 +231,7 @@ export default {
             }
             let response = await this.$axios.send(data)
             if(response.status===1){
+                this.$emit("freshList")
                 this.returnFormVisible = false;
             }
             else if (response.status == -1) {
@@ -249,6 +250,7 @@ export default {
         },
         requestService(){
             console.log("现在点击了 申请平台介入 按钮");
+            this.$router.push({paht:'/Appeal',query:{'id':this.item.orderId,'type':2}})
         },
         async doReturn(afterServiceId){
 
@@ -264,6 +266,7 @@ export default {
             }
             let response = await this.$axios.send(data)
             if(response.status===1){
+                this.$emit("freshList")
                 this.returnFormVisible = false;
             }
             else if (response.status == -1) {

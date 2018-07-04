@@ -1,4 +1,5 @@
 <template>
+    <!-- 卖家角度 查看所有申请售后的商品列表 -->
     <el-container v-if="showList">
         <el-main>
             <el-tabs v-model="service" >
@@ -18,12 +19,16 @@
                                 </el-col>   
                                 <!-- 按钮合集 -->
                                 <el-col :span="3" class="el-row-body-text">{{item.afterServiceState}}</el-col>
-                                <el-col :span="4" class="el-row-body-text">
-                                    <el-button v-if="item.afterServiceState=='等待审核'" @click="applyReview(index)">审核</el-button>
-                                    <el-button v-if="item.afterServiceState=='等待售后收货'" @click="checkReceive(index)">售后收货</el-button>
-                                    <el-button v-if="item.afterServiceState=='卖家已签收'" @click="completeAfterService(index)" style="margin-top:15px;">完成售后</el-button>
-                                    <el-button v-if="item.afterServiceState=='卖家已签收'" @click="requestService(index)">申请介入</el-button>
-                                    <el-button type="text" size="small" class="button-text" @click="seeDetail(index)">查看详情</el-button>
+                                <el-col :span="3" >
+                                        <el-button size="small" v-if="item.afterServiceState=='等待审核'" @click="applyReview(index)" class="buttons">审核</el-button>
+
+                                        <el-button size="small" v-if="item.afterServiceState=='等待售后收货'" @click="checkReceive(index)" class="buttons">售后收货</el-button>
+
+                                        <el-button size="small" v-if="item.afterServiceState=='卖家已签收'" @click="completeAfterService(index)" class="buttons">完成售后</el-button>
+
+                                        <el-button size="small" v-if="item.afterServiceState=='卖家已签收'" @click="requestService(index) " class="buttons">申请介入</el-button>
+
+                                        <el-button type="text" size="small" class="buttons-text" @click="seeDetail(index)">查看详情</el-button>
                                 </el-col>
                                 <el-col :span="4" class="el-row-body-text">
                                     <el-row style="margin-bottom:20px">买家申诉信息</el-row>
@@ -31,19 +36,55 @@
                                 </el-col>
                             </el-row>
                         </div>
-
-                        
-
-
-
                     </el-card>
                 </el-tab-pane>
             </el-tabs>
 
             <!-- 填写审核相关信息 -->
             <el-dialog title="售后审核" :visible.sync="reviewFormVisible">
-                <div>
-
+                <!-- <el-row>
+                    <el-col :span="10">服务单号：</el-col>
+                    <el-col :span="8">申请时间：</el-col>
+                </el-row> -->
+                <div class="serviceMsg-box" style="margin-top:15px;">
+                    <h3 class="text-title">服务单信息：</h3>
+                    <div>
+                        <el-row class="msg"> 
+                            <el-col :span="5" class="col-title">服务单号</el-col>
+                            <!-- 下方传入 服务单号 -->
+                            <el-col :span="14" class="col-text"> {{afterSellerServiceList[reviewIndex]?afterSellerServiceList[reviewIndex].afterServiceId :""}} </el-col>      
+                        </el-row>
+                        <el-row class="msg"> 
+                            <el-col :span="5" class="col-title">申请时间</el-col>
+                            <!-- 下方传入 申请时间 -->
+                            <el-col :span="14" class="col-text"> {{afterSellerServiceList[reviewIndex]?afterSellerServiceList[reviewIndex].launchTime :""}}</el-col>      
+                        </el-row>
+                        <el-row class="msg"> 
+                            <el-col :span="5" class="col-title">退货原因</el-col>
+                            <!-- 下方传入 退货原因 -->
+                            <el-col :span="14" class="col-text"> {{afterSellerServiceList[reviewIndex]?afterSellerServiceList[reviewIndex].returnReason :""}}</el-col>      
+                        </el-row>
+                        <el-row class="msg">
+                            <el-col :span="5" class="col-title">退款金额</el-col>
+                            <!-- 下方传入 退款金额 -->
+                            <el-col :span="14" class="col-text">￥ {{afterSellerServiceList[reviewIndex]?afterSellerServiceList[reviewIndex].totalPrice :""}} </el-col>     
+                        </el-row>
+                        <el-row class="msg">
+                            <el-col :span="5" class="col-title">联系人</el-col> 
+                            <!-- 下方传入 联系人 -->
+                            <el-col :span="14" class="col-text"> {{afterSellerServiceList[reviewIndex]?afterSellerServiceList[reviewIndex].buyerName :""}}</el-col>     
+                        </el-row>
+                        <el-row class="msg">
+                            <el-col :span="5" class="col-title">联系电话</el-col>
+                            <!-- 下方传入 联系电话 -->
+                            <el-col :span="14" class="col-text"> {{afterSellerServiceList[reviewIndex]?afterSellerServiceList[reviewIndex].buyerPhoneNumber :""}}</el-col>     
+                        </el-row>
+                        <el-row class="msg">
+                            <el-col :span="5" class="col-title">售后服务状态</el-col>
+                            <!-- 下方传入 售后服务状态 -->
+                            <el-col :span="14" class="col-text"> {{afterSellerServiceList[reviewIndex]?afterSellerServiceList[reviewIndex].afterServiceState :""}}</el-col>     
+                        </el-row>
+                    </div>
                 </div>
 
                 <el-form :model="reviewGood">
@@ -56,10 +97,12 @@
                         <el-input v-model="reviewGood.message" placeholder="请输入审核留言"></el-input>
                     </el-form-item>
 
-
                     <div v-if="reviewGood.flag">
                         <el-form-item label="联系人">
                             <el-input v-model="reviewGood.sellerName" ></el-input>
+                        </el-form-item>
+                        <el-form-item label="联系手机">
+                            <el-input v-model="reviewGood.phoneNumber" ></el-input>
                         </el-form-item>
                         <mapLinkage ref="map" :province="reviewGood.province" :city="reviewGood.city"  @updateArea="updateArea"></mapLinkage>
                         <el-form-item label="详细地址">
@@ -67,17 +110,10 @@
                         </el-form-item>
                     </div>
 
-
-
-
-                    
-
-
                     <!-- 确认提交审核信息  -->
-                    <el-button type="primary" style="margin-left:85%;margin-top:20px;">确认</el-button>
+                    <el-button type="primary" @click="submitReview"  style="margin-left:85%;margin-top:20px;">确认</el-button>
                 </el-form>
             </el-dialog>
-
 
         </el-main>
     </el-container>
@@ -86,15 +122,49 @@
         <el-header>
             <el-button @click="goBack" class="back-button" size="medium" type='text' icon="el-icon-back">返回</el-button>
         </el-header>
-        <AfterSellerDetail :afterSellerService="afterSellerServiceList[detailIndex]"></AfterSellerDetail>
+        <AfterSellerDetail :afterSellerService=" afterSellerServiceList[detailIndex]"></AfterSellerDetail>
     </el-container>
 </template>
 
 <style scoped>
+.buttons {
+    margin-top: 10px;
+    margin-left: 20px;
+}
+.buttons-text {
+    margin-top: 10px;
+    margin-left: 30px;
+    font-size: 14px;
+}
 .back-button {
   color: #999;
   font-size: 30px;
   margin-top: 16px;
+}
+.button-text {
+  margin-left: 10px;
+  margin-top: 10px;
+  margin-bottom: -20px;
+  font-size: 14px;
+  display: block;
+  text-decoration: none;
+}
+.col-title{
+    text-align: center;
+    background-color: rgb(249, 249, 249);
+    border-style: solid;
+    border-width: 1px;
+    border-color: rgb(228, 228, 228);
+    font-size: 18px;
+}
+.col-text{
+    text-align: left;
+    left : 80px;
+    border-style: solid;
+    border-width: 1px;
+    border-color: rgb(228, 228, 228);
+    padding-left: 20px;
+    font-size: 18px;
 }
 .header {
   background-color: rgb(249, 249, 249);
@@ -105,40 +175,39 @@
   margin: 5px 0 5px 10px;
 }
 .el-row-body {
-    margin-top: 15px;
+  margin-top: 15px;
 }
 .el-row-body-text {
-    margin-left: 30px;
+  margin-left: 30px;
   margin-bottom: 10px;
   margin-top: 20px;
 }
-.button-text {
-  margin-left: 10px;
-  margin-top: 10px;
-  margin-bottom: -20px;
-  font-size: 14px;
-  display: block;
-  text-decoration: none;
+.msg{
+    margin-bottom: 3px;
+    margin-top: 8px;
+    padding:1px;
+    
 }
 </style>
 
 <script>
 import AfterSellerDetail from "~/components/home/AfterSellerDetail";
-import mapLinkage from '~/components/home/mapLinkage'
-import Cookies from 'js-cookie'
+import mapLinkage from "~/components/home/mapLinkage";
+import Cookies from "js-cookie";
 export default {
     components:{
         AfterSellerDetail,
         mapLinkage,
     },
-    mounted(){
-        this.getSellerAfterServiceList()
+    async mounted(){
+        await this.getSellerAfterServiceList()
     },
     data() {
         return {
             reviewFormVisible:false,
             showList:true,
             detailIndex : 0,
+            reviewIndex : 0,
             service : 'seeList',
             reviewGood :{
                 flag : false,
@@ -148,8 +217,9 @@ export default {
                 addressDetail:'',
                 sellerName : '',
                 index : '',
+                phoneNumber : '',
             },
-            afterSellerServiceList :[]
+            afterSellerServiceList  :[]
         }
     },
     methods:{
@@ -159,10 +229,47 @@ export default {
         },
         applyReview(index){
             this.reviewFormVisible = true;
-            this.reviewGood.index = index
+            this.reviewIndex = index
+            this.reviewGood.province = this.afterSellerServiceList[index].province
+            this.reviewGood.city = this.afterSellerServiceList[index].city
+            this.reviewGood.addressDetail = this.afterSellerServiceList[index].addressDetail
+            this.reviewGood.sellerName = this.afterSellerServiceList[index].sellerName   
+            this.reviewGood.phoneNumber = this.afterSellerServiceList[index].sellerPhoneNumber   
         },
         updateArea(province,city){
 
+        },
+        async submitReview(){
+            // 没想好怎么验证
+            console.log("提交审核")
+            let data = {
+                query : 'Review',
+                data : {
+                    userId:Cookies.get("userId"),
+                    sessionId: Cookies.get("sessionId"),
+                    afterServiceId:this.afterSellerServiceList[this.reviewIndex].afterServiceId+"",
+                    reviewFlag : this.reviewGood.flag,
+                    sellerMessage: this.reviewGood.message,
+                    addressDetail: this.reviewGood.addressDetail,
+                    sellerName: this.reviewGood.sellerName,
+                    province: this.reviewGood.province,
+                    city: this.reviewGood.city, 
+                    sellerPhoneNumber: this.reviewGood.phoneNumber,
+                }
+            }
+
+            let response = await this.$axios.send(data);
+            if (response.status == 1) {
+                await this.getSellerAfterServiceList()
+                this.$message({ message: "审核成功！",type: "success"});
+            } else if (response.status == 0) {
+                this.$message.error("发送错误:" + response.err);
+            } else {
+                Cookies.remove("userId");
+                Cookies.remove("sessionId");
+                Cookies.remove("userName");
+                this.$router.push({ path: "/" });
+            }
         },
         checkReceive(index){
             this.$confirm('请问是否确认收货？','提示',{
@@ -176,7 +283,7 @@ export default {
                     data : {
                         userId:Cookies.get("userId"),
                         sessionId: Cookies.get("sessionId"),
-                        afterServiceId:this.afterSellerServiceList[index].afterServiceId,
+                        afterServiceId:this.afterSellerServiceList[index].afterServiceId+"",
                     }
                 }
 
@@ -184,13 +291,14 @@ export default {
                 if (response.status == 1) {
                     await this.getSellerAfterServiceList()
                     this.$message({ message: "发布成功！",type: "success"});
-                } else if (response.status == 0) {
-                    this.$message.error("发送错误:" + response.err);
-                } else {
+                } else if (response.status == -1) {
                     Cookies.remove("userId");
                     Cookies.remove("sessionId");
                     Cookies.remove("userName");
                     this.$router.push({ path: "/" });
+                    
+                } else {
+                    this.$message.error("发送错误:" + response.err);
                 }
                 
             }).catch(()=>{

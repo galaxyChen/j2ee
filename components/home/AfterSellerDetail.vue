@@ -33,7 +33,7 @@
                 </el-row>
                 <el-row class="msg">
                     <el-col :span="4" class="col-title">联系电话</el-col>
-                    <el-col :span="20" class="col-text">{{afterSellerService.phoneNumber}}</el-col>     
+                    <el-col :span="20" class="col-text">{{afterSellerService.buyerPhoneNumber}}</el-col>     
                 </el-row>
             </div>
         </div>
@@ -48,14 +48,14 @@
             <h3 style="color:#cccccc;">审核信息</h3>
             <div style="border-style:solid;border-color:rgb(238, 238, 238);margin-top:10px;padding:20px;line-height:25px;">
                 <p style="margin-bottom:30px;">{{afterSellerService.sellerMessage}}</p>
-                <el-input label="收货地址："> {{afterSellerService.addressDetail}}</el-input>
-                <el-input label="联系姓名："> {{afterSellerService.sellerName}}</el-input>
-                <el-input label="联系电话：">{{afterSellerService.sellerPhoneNumber}}</el-input>
+                <el-row >收货地址： {{afterSellerService.addressDetail}}</el-row>
+                <el-row >联系姓名： {{afterSellerService.sellerName}}</el-row>
+                <el-row >联系电话：{{afterSellerService.sellerPhoneNumber}}</el-row>
             </div>
         </div>
 
         <!-- 未想好 点击取消之后，页面如何变化 -->
-        <el-button type="primary" class="cancelBtn" @click="confirmCancel">取消</el-button>
+        <!-- <el-button type="primary" class="cancelBtn" @click="confirmCancel">取消</el-button> -->
     </el-main>
 </template>
 
