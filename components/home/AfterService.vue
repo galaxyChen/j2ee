@@ -46,9 +46,15 @@ export default {
           AfterDetail,
           AfterOrderDetail,
     },
-    mounted(){
-        this.getOrderList()
-        this.getAfterServiceList()
+    async mounted(){
+        await this.getOrderList()
+        await this.getAfterServiceList()
+        let params = this.$route.params;
+        console.log(params)
+        if(false){
+            this.showList = false;
+            this.service = 'second'
+        }
     },
     data(){
         return{

@@ -355,7 +355,22 @@ export default {
         }
       });
     },
-    lookServive() {},
+    lookServive() {
+      let userId = Cookies.get("userId")
+      this.$router.push({
+        // name : "home-id",
+        // query : {
+        //   index : '3-4'
+        // },
+        // params : {
+        //   orderId : this.order.orderId
+        // }
+        path :  `/home/${userId}` ,
+        query :{
+          index : '3-3'
+        }
+      })
+    },
     async sendOrder() {
       this.dialogFormVisible = false;
       let sender = this.sendGood.sender[0];
