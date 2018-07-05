@@ -3,7 +3,7 @@
         <div class='person-main-box'>
             <el-form :inline="true">
                 <el-form-item label="昵称">
-                    <el-input ref='name' @blur='changeName' :disabled='change' v-model='name'  :placeholder='user_name'></el-input>
+                    <el-input ref='name' @blur='changeName' :disabled='change' v-model='name'  :placeholder='user_name' @input="checkName"></el-input><a style="color:red;">{{error_name_message}}</a>
                 </el-form-item>
                 <el-form-item>
                     <el-button type="primary" @click="changeName">修改</el-button>
@@ -17,9 +17,10 @@
                         <el-input type='password' v-model='oldpw' class='person-input-box'  size='medium'>
                             <template slot='prepend'>旧密码</template>
                         </el-input>
-                        <el-input type='password' v-model='newpw' class='person-input-box'  size='medium'>
+                        <el-input @input='checkPw' type='password' v-model='newpw' class='person-input-box'  size='medium'>
                             <template slot='prepend'>新密码</template>
                         </el-input>
+                        <a style="color:red;">{{error_pw_message}}</a>
                         <el-input type='password' v-model='newpw2' class='person-input-box'  size='medium'>
                             <template slot='prepend'>重复新密码</template>
                         </el-input>
@@ -75,10 +76,53 @@ export default {
       answer: "",
       oldpw: "",
       newpw: "",
-      newpw2: ""
+      newpw2: "",
+      error_name_message: "",
+      error_pw_message: ""
     };
   },
   methods: {
+    checkName(text) {
+      let newName = text;
+      if (newName == "") {
+        this.error_name_message = "请输入昵称";
+        return;
+      } else if (newName.length > 20) {
+        this.error_name_message = "长度不超过20个字";
+        return;
+      } else {
+        let p1 = /^[A-Za-z0-9\u4e00-\u9fa5]+$/;
+        let p2 = /^[0-9]+$/;
+        if (p2.test(newName)) {
+          this.error_name_message = "由汉字、字母和数字组成，不允许是纯数字";
+          return;
+        } else if (!p1.test(newName)) {
+          this.error_name_message = "由汉字、字母和数字组成，不允许是纯数字";
+          return;
+        }
+      }
+      this.error_name_message = "";
+    },
+    checkPw(newpw) {
+      if (newpw == "") {
+        this.error_pw_message = "请输入密码";
+        return;
+      } else if (newpw.length > 16 || newpw.length < 6) {
+        this.error_pw_message = "新密码长度在 6 到 16 个字符";
+        return;
+      } else {
+        let p = /^(?=.*\d)(?=.*[a-zA-Z])(?=.*[_])[\da-zA-Z_]+/;
+        let p1 = /^[a-z1-9A-Z_]+$/
+        if (!p.test(newpw)) {
+          this.error_pw_message = "新密码最少包含数字、字母和下划线";
+          return;
+        }
+        if (!p1.test(newpw)) {
+          this.error_pw_message = "新密码只能包含数字、字母和下划线";
+          return;
+        }
+      }
+    },
     async changeName() {
       console.log("changeName");
       if (this.change) {

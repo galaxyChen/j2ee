@@ -14,15 +14,25 @@
                 </el-tabs>
             </el-header>
             <el-main>
-                <Order @sendOrder='updateOrder' @cancelOrder='updateOrder' @finishOrder='updateOrder' @signOrder='updateOrder' @lookDetail='lookDetail' v-for="order in onShowList" :type='type' :key='"order-"+order.orderId' :order='order'></Order>
+                <Order @sendOrder='updateOrder' @cancelOrder='updateOrder' @finishOrder='updateOrder' @signOrder='updateOrder' @lookServiceDetail='lookServiceDetail' @lookDetail='lookDetail' v-for="order in onShowList" :type='type' :key='"order-"+order.orderId' :order='order'></Order>
             </el-main>
         </el-container>
-        <el-container v-else>
+        <el-container v-else-if="showOrder">
             <el-header>
                 <el-button @click="goBack" class="back-button" size="medium" type='text' icon="el-icon-back">返回</el-button>
             </el-header>
             <el-main>
                 <OrderDetail @sendOrder='updateOrder' @cancelOrder='updateOrder' @finishOrder='updateOrder' @signOrder='updateOrder' @lookDetail='lookDetail' :type='type' :order='onShowOrder'></OrderDetail>
+            </el-main>
+        </el-container>
+
+        <el-container v-else>
+            <el-header>
+                <el-button @click="goBack" class="back-button" size="medium" type='text' icon="el-icon-back">返回</el-button>
+            </el-header>
+            <el-main>
+                <AfterDetail v-if="type==1" :afterService='service'></AfterDetail>
+                <AfterSellerDetail v-else :afterSellerService='service'></AfterSellerDetail>
             </el-main>
         </el-container>
     </el-col>
@@ -48,10 +58,14 @@
 import Order from "~/components/home/Order";
 import OrderDetail from "~/components/home/OrderDetail";
 import Cookies from "js-cookie";
+import AfterDetail from '~/components/home/AfterDetail';
+import AfterSellerDetail from '~/components/home/AfterSellerDetail';
 export default {
   components: {
     Order,
-    OrderDetail
+    OrderDetail,
+    AfterSellerDetail,
+    AfterDetail
   },
   async mounted() {
     console.log("now at:" + this.$route.query["index"]);
@@ -64,6 +78,7 @@ export default {
       type: 1,
       activeTab: "all",
       showList: true,
+      showOrder: false,
       allOrder: [],
       payOrder: [],
       receiveOrder: [],
@@ -71,12 +86,33 @@ export default {
       canceledOrder: [],
       orderList: [],
       onShowList: [],
-      onShowOrder: {}
+      onShowOrder: {},
+      service: {}
     };
   },
   methods: {
+    async lookServiceDetail(id) {
+      let query = {
+        query: "getOneAfterService",
+        data: {
+          adminId: Cookies.get("adminId"),
+          sessionId: Cookies.get("sessionId"),
+          afterServiceId: afterServiceId + ""
+        }
+      };
+      let response = await this.$axios.send(query);
+      if (response.status == 1) {
+        this.service = response.data.service;
+        this.showList = false;
+        this.showOrder = false;
+      } else if (response.status == 0) {
+        this.$message.error("发生错误" + response.err);
+      } else {
+        this.signout();
+      }
+    },
     async getOrder() {
-      this.onShowList = []
+      this.onShowList = [];
       let query = this.type == 1 ? "getBuyOrder" : "getSellOrder";
       let data = {
         query: query,
@@ -128,6 +164,7 @@ export default {
     },
     goBack() {
       this.showList = true;
+      this.showOrder = false;
       this.updateShowList();
     },
     lookDetail(id) {
@@ -137,6 +174,7 @@ export default {
           console.log(this.orderList[item]);
           this.onShowOrder = this.orderList[item];
           this.showList = false;
+          this.showOrder = true;
           return;
         }
       }
@@ -152,8 +190,9 @@ export default {
     $route(to, from) {
       let index = to.query.index.split("-");
       if (index.length == 2) {
-        this.onShowList = []
+        this.onShowList = [];
         this.showList = true;
+        this.showOrder = false;
         this.type = index[1] - 0;
         this.getOrder();
       }

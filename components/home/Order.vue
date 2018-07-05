@@ -10,11 +10,11 @@
         <el-row>
             <el-col class='order-box' :span='4'>
                 <div >
-                    <img class='order-book' :src='order.pictureAddress'/>
+                    <img @click="lookItemDetail" class='order-book' :src='order.pictureAddress'/>
                 </div>
             </el-col>
             <el-col class='order-box' :span="8">
-                <h4 class="order-title-text">{{order.itemTitle}}</h4>
+                <h4 @click="lookItemDetail" class="order-title-text">{{order.itemTitle}}</h4>
                 <a class="order-title-text">数量：{{order.quantity}}</a>
             </el-col>
             <el-col class='order-box' :span="4">
@@ -268,6 +268,9 @@ export default {
     }
   },
   methods: {
+    lookItemDetail() {
+      this.$router.push({ path: `/item/${this.order.itemId}` });
+    },
     handleChange() {
       console.log(this.sendGood.sender);
     },
@@ -356,25 +359,16 @@ export default {
       });
     },
     lookServive() {
-      let userId = Cookies.get("userId")
-      this.$router.push({
-        // name : "home-id",
-        // query : {
-        //   index : '3-4'
-        // },
-        // params : {
-        //   orderId : this.order.orderId
-        // }
-        path :  `/home/${userId}` ,
-        query :{
-          index : '3-3'
-        }
-      })
+      this.$emit("lookServiceDetail", this.order.afterServiceId);
     },
     async sendOrder() {
-      this.dialogFormVisible = false;
       let sender = this.sendGood.sender[0];
       let code = this.sendGood.code;
+      if (sender == "" || code == "") {
+        this.$message.error("信息未填写完整!");
+        return;
+      }
+      this.dialogFormVisible = false;
       if (sender != "" && code != "") {
         let data = {
           query: "sendOrder",

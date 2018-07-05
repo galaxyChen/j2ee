@@ -107,6 +107,20 @@ export default {
       if (this.$refs.upload.uploadFiles.length == 0) return "";
       let file = this.$refs.upload.uploadFiles[0];
       file = this.$refs.upload.getFile(file);
+      let fileName = file.name.split(".");
+      if (fileName.length != 2) {
+        this.$message.error("上传图片文件名有误!");
+        return false;
+      }
+      if (fileName[1] != "jpg" || fileName[1] != "png") {
+        this.$message.error("只支持jpg或者png文件!");
+        return false;
+      }
+      let size = file.size;
+      if (size / 1024 / 1024 > 1) {
+        this.$message.error("图片大小不能超过1M!");
+        return false;
+      }
       // console.log(file.raw instanceof File)
       // console.log(this.$refs.upload.$refs['upload-inner'].upload)
       let data = new FormData();
@@ -150,28 +164,31 @@ export default {
           let query = {
             query: "appeal",
             data: {
-              userId: Cookies.get("userId")+"",
+              userId: Cookies.get("userId") + "",
               sessionId: Cookies.get("sessionId"),
-              afterServiceId: this.$route.query["id"]+"",
+              afterServiceId: this.$route.query["id"] + "",
               description: this.data.reason,
               pictureAddress: url,
               name: this.data.name,
               phoneNumber: this.data.phone,
-              complaintType:this.$route.query['type']+""
+              complaintType: this.$route.query["type"] + ""
             }
           };
           let response = await this.$axios.send(query);
           if (response.status == 1) {
-              this.loading = false;
-              this.$message({
-                  message:"申诉申请已提交！",
-                  type:"success"
-              })
-              let index = this.$route.query.type == 1?'3-3':'3-4';
-              let userId = Cookies.get('userId')
-              this.$router.push({ path: `/home/${userId}` ,query:{index:index}});
+            this.loading = false;
+            this.$message({
+              message: "申诉申请已提交！",
+              type: "success"
+            });
+            let index = this.$route.query.type == 1 ? "3-3" : "3-4";
+            let userId = Cookies.get("userId");
+            this.$router.push({
+              path: `/home/${userId}`,
+              query: { index: index }
+            });
           } else if (response.status == 0) {
-               this.$message.error("发现错误:" + response.err);
+            this.$message.error("发现错误:" + response.err);
           } else {
             this.$message.error("登录超时！");
             Cookies.remove("userId");
