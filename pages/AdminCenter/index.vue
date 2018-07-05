@@ -9,7 +9,7 @@
                     <AdminNavLeft :active='currentMainIndex' @changeTab='changeTab'></AdminNavLeft>
             </el-col>
                 <el-col v-if="showDetail" :span="18">
-                    <ComplainDetail @goback='goback' :complaint='onShowComplaint'></ComplainDetail>
+                    <ComplainDetail @gofront='goback' :complaint='onShowComplaint'></ComplainDetail>
                 </el-col>
                 <el-col v-else :span='20'>
                     <el-container class="main-window">
@@ -22,15 +22,12 @@
                         </el-header>
                         <!-- 选项卡内容 -->
                         <el-main style='min-height:300px;'>
-                            <Complain v-for="comp in complaints" :key="'copm'+comp.complianId" :complaint='comp'></Complain>
+                            <Complain @lookComplain='lookComplain' v-for="comp in showList" :key="'copm'+comp.complaintId" :complaint='comp'></Complain>
                         </el-main>
                     </el-container>
                 </el-col>
         </el-main>
-
-        
     </el-container>    
-
 </template>
 
 <style>
@@ -55,51 +52,63 @@ export default {
     ComplainDetail,
     Complain
   },
-  async mounted() {
-    let query = {
-      query: "getAppealList",
-      data: {
-        adminId: Cookies.get("adminId"),
-        sessionId: Cookies.get("sessionId")
-      }
-    };
-    let response = await this.$axios.send(query);
-    if (response.status == 1){
-        this.complaints = response.data.appealList;
-    } else if (response.status == 0){
-        this.$message.error("发生错误："+response.err)
-    } else {
-        Cookies.remove('adminId')
-        Cookies.remove('sessionId')
-        this.$message.error("登录超时！")
-        this.$router.push({path:"/"})
-    }
+  mounted() {
+    this.getData();
   },
   data() {
     return {
       currentMainIndex: "1",
-      showDetail: true,
-      onShowComplaint: {
-        
-      },
-      complaints: [
-        
-      ]
+      showDetail: false,
+      activeTab: "buyerComplain",
+      onShowComplaint: {},
+      complaints: [],
+      showList: []
     };
   },
   methods: {
-    changeTab(index, indexPath) {
-      // console.log(index, indexPath);
-      let name = {
-        "1": "DealComplain"
-      };
-      this.currentMain = name[index];
-      this.currentMainIndex = index;
-      let adminId = Cookies.get("AdminId");
-      // this.$router.push({ path: `/home/${userId}` ,query:{index:index}});
-    },
+    changeTab(index, indexPath) {},
     goback() {
       this.showDetail = false;
+      this.getData();
+    },
+    handleClick() {
+      this.updateShowList();
+    },
+    updateShowList() {
+      let type = 1;
+      if (this.activeTab != "buyerComplain") type = 2;
+      let temp = this.complaints.filter((value, index) => {
+        if (value.complaintType == type) return true;
+        else return false;
+      });
+      this.showList = temp;
+    },
+    async getData() {
+      let query = {
+        query: "getAppealList",
+        data: {
+          adminId: Cookies.get("adminId"),
+          sessionId: Cookies.get("sessionId")
+        }
+      };
+      let response = await this.$axios.send(query);
+      if (response.status == 1) {
+        this.complaints = response.data.appealList;
+        this.updateShowList();
+      } else if (response.status == 0) {
+        this.$message.error("发生错误：" + response.err);
+      } else {
+        Cookies.remove("adminId");
+        Cookies.remove("sessionId");
+        this.$message.error("登录超时！");
+        this.$router.push({ path: "/" });
+      }
+    },
+    lookComplain(id) {
+      let index = 0;
+      while (this.complaints[index].complaintId != id) index++;
+      this.onShowComplaint = this.complaints[index];
+      this.showDetail = true;
     }
   }
 };

@@ -31,7 +31,7 @@
                 <!-- 等待退货状态 对应按钮 -->
                 <el-button @click="returnOfGoods(item.afterServiceId)" v-if='returnGoods(index)' type="text" class="stateBtn" size="small">退货</el-button>
                <!-- 拒绝退货状态 对应按钮 -->
-               <el-button @click="requestService" v-if='service(index)'  type="text warning" class="stateBtn" size='small'>申诉</el-button>
+               <el-button @click="requestService(item.afterServiceId)" v-if='service(index)'  type="text warning" class="stateBtn" size='small'>申诉</el-button>
             </el-col>
 
             <!-- 填写退货物流相关信息 -->
@@ -248,9 +248,10 @@ export default {
             console.log("现在点击了 退货按钮，准备填写退货信息");
             this.returnFormVisible = true;
         },
-        requestService(){
+        requestService(id){
             console.log("现在点击了 申请平台介入 按钮");
-            this.$router.push({paht:'/Appeal',query:{'id':this.item.orderId,'type':2}})
+            // console.log(this.afterServiceList)
+            this.$router.push({path:'/Appeal',query:{'id':id,'type':2}})
         },
         async doReturn(afterServiceId){
 

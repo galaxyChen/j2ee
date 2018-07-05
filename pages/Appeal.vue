@@ -152,7 +152,7 @@ export default {
             data: {
               userId: Cookies.get("userId")+"",
               sessionId: Cookies.get("sessionId"),
-              afterServiceId: this.$route.query["id"],
+              afterServiceId: this.$route.query["id"]+"",
               description: this.data.reason,
               pictureAddress: url,
               name: this.data.name,

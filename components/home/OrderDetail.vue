@@ -90,6 +90,12 @@
                 <div  class="text item">
                     收货地址:{{addressDetail}}
                 </div>
+                <div  class="text item">
+                    物流公司:{{order.expressCompany || "无"}}
+                </div>
+                <div  class="text item">
+                    物流单号:{{order.expressCode || "无"}}
+                </div>
             </el-card>
         </el-row>
         <el-row class="order-summary">

@@ -36,8 +36,8 @@
             </el-col>
         </el-row>
         <el-dialog title="收货地址" :visible.sync="dialogFormVisible">
-         <el-form :model="sendGood">
-            <el-form-item label="快递公司" >
+         <el-form :model="sendGood" :rules="rules">
+            <el-form-item label="快递公司" prop='firm'>
               <!-- <el-input v-model="sendGood.sender" placeholder="请输入快递公司"></el-input> -->
               <el-cascader
                 :options="options"
@@ -47,7 +47,7 @@
                >
               </el-cascader>
             </el-form-item>
-            <el-form-item label="快递单号" >
+            <el-form-item label="快递单号" prop='code'>
               <el-input v-model="sendGood.code" placeholder="请输入快递单号">
               </el-input>
             </el-form-item>
@@ -116,58 +116,96 @@ import Cookies from "js-cookie";
 export default {
   props: ["order", "type"],
   data() {
+    let validateCode = (rule, value, callback) => {
+      if (value == "") {
+        callback(new Error("请输入快递单号"));
+      } else {
+        let p = /^[1-9a-zA-Z]+$/;
+        if (!p.test(value)) {
+          callback(new Error("请输入快递单号"));
+        } else {
+          callback();
+        }
+      }
+    };
     return {
-        options: [{
-          value: '顺丰',
-          label: '顺丰',
-          }, {
-            value: '京东',
-            label: '京东',
-          },{
-            value: '韵达',
-            label: '韵达'
-          },{
-            value: '中通',
-            label: '中通',
-          },{
-            value: '圆通',
-            label: '圆通',
-          },{
-            value: '申通',
-            label: '申通',
-          },{
-            value: '百世汇通',
-            label: '百世汇通'
-          },{
-            value: '天天',
-            label: '天天'
-          },{
-            value: '邮政',
-            label: '邮政'
-          },{
-            value: '当当',
-            label: '当当'
-          },{
-            value: '亚马逊',
-            label: '亚马逊'
-          },{
-            value: '如风达',
-            label: '如风达'
-          },{
-            value: '快捷',
-            label: '快捷'
-          },{
-            value: '德邦',
-            label: '德邦'
-          },{
-            value: '万象',
-            label: '万象'
-          },{
-            value: '其他',
-            label: '其他'
-          }],
-         
-
+      options: [
+        {
+          value: "顺丰",
+          label: "顺丰"
+        },
+        {
+          value: "京东",
+          label: "京东"
+        },
+        {
+          value: "韵达",
+          label: "韵达"
+        },
+        {
+          value: "中通",
+          label: "中通"
+        },
+        {
+          value: "圆通",
+          label: "圆通"
+        },
+        {
+          value: "申通",
+          label: "申通"
+        },
+        {
+          value: "百世汇通",
+          label: "百世汇通"
+        },
+        {
+          value: "天天",
+          label: "天天"
+        },
+        {
+          value: "邮政",
+          label: "邮政"
+        },
+        {
+          value: "当当",
+          label: "当当"
+        },
+        {
+          value: "亚马逊",
+          label: "亚马逊"
+        },
+        {
+          value: "如风达",
+          label: "如风达"
+        },
+        {
+          value: "快捷",
+          label: "快捷"
+        },
+        {
+          value: "德邦",
+          label: "德邦"
+        },
+        {
+          value: "万象",
+          label: "万象"
+        },
+        {
+          value: "其他",
+          label: "其他"
+        }
+      ],
+      rules: {
+        code: [
+          { validator: validateCode, trigger: "change" },
+          {
+            min: 1,
+            max: 15,
+            message: "长度应在15字符内！",
+            trigger: "change"
+          }
+        ]
+      },
       dialogFormVisible: false,
       sendGood: {
         sender: [],
@@ -196,7 +234,12 @@ export default {
       else return false;
     },
     signfor() {
-      if (this.type == 1 && this.order.orderState == "等待收货" && this.type == 1) return true;
+      if (
+        this.type == 1 &&
+        this.order.orderState == "等待收货" &&
+        this.type == 1
+      )
+        return true;
       else return false;
     },
     service() {
@@ -225,33 +268,31 @@ export default {
     }
   },
   methods: {
-    handleChange(){
+    handleChange() {
       console.log(this.sendGood.sender);
     },
     signout() {
-      this.$message.error("登录超时！")
-      Cookies.remove('userId')
-      Cookies.remove('sessionId')
-      Cookies.remove('userName')
-      this.$router.push({path:'/'})
+      this.$message.error("登录超时！");
+      Cookies.remove("userId");
+      Cookies.remove("sessionId");
+      Cookies.remove("userName");
+      this.$router.push({ path: "/" });
     },
     lookDetail() {
       this.$emit("lookDetail", this.order.orderId);
     },
     payForOrder() {
       //进入结算页面
-      let orderId = []
-      orderId.push(this.order.orderId)
-      this.$router.push({ 
-          name: 'Pay' ,
-          params: { 
-              totalPay: this.order.price + this.order.postage ,
-              orderId : orderId,
-              time_limit :'2小时0分',
-          }  
+      let orderId = [];
+      orderId.push(this.order.orderId);
+      this.$router.push({
+        name: "Pay",
+        params: {
+          totalPay: this.order.price + this.order.postage,
+          orderId: orderId,
+          time_limit: "2小时0分"
+        }
       });
-
-
     },
     signOrder() {
       this.$confirm("确认收货吗?", "收货确认", {
@@ -264,7 +305,7 @@ export default {
           data: {
             userId: Cookies.get("userId"),
             sessionId: Cookies.get("sessionId"),
-            orderId: this.order.orderId+'',
+            orderId: this.order.orderId + ""
           }
         };
         let response = await this.$axios.send(data);
@@ -295,7 +336,7 @@ export default {
           data: {
             userId: Cookies.get("userId"),
             sessionId: Cookies.get("sessionId"),
-            orderId: this.order.orderId+''
+            orderId: this.order.orderId + ""
           }
         };
         let response = await this.$axios.send(data);
@@ -325,8 +366,8 @@ export default {
           data: {
             userId: Cookies.get("userId"),
             sessionId: Cookies.get("sessionId"),
-            orderId:this.order.orderId+'', 
-            expressCode: code+'',
+            orderId: this.order.orderId + "",
+            expressCode: code + "",
             express_company: sender
           }
         };
@@ -339,9 +380,9 @@ export default {
             type: "success"
           });
           this.sendGood = {
-            sender:'',
-            code:''
-          }
+            sender: [],
+            code: ""
+          };
           this.$emit("sendOrder", item);
         } else if (response.status == 0) {
           this.$message.error("发生错误：" + response.err);
@@ -361,7 +402,7 @@ export default {
           data: {
             userId: Cookies.get("userId"),
             sessionId: Cookies.get("sessionId"),
-            orderId: this.order.orderId+"",
+            orderId: this.order.orderId + ""
           }
         };
         let response = await this.$axios.send(data);

@@ -61,19 +61,14 @@ export default {
             this.$refs[formName].validate(async valid => {
                if (valid) {
                     let data = {
-                       query: this.query
+                       query: 'adminLogin',
+                       data:{
+                           adminName:this.adminLoginForm.adminName,
+                           password:this.adminLoginForm.password
+                       }
                     };
-                    data.data = serialize(this.serviceLoginForm);
-                    // let response = await this.$axios.send(data);
-                    let response = {
-                        status: 1,
-                        data: {
-                            adminId: 1,
-                            adminName: "root",
-                            sessionId: "11111",
-                        }
-
-                    }
+                    // data.data = serialize(this.adminLoginForm);
+                    let response = await this.$axios.send(data);
                     this.applyLogin(response);
                }
             });
@@ -83,7 +78,7 @@ export default {
             if (response.status === 1) {
                 console.log("login success");
                 Cookies.set("adminId", response.data.adminId);
-                Cookies.set("adminName", response.data.adminName);
+                Cookies.set("adminName", this.adminLoginForm.adminName);
                 Cookies.set("sessionId", response.data.sessionId);
                 this.$router.push({ path: "/AdminCenter/" });
             } else {
