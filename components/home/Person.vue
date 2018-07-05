@@ -143,7 +143,7 @@ export default {
           return;
         } else {
           let p1 = /^[A-Za-z0-9\u4e00-\u9fa5]+$/;
-          let p2 = /^[0-9]$/;
+          let p2 = /^[0-9]+$/;
           if (p2.test(newName)) {
             this.$message.error("由汉字、字母和数字组成，不允许是纯数字");
             return;

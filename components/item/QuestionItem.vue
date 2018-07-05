@@ -67,6 +67,10 @@ export default {
           this.$message.error("留言不可超过200字")
           return 
       }
+      else if(this.answer==0){
+          this.$message.error("回复不可为空")
+          return 
+      }
 
       let userId = Cookies.get("userId");
       let sessionId = Cookies.get("sessionId");
