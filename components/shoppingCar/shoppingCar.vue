@@ -27,7 +27,7 @@
     </el-table-column>
     <el-table-column label="数量" align="center" >
         <template slot-scope="scope">
-            <el-input-number :disabled="!scope.row.canChosen" v-model="scope.row.nums"  :min="1" :max="scope.row.quantity" @change="changeNums(scope.$index)"></el-input-number>
+            <el-input-number style="width:auto;" :disabled="!scope.row.canChosen" v-model="scope.row.nums"  :min="1" :max="scope.row.quantity"   @change="changeNums(scope.$index)"></el-input-number>
         </template>
     </el-table-column>
     <el-table-column label="小计" align="center">

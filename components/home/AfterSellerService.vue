@@ -7,11 +7,15 @@
                     <el-card v-for="(item,index) in afterSellerServiceList" :key="index">
                         <div class="oneRequestMsg">
                             <el-row class="header">
-                                <el-col class="header-text" :span="4">下单时间:{{item.purchaseTime}}</el-col>
+                                <el-col class="header-text" :span="8">下单时间:{{item.purchaseTime}}</el-col>
                                 <el-col class="header-text" :span="4"> 订单编号:{{item.orderId}} </el-col>
                             </el-row>
                             <el-row class="el-row-body">
-                                <el-col :span="3" class="el-row-body-text"><img :src="item.pictureAddress"/> </el-col>
+                                <el-col :span="3" class="el-row-body-text">
+                                  
+                                        <img  :src="item.pictureAddress" style="width:120px;height:150px;"/>
+                               
+                                 </el-col>
                                 <el-col :span="3" class="el-row-body-text">{{item.itemTitle}}</el-col>
                                 <el-col :span="3" class="el-row-body-text">
                                     <el-row style="margin-bottom:20px">服务单号:{{item.afterServiceId}}</el-row>
@@ -177,6 +181,7 @@
 .el-row-body {
   margin-top: 15px;
 }
+
 .el-row-body-text {
   margin-left: 30px;
   margin-bottom: 10px;

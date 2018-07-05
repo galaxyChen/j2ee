@@ -3,8 +3,8 @@
 <div>
     <el-card  v-for="(item,index) in afterServiceList" :key="index"  class="container">
         <el-row class="header">
-            <el-col class="header-text" :span="4">下单时间:{{item.purchaseTime}}</el-col>
-            <el-col class="header-text" :span="4"> 订单编号:{{item.orderId}} </el-col>
+            <el-col class="header-text" :span="8">下单时间:{{item.purchaseTime}}</el-col>
+            <el-col class="header-text" :span="6"> 订单编号:{{item.orderId}} </el-col>
         </el-row>
         <el-row class="el-row-body">
             <el-col :span="3" >
