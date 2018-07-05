@@ -75,6 +75,10 @@ export default {
         this.$message.error("留言不可以超过200字");
         return;
       }
+      else if(this.ask.length==0){
+        this.$message.error("留言不可以为空");
+        return;
+      }
       let userId = Cookies.get("userId");
       let sessionId = Cookies.get("sessionId");
       let data = {
@@ -119,7 +123,7 @@ export default {
       if (response.status === 1) {
         this.questions = response.data.QAList;
         this.showQuestions = JSON.parse(JSON.stringify(this.questions)).splice(0,5);
-        this.currentPage = 1;
+        // this.currentPage = 1;
       } else {
         this.$message.error("发生错误：" + response.err);
       }

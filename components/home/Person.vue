@@ -1,9 +1,9 @@
 <template>
     <el-col :span='10' :push='3'>
         <div class='person-main-box'>
-            <el-form :inline="true">
-                <el-form-item label="昵称">
-                    <el-input ref='name' @blur='changeName' :disabled='change' v-model='name'  :placeholder='user_name'></el-input>
+            <el-form :inline="true" :rules="nameRule">
+                <el-form-item label="昵称" prop="name">
+                    <el-input ref='name'  @blur='changeName' :disabled='change' v-model='name'  :placeholder='user_name'></el-input>
                 </el-form-item>
                 <el-form-item>
                     <el-button type="primary" @click="changeName">修改</el-button>
@@ -75,7 +75,33 @@ export default {
       answer: "",
       oldpw: "",
       newpw: "",
-      newpw2: ""
+      newpw2: "",
+      nameRule:{
+        name : [
+          { validator:(rule,value,callback)=>{
+              if (newName == "") {
+                callback(new Error("请输入昵称"))
+              } 
+              else if (newName.length > 20) {
+                callback(new Error("长度不超过20个字"))
+              } 
+              else {
+                let p1 = /^[A-Za-z0-9\u4e00-\u9fa5]+$/;
+                let p2 = /^[0-9]+$/;
+                if (p2.test(newName)) {
+                  callback(new Error("由汉字、字母和数字组成，不允许是纯数字"))
+                } 
+                else if (!p1.test(newName)) {
+                  callback(new Error("由汉字、字母和数字组成，不允许是纯数字"))
+                }
+                else{
+                  callback()
+                }
+              }  
+            },trigger:"change",trigger:"blur"
+          }
+        ]
+      },
     };
   },
   methods: {
@@ -99,7 +125,7 @@ export default {
           return;
         } else {
           let p1 = /^[A-Za-z0-9\u4e00-\u9fa5]+$/;
-          let p2 = /^[0-9]$/;
+          let p2 = /^[0-9]+$/;
           if (p2.test(newName)) {
             this.$message.error("由汉字、字母和数字组成，不允许是纯数字");
             return;
