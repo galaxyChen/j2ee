@@ -69,19 +69,19 @@ export default {
     changeTab(index, indexPath) {},
     goback() {
       this.showDetail = false;
-      this.getData()
+      this.getData();
     },
     handleClick() {
       this.updateShowList();
     },
     updateShowList() {
-        let type = 0;
-        if (this.activeTab != 'buyerComplain') type = 1;
-        let temp = this.complaints.filter((value,index)=>{
-            if (value.complaintType == type) return true;
-            else return false;
-        })
-        this.showList = temp;
+      let type = 1;
+      if (this.activeTab != "buyerComplain") type = 2;
+      let temp = this.complaints.filter((value, index) => {
+        if (value.complaintType == type) return true;
+        else return false;
+      });
+      this.showList = temp;
     },
     async getData() {
       let query = {
@@ -94,7 +94,7 @@ export default {
       let response = await this.$axios.send(query);
       if (response.status == 1) {
         this.complaints = response.data.appealList;
-        this.updateShowList()
+        this.updateShowList();
       } else if (response.status == 0) {
         this.$message.error("发生错误：" + response.err);
       } else {
