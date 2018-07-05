@@ -1,7 +1,14 @@
 <template>
     <div>
         <NavTop></NavTop>
-        <el-main>
+        <el-main v-if="item.itemState == '已下架'">
+            <el-alert
+              style="margin-top:50px;"
+              title="该商品已下架"
+              type="warning">
+            </el-alert>
+        </el-main>
+        <el-main v-else>
             <el-row type="flex" justify="center">
                 <el-col :xs="20" :sm="18" :md="18" :lg="18" :xl="14">
                     <el-card shadow="never" body-style="{ padding: '20px'}" >
