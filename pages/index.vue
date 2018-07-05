@@ -13,34 +13,14 @@
           <!-- 搜索框组件 -->
           <SearchBox @doSearch='doSearch' ref = 'searchbox' class="search-box"></SearchBox>
 
-          <!-- 新书上架组件 -->
-          <!-- <div class="newBookBox" >
-            <el-col style="color: #99a9bf;font-size:28px;text-align:left;margin-top:-80px;">新书上架
-              <hr style="margin-top:-50px;">
-            </el-col>
-            <div
-            v-for="book in newBooks"
-            :key='"recent"+book.itemId'
-            class="goods" >
-                  <img @click='lookDetail(book.itemId)' class='goods-img' :src="book.pictureAddress">
-                  <div @click='lookDetail(book.itemId)' style="mar  gin-top:-100px;"> 
-                      <p style="margin-top:-120px;margin-left:-50px;color:red;font-weight:900;">￥ {{book.price}}</p>
-                      <p style="margin-top:-120px;margin-left:10px;">{{book.itemTitle}}</p>
-                      <div style="margin-top:-120px;margin-left:10px;">
-                          <el-button type="primary" @click='lookDetail(book.itemId)'>查看详情</el-button>
-                      </div>
-                  </div>
-              </div>
-            </div> -->
-
-              <!-- 新书上架组件  6/28 16:30 修改测试-->
+          <!-- 新书上架组件  6/28 16:30 修改测试-->
           <div class="newBookBox" >
             <el-col style="color: #99a9bf;font-size:28px;text-align:left;margin-top:-80px;">新书上架
               <hr style="margin-top:-50px;">
             </el-col>
-            <el-row style="margin-left:8px;margin-right:20px;">
+            <el-row style="margin-left:5px;">
               <el-col :span="3" v-for="book in newBooks" :key='"recent"+book.itemId' :offset="1">
-                <el-card :body-style="{ padding: '5px' }" class="goods" >
+                <el-card :body-style="{ padding: '10px' }" class="goods" >
                   <img @click='lookDetail(book.itemId)'  class="image" :src="book.pictureAddress">
                   <div style="text-align:left;padding-left:10px;margin-top:-50px">
                     <span style="font-weight:900;font-size:18px;"> {{book.itemTitle}}</span>

@@ -1,7 +1,7 @@
 <template>
 <div>
     <el-row type="flex" justify="end">
-        <el-col :span="5" class="leftDiv">
+        <el-col :span="8" class="leftDiv">
             <el-row class="el-row1">
                 商品件数：
             </el-row>
@@ -47,7 +47,8 @@
   text-align: right
 }
 .leftDiv{
-    text-align: right
+    text-align: right;
+    font-weight: 800;
 }
 </style>
 

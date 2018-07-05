@@ -28,7 +28,7 @@
         <span v-if="item.isDefaultAddress=='1'" >[默认地址]</span>
       </el-card>
         <span slot="footer" class="dialog-footer">
-            <el-button @click="closeDialog">取 消</el-button>
+            <!-- <el-button @click="closeDialog"></el-button> -->
             <el-button type="primary" @click="submit">确 定</el-button>
         </span>
 </el-dialog>
