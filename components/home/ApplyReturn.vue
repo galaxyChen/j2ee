@@ -184,53 +184,72 @@ export default {
           { required: true, message: "请选择退货原因", trigger: "blur" }
         ],
         dsc: [
-          { required: true, message: "请输入问题描述！", trigger: "blur" },
-          { required: true, message: "请输入问题描述！", trigger: "change" }
+          { required: true, message: "请输入问题描述！", trigger: "blur" , trigger: "change"},
+          { max: 300, message: "问题描述不能超过300字" , trigger: "blur" , trigger: "change"}
         ],
         contacts: [
-          { required: true, validator: checkContacts, trigger: "blur" },
-          { required: true, validator: checkContacts, trigger: "change" }
+          { required: true, validator: checkContacts, trigger: "blur", trigger: "change" },
         ],
         phone: [
-          // {required:true, type:"number", message:"请正确输入联系电话！",trigger:"blur" },
-          { require: true, validator: checkPhone, trigger: "blur" },
-          { require: true, validator: checkPhone, trigger: "change" }
+          {   validator: (rule,value,callback)=>{
+                  if(value==""){
+                      callback(new Error("请输入手机号"));
+                  }
+                  else{
+                      let p = /^1[3|4|5|7|8][0-9]\d{8}$/;
+                      if(!p.test(value)){
+                          callback(new Error("请输入正确的手机号"));
+                      }
+                      else{
+                          callback();
+                      }
+                  }
+              },
+              trigger: 'blur',trigger:'change'
+          }
         ]
       }
     };
   },
   methods: {
     async applyReturn(){
-      let data = {
-          query : 'applyReturn',
-          data : {
-              userId : Cookies.get("userId"),
-              sessionId : Cookies.get("sessionId"),
-              orderId : this.order.orderId+"",
-              returnReason : this.ApplyForm.reason,
-              returnVoucher : [
-                'http://193.112.63.219.8080/BookStore/image/1.jpg',
-                'http://193.112.63.219.8080/BookStore/image/1.jpg'
-              ], 
-              description : this.ApplyForm.dsc , 
-              buyerPhoneNumber : this.ApplyForm.phone,
-              buyerName : this.ApplyForm.contacts,
+      this.$refs['ApplyForm'].validate(async valid => {
+        if(valid){
+          let data = {
+              query : 'applyReturn',
+              data : {
+                  userId : Cookies.get("userId"),
+                  sessionId : Cookies.get("sessionId"),
+                  orderId : this.order.orderId+"",
+                  returnReason : this.ApplyForm.reason,
+                  returnVoucher : [
+                    'http://193.112.63.219.8080/BookStore/image/1.jpg',
+                    'http://193.112.63.219.8080/BookStore/image/1.jpg'
+                  ], 
+                  description : this.ApplyForm.dsc , 
+                  buyerPhoneNumber : this.ApplyForm.phone,
+                  buyerName : this.ApplyForm.contacts,
+                  
+              }
           }
-      }
-      let response = await this.$axios.send(data)
-      if(response.status===1){
-          this.$message.success("您已成功申请退货，请等待审核")
-          this.$emit("applyReturnSuccess")
-      }
-      else if (response.status == -1) {
-          this.$message.error("登录超时！");
-          Cookies.remove("userId");
-          Cookies.remove("sessionId");
-          Cookies.remove("userName");
-          this.$router.push({ path: "/" });
-      } else {
-          this.$message.error("发生错误：" + response.err);
-      }
+          let response = await this.$axios.send(data)
+          if(response.status===1){
+              this.$message.success("您已成功申请退货，请等待审核")
+              this.$emit("applyReturnSuccess")
+          }
+          else if (response.status == -1) {
+              this.$message.error("登录超时！");
+              Cookies.remove("userId");
+              Cookies.remove("sessionId");
+              Cookies.remove("userName");
+              this.$router.push({ path: "/" });
+          } else {
+              this.$message.error("发生错误：" + response.err);
+          }
+        }
+      });
+      
+
     },
     handleExceed(files, fileList) {
       this.$message.warning(
