@@ -23,7 +23,7 @@
             :key='"recent"+book.itemId'
             class="goods" >
                   <img @click='lookDetail(book.itemId)' class='goods-img' :src="book.pictureAddress">
-                  <div @click='lookDetail(book.itemId)' style="margin-top:-100px;"> 
+                  <div @click='lookDetail(book.itemId)' style="mar  gin-top:-100px;"> 
                       <p style="margin-top:-120px;margin-left:-50px;color:red;font-weight:900;">￥ {{book.price}}</p>
                       <p style="margin-top:-120px;margin-left:10px;">{{book.itemTitle}}</p>
                       <div style="margin-top:-120px;margin-left:10px;">
@@ -38,12 +38,12 @@
             <el-col style="color: #99a9bf;font-size:28px;text-align:left;margin-top:-80px;">新书上架
               <hr style="margin-top:-50px;">
             </el-col>
-            <el-row style="margin-left:10px;margin-right:20px;">
+            <el-row style="margin-left:8px;margin-right:20px;">
               <el-col :span="3" v-for="book in newBooks" :key='"recent"+book.itemId' :offset="1">
                 <el-card :body-style="{ padding: '5px' }" class="goods" >
                   <img @click='lookDetail(book.itemId)'  class="image" :src="book.pictureAddress">
                   <div style="text-align:left;padding-left:10px;margin-top:-50px">
-                    <span style="font-weight:900;font-size:20px;"> {{book.itemTitle}}</span>
+                    <span style="font-weight:900;font-size:18px;"> {{book.itemTitle}}</span>
                     <div class="bottom clearfix" @click='lookDetail(book.itemId)'>
                       <p style="margin-top:-60px;font-weight:500;color:red;">￥ {{book.price}}</p>
                       <el-button type="text" @click='lookDetail(book.itemId)' class="button">查看详情</el-button>
