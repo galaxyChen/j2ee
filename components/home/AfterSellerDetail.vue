@@ -1,6 +1,6 @@
 <template>
     <!-- 卖家角度 查看申请售后服务商品的详细信息 -->
-    <el-main style=" margin:70px 40px 30px -80px;border-style: solid;border-color: rgb(238, 238, 238);">    
+    <el-main style=" border-style: solid;border-color: rgb(238, 238, 238);">    
         <el-row class="row1 status" >
             <el-col :span="6" style="color:red">售后服务状态：{{afterSellerService.afterServiceState}}</el-col>
             <el-col :span="6" :offset="2">服务单号：{{afterSellerService.afterServiceId}}</el-col>
