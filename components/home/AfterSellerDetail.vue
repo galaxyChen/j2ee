@@ -1,4 +1,4 @@
-<template>
+    <template>
     <!-- 卖家角度 查看申请售后服务商品的详细信息 -->
     <div style=" border-style: solid;border-color: rgb(238, 238, 238);">    
         <el-row class="row1 status" >
@@ -39,9 +39,13 @@
         </div>
         <el-row class="row1">
             <h3 style="color:#cccccc;">问题描述</h3>
-            <p style="border-style:solid;border-color:rgb(238, 238, 238);margin-top:10px;margin-bottom:40px;padding:20px;">{{afterSellerService.description}}</p>
+            <div style="border-style:solid;border-color:rgb(238, 238, 238);margin-top:10px;margin-bottom:40px;padding:20px;">{{afterSellerService.description}}
             <!-- 加入照片凭证 -->
-            
+            <h5 style="color:#cccccc;margin-top:10px;margin-bottom:20px;">照片凭证：</h5>
+                <div>
+                    <img :src="afterSellerService.pictureAddress">
+                </div>
+            </div>
         </el-row>
 
         <div class="check" v-if="afterSellerService.afterServiceState!='等待审核'">
