@@ -91,7 +91,7 @@
                     </div>
                 </div>
 
-                <el-form :model="reviewGood" :rules="reviewRules">
+                <el-form ref="reviewForm" :model="reviewGood" :rules="reviewRules">
                     <!-- 卖家角度 审核内容 -->
                     <el-form-item>
                         <el-switch v-model="reviewGood.flag" active-text="审核通过" inactive-text="审核不通过"></el-switch>
@@ -235,7 +235,7 @@ export default {
                                 callback(new Error("请输入手机号"));
                             }
                             else{
-                                let p = /^1[3|4|5|7|8][0-9]\d{8}$/;
+                                let p = /^1[3|4|5|7|8][0-9]\d{8}$/
                                 if(!p.test(value)){
                                     callback(new Error("请输入正确的手机号"));
                                 }
@@ -275,8 +275,9 @@ export default {
         },
         async submitReview(){
             // 没想好怎么验证
-            let flag = this.$refs.map.test()
-            this.$refs[formName].validate(async valid => {
+            // let flag = this.$refs.map.test()
+            let flag = true
+            this.$refs['reviewForm'].validate(async valid => {
                 if(valid && flag){
                     let data = {
                         query : 'Review',
@@ -297,6 +298,7 @@ export default {
                     let response = await this.$axios.send(data);
                     if (response.status == 1) {
                         await this.getSellerAfterServiceList()
+                        this.reviewFormVisible = false
                         this.$message({ message: "审核成功！",type: "success"});
                     } else if (response.status == -1) {
                         Cookies.remove("userId");
