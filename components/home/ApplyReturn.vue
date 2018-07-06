@@ -303,6 +303,7 @@ export default {
             this.$router.push({ path: "/" });
           } else {
             this.$message.error("发生错误：" + response.err);
+            this.loading = false;
           }
         }
       });

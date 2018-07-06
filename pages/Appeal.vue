@@ -189,6 +189,7 @@ export default {
             });
           } else if (response.status == 0) {
             this.$message.error("发现错误:" + response.err);
+            this.loading = false;
           } else {
             this.$message.error("登录超时！");
             Cookies.remove("userId");

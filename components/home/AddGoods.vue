@@ -393,13 +393,7 @@ export default {
       }
     },
     changeType(value) {
-      if (value.length == 2) {
-        this.type = value;
-      }
-      if (value.length == 1) {
-        value.push("全部");
-        this.type = value;
-      }
+      this.type = value;
     },
     //提交表单
     async submitForm(formName) {
@@ -457,6 +451,7 @@ export default {
               this.$router.push({path:`/home/${userId}`,query:{index:'4-2'}})
             } else if (response.status == 0) {
               this.$message.error("发现错误:" + response.err);
+              this.loading = false;
             } else {
               Cookies.remove("userId");
               Cookies.remove("sessionId");
