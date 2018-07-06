@@ -1,6 +1,6 @@
 <template>
     <!--买家角度： 查看单笔订单的退货详情 -->
-    <el-main style="border-style: solid;border-color: rgb(238, 238, 238);">    
+    <div style="border-style: solid;border-color: rgb(238, 238, 238);">    
         <el-row class="row1 status" >
             <el-col :span="6" style="color:red">售后服务状态：{{afterService.afterServiceState}}</el-col>
             <el-col :span="6" :offset="2">服务单号：{{afterService.afterServiceId}}</el-col>
@@ -57,7 +57,7 @@
 
         <!-- 未想好 点击取消之后，页面如何变化 -->
         <el-button type="primary" class="cancelBtn" @click="confirmCancel">取消</el-button>
-    </el-main>
+    </div>
 </template>
 
 <style scope>

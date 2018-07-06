@@ -206,6 +206,9 @@ export default {
   methods: {
     changeValue(value) {
       console.log(this.tag);
+      if (value.length == 1 && value[0] == '其它'){
+        this.tag.push('全部')
+      }
     },
     search() {
       let text = this.searchText;

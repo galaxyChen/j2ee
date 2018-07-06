@@ -1,7 +1,6 @@
 <template>
-    <el-container style="font-size:20px;">
-        <el-main>
-        <div class="Apply-box"> 
+    <div>
+      <div class="Apply-box"> 
             <h1 style="margin-top:5px;margin-left:10px;">申请退货</h1>
             <div class="orderMsg">
                 <!-- 订单信息部分 -->
@@ -107,8 +106,7 @@
                 </div>
             </div>
         </div>
-        </el-main>
-    </el-container>
+    </div>
 </template>
 
 <script>

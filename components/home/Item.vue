@@ -53,7 +53,11 @@
   border-style: solid;
   border-color: rgb(249, 249, 249);
   height: 140px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
+
 .order-box:first-child {
   border-left-width: 2px;
 }
@@ -66,7 +70,8 @@
   margin-top: 40px;
 }
 .order-button {
-  margin-top: 10px;
+  margin-top: 20px;
+  width: 50%;
 }
 .order-button-text {
   margin-top: 10px;
