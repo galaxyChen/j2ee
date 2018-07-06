@@ -275,9 +275,9 @@ export default {
         },
         async submitReview(){
             // 没想好怎么验证
-
+            let flag = this.$refs.map.test()
             this.$refs[formName].validate(async valid => {
-                if(valid){
+                if(valid && flag){
                     let data = {
                         query : 'Review',
                         data : {

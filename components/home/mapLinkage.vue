@@ -17,7 +17,7 @@
 
       <el-col :span="8">
         <el-form-item prop="selectCity">
-            <el-select size="small" style="margin-left:10px;" v-if="area.selectProv!=''" v-model="area.selectCity" placeholder="请选择城市">
+            <el-select size="small" style="margin-left:10px;" v-if="area.selectProv!=undefined&&area.selectProv!='' " v-model="area.selectCity" placeholder="请选择城市">
                 <el-option v-for="item in citys" :key="item.value" :label="item.label" :value="item.value">
                 </el-option>
             </el-select>
@@ -1625,6 +1625,7 @@ export default {
           selectProv:prov,
           selectCity:tempCity[0]['value']
       }
+      
     },
     reset: function() {
       this.$refs.area.resetFields();
@@ -1634,13 +1635,7 @@ export default {
       }
       this.citys = [];
     },
-    initVal : function(){
-      // this.area = {
-      //   province : province ,
-      //   city : city
-      // }
-      console.log("haha")
-    },
+
     set: function(province,city){
         this.area = {
           selectProv:province,
@@ -1650,9 +1645,15 @@ export default {
     test: function() {
       console.log('test the mapform')
       this.$refs.area.validateField("selectProv");
-      if (this.area.selectProv != "")
+      console.log(this.area.selectProv)
+      if (this.area.selectProv != undefined && this.area.selectProv!=""  )
         this.$refs.area.validateField("selectCity");
-      if (this.area.selectProv != "" && this.area.selectCity != "") {
+      console.log(this.area.selectCity)
+      if (this.area.selectProv != undefined && 
+          this.area.selectCity != undefined  &&
+          this.area.selectProv!="" && 
+          this.area.selectCity!=""
+      ) {
         this.$emit("updateArea", this.area.selectProv, this.area.selectCity);
         return {
           prov:this.area.selectProv,
