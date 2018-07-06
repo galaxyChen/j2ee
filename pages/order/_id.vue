@@ -154,6 +154,14 @@ export default {
         },
         // 提交订单
         async submitBill(){
+            if(this.addressItem==undefined || this.addressItem==''){
+                this.$message.error("没有填写收货地址")
+                return 
+            }
+            if(this.itemList==undefined ||this.itemList.length==0  ){
+                this.$message.error('没有购买的商品')
+                return 
+            }
             function number2StrInArr(arr){
                 arr.forEach(obj=>{
                     for (let term in obj) {
