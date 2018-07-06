@@ -23,7 +23,10 @@
                 <el-button @click="goBack" class="back-button" size="medium" type='text' icon="el-icon-back">返回</el-button>
             </el-header>
             <el-main>
-                <OrderDetail @sendOrder='updateOrder' @cancelOrder='updateOrder' @finishOrder='updateOrder' @signOrder='updateOrder' @lookDetail='lookDetail' :type='type' :order='onShowOrder'></OrderDetail>
+                <OrderDetail @sendOrder='updateOrder' @cancelOrder='updateOrder' @finishOrder='updateOrder' @signOrder='updateOrder' @lookDetail='lookDetail' :type='type' 
+                @lookServiceDetail='lookServiceDetail'
+                @requestService='requestService'
+                :order='onShowOrder'></OrderDetail>
             </el-main>
         </el-container>
 

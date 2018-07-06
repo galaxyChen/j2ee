@@ -151,7 +151,8 @@ export default {
             }
         },
         changeSelectAdress(index){
-            this.addressItem = this.addressList[index]
+            if(index>=0)
+                this.addressItem = this.addressList[index]
         },
         async getAddress(){
 
