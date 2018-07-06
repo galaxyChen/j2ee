@@ -78,7 +78,7 @@ export default {
 
   methods: {
     cancelPay(){
-
+      this.$router.go(-1)
     },
     PayConfirm() {
       let orderId = this.$route.params.orderId

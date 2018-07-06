@@ -61,7 +61,7 @@ export default {
       is_seller: false,
       questions: [],
       showQuestions: [],
-      ask: ""
+      ask: "",
     };
   },
   methods: {
@@ -70,8 +70,13 @@ export default {
       this.showQuestions = JSON.parse(JSON.stringify(this.questions)).splice(begin,5);
     },
     async sendAsk() {
+ 
       if(this.ask.length>200){
         this.$message.error("留言不可以超过200字");
+        return;
+      }
+      else if(this.ask.length==0){
+        this.$message.error("留言不可以为空");
         return;
       }
       let userId = Cookies.get("userId");
@@ -85,12 +90,16 @@ export default {
           questionContent: this.ask
         }
       };
+      
       let response = await this.$axios.send(data);
       if (response.status === 1) {
-        this.$message("提问成功");
+        
+        this.ask = "" ;
+
         this.questions = response.data.QAList;
         this.showQuestions = JSON.parse(JSON.stringify(this.questions)).splice(0,5);
         this.currentPage = 1;
+        this.$message("提问成功");
       } else if (response.status == -1) {
         this.$message.error("登录超时！");
         Cookies.remove("userId");
@@ -114,7 +123,7 @@ export default {
       if (response.status === 1) {
         this.questions = response.data.QAList;
         this.showQuestions = JSON.parse(JSON.stringify(this.questions)).splice(0,5);
-        this.currentPage = 1;
+        // this.currentPage = 1;
       } else {
         this.$message.error("发生错误：" + response.err);
       }

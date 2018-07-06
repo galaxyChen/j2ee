@@ -61,7 +61,7 @@
                 </el-form-item>
                 <div style="float:right"> 
                     <el-button type="primary" @click="submitForm('Goods')">发布商品</el-button>
-                    <el-button>取消</el-button>
+                    <!-- <el-button>取消</el-button> -->
                 </div>
             </el-form>
         </div>
@@ -357,6 +357,20 @@ export default {
       if (this.$refs.upload.uploadFiles.length == 0) return "";
       let file = this.$refs.upload.uploadFiles[0];
       file = this.$refs.upload.getFile(file);
+      let fileName = file.name.split('.')
+      if (fileName.length!=2){
+        this.$message.error("上传图片文件名有误!")
+        return false;
+      }
+      if (fileName[1]!='jpg' || fileName[1]!='png'){
+        this.$message.error("只支持jpg或者png文件!")
+        return false;
+      }
+      let size = file.size;
+      if (size/1024/1024>1){
+        this.$message.error("图片大小不能超过1M!")
+        return false;
+      }
       // console.log(file.raw instanceof File)
       // console.log(this.$refs.upload.$refs['upload-inner'].upload)
       let data = new FormData();

@@ -208,7 +208,7 @@ export default {
             else return false;
         },
         service(index){
-            if(this.afterServiceList[index].afterServiceState == "拒绝退货") return true;
+            if(this.afterServiceList[index].afterServiceState == "审核不通过") return true;
             else return false;
         },
         seeDetail(index){

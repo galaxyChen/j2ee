@@ -25,7 +25,7 @@
                 <el-button @click="signOrder" type="success">确认收货</el-button>
             </el-col>
             <el-col  v-if="send" class="header-box" :span="3">
-                <el-button @click="sendOrder" type="danger">现在发货</el-button>
+                <el-button @click="dialogFormVisible = true" type="danger">现在发货</el-button>
             </el-col>
             <el-col  v-if="service" class="header-box" :span="3" >
                 <el-button @click="requestService" type="warning">申请售后</el-button>
@@ -132,6 +132,27 @@
                 </el-col>
             </el-row>       
         </el-row>
+        <el-dialog title="收货地址" :visible.sync="dialogFormVisible">
+         <el-form :model="sendGood" :rules="rules">
+            <el-form-item label="快递公司" prop='firm'>
+              <!-- <el-input v-model="sendGood.sender" placeholder="请输入快递公司"></el-input> -->
+              <el-cascader
+                :options="options"
+                v-model="sendGood.sender"
+                placeholder="请选择快递公司"
+               >
+              </el-cascader>
+            </el-form-item>
+            <el-form-item label="快递单号" prop='code'>
+              <el-input v-model="sendGood.code" placeholder="请输入快递单号">
+              </el-input>
+            </el-form-item>
+          </el-form>
+          <div slot="footer" class="dialog-footer">
+            <el-button @click="dialogFormVisible = false">取 消</el-button>
+            <el-button type="primary" @click="sendOrder">确 定</el-button>
+          </div>
+      </el-dialog>
     </div>
 </template>
 
@@ -234,17 +255,111 @@ export default {
   },
   props: ["order", "type"],
   data() {
+    let validateCode = (rule, value, callback) => {
+      if (value == "") {
+        callback(new Error("请输入快递单号"));
+      } else {
+        let p = /^[1-9a-zA-Z]+$/;
+        if (!p.test(value)) {
+          callback(new Error("请输入快递单号"));
+        } else {
+          callback();
+        }
+      }
+    };
     return {
-      address: {}
+      address: {},
+      sendGood: {
+        sender: [],
+        code: ""
+      },
+      dialogFormVisible: false,
+      options: [
+        {
+          value: "顺丰",
+          label: "顺丰"
+        },
+        {
+          value: "京东",
+          label: "京东"
+        },
+        {
+          value: "韵达",
+          label: "韵达"
+        },
+        {
+          value: "中通",
+          label: "中通"
+        },
+        {
+          value: "圆通",
+          label: "圆通"
+        },
+        {
+          value: "申通",
+          label: "申通"
+        },
+        {
+          value: "百世汇通",
+          label: "百世汇通"
+        },
+        {
+          value: "天天",
+          label: "天天"
+        },
+        {
+          value: "邮政",
+          label: "邮政"
+        },
+        {
+          value: "当当",
+          label: "当当"
+        },
+        {
+          value: "亚马逊",
+          label: "亚马逊"
+        },
+        {
+          value: "如风达",
+          label: "如风达"
+        },
+        {
+          value: "快捷",
+          label: "快捷"
+        },
+        {
+          value: "德邦",
+          label: "德邦"
+        },
+        {
+          value: "万象",
+          label: "万象"
+        },
+        {
+          value: "其他",
+          label: "其他"
+        }
+      ],
+      rules: {
+        code: [
+          { validator: validateCode, trigger: "change" },
+          {
+            min: 1,
+            max: 15,
+            message: "长度应在15字符内！",
+            trigger: "change"
+          }
+        ]
+      }
     };
   },
   computed: {
     activeStep() {
-        if (this.order.orderState == '等待付款') return 1;
-        if (this.order.orderState == '等待发货') return 2;
-        if (this.order.orderState == '等待收货') return 3;
-        if (this.order.orderState == '已签收') return 4;
-        if (this.order.orderState == '已完成') return 5;
+      if (this.order.orderState == "等待付款") return 1;
+      if (this.order.orderState == "等待发货") return 2;
+      if (this.order.orderState == "等待收货") return 3;
+      if (this.order.orderState == "已签收") return 4;
+      if (this.order.orderState == "已完成") return 5;
     },
     showTimeLimit() {
       if (this.order.orderState == "等待付款") {
@@ -311,17 +426,16 @@ export default {
     },
     payOrder() {
       //进入结算页面
-      let orderId = []
-      orderId.push(this.order.orderId)
-      this.$router.push({ 
-          name: 'Pay' ,
-          params: { 
-              totalPay: this.order.price + this.order.postage ,
-              orderId : orderId,
-              time_limit :'2小时0分',
-          }  
+      let orderId = [];
+      orderId.push(this.order.orderId);
+      this.$router.push({
+        name: "Pay",
+        params: {
+          totalPay: this.order.price + this.order.postage,
+          orderId: orderId,
+          time_limit: "2小时0分"
+        }
       });
-
     },
     signOrder() {
       this.$confirm("确认收货吗?", "收货确认", {
@@ -334,7 +448,7 @@ export default {
           data: {
             userId: Cookies.get("userId"),
             sessionId: Cookies.get("sessionId"),
-            orderId: this.order.orderId
+            orderId: this.order.orderId + ""
           }
         };
         let response = await this.$axios.send(data);
@@ -365,7 +479,7 @@ export default {
           data: {
             userId: Cookies.get("userId"),
             sessionId: Cookies.get("sessionId"),
-            orderId: this.order.orderId
+            orderId: this.order.orderId+""
           }
         };
         let response = await this.$axios.send(data);
@@ -386,9 +500,13 @@ export default {
     },
     lookServive() {},
     async sendOrder() {
-      this.dialogFormVisible = false;
       let sender = this.sendGood.sender;
       let code = this.sendGood.code;
+      if (sender == "" || code == ""){
+        this.$message.error("信息未填写完整!")
+        return ;
+      }
+      this.dialogFormVisible = false;
       if (sender != "" && code != "") {
         let data = {
           query: "sendOrder",
@@ -397,7 +515,7 @@ export default {
             sessionId: Cookies.get("sessionId"),
             expressCode: code,
             express_company: sender,
-            orderId:this.item.orderId
+            orderId: this.order.orderId+""
           }
         };
         let response = await this.$axios.send(data);
@@ -409,7 +527,7 @@ export default {
             type: "success"
           });
           this.sendGood = {
-            sender: "",
+            sender: [],
             code: ""
           };
           this.$emit("sendOrder", item);
@@ -431,7 +549,7 @@ export default {
           data: {
             userId: Cookies.get("userId"),
             sessionId: Cookies.get("sessionId"),
-            orderId: this.order.orderId+""
+            orderId: this.order.orderId + ""
           }
         };
         let response = await this.$axios.send(data);
