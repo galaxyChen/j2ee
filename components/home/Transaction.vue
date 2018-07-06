@@ -14,7 +14,8 @@
                 </el-tabs>
             </el-header>
             <el-main>
-                <Order @sendOrder='updateOrder' @cancelOrder='updateOrder' @finishOrder='updateOrder' @signOrder='updateOrder' @lookServiceDetail='lookServiceDetail' @lookDetail='lookDetail' v-for="order in onShowList" :type='type' :key='"order-"+order.orderId' :order='order'></Order>
+                <Order @sendOrder='updateOrder' @cancelOrder='updateOrder' @finishOrder='updateOrder' @signOrder='updateOrder' @lookServiceDetail='lookServiceDetail'
+                @requestService='requestService' @lookDetail='lookDetail' v-for="order in onShowList" :type='type' :key='"order-"+order.orderId' :order='order'></Order>
             </el-main>
         </el-container>
         <el-container v-else-if="showOrder">
@@ -26,13 +27,24 @@
             </el-main>
         </el-container>
 
-        <el-container v-else>
+        <el-container v-else-if="showService">
             <el-header>
                 <el-button @click="goBack" class="back-button" size="medium" type='text' icon="el-icon-back">返回</el-button>
             </el-header>
             <el-main>
                 <AfterDetail v-if="type==1" :afterService='service'></AfterDetail>
                 <AfterSellerDetail v-else :afterSellerService='service'></AfterSellerDetail>
+            </el-main>
+        </el-container>
+
+        <el-container v-else>
+            <el-header>
+                <el-button @click="goBack" class="back-button" size="medium" type='text' icon="el-icon-back">返回</el-button>
+            </el-header>
+            <el-main>
+                <ApplyReturn
+                @applyReturnSuccess="applyReturnSuccess" 
+                :order="onShowOrder" ></ApplyReturn>
             </el-main>
         </el-container>
     </el-col>
@@ -58,14 +70,16 @@
 import Order from "~/components/home/Order";
 import OrderDetail from "~/components/home/OrderDetail";
 import Cookies from "js-cookie";
-import AfterDetail from '~/components/home/AfterDetail';
-import AfterSellerDetail from '~/components/home/AfterSellerDetail';
+import AfterDetail from "~/components/home/AfterDetail";
+import AfterSellerDetail from "~/components/home/AfterSellerDetail";
+import ApplyReturn from "~/components/home/ApplyReturn";
 export default {
   components: {
     Order,
     OrderDetail,
     AfterSellerDetail,
-    AfterDetail
+    AfterDetail,
+    ApplyReturn
   },
   async mounted() {
     console.log("now at:" + this.$route.query["index"]);
@@ -79,6 +93,7 @@ export default {
       activeTab: "all",
       showList: true,
       showOrder: false,
+      showService: false,
       allOrder: [],
       payOrder: [],
       receiveOrder: [],
@@ -91,13 +106,36 @@ export default {
     };
   },
   methods: {
+    applyReturnSuccess(){
+      let index = 0;
+      while (this.orderList[index].orderId!=this.onShowOrder.orderId) index++;
+      let temp = JSON.parse(JSON.stringify(this.onShowOrder))
+      this.orderList.splice(index,1,temp);
+      this.updateShowList()
+      this.showList = true;
+      this.showOrder = false;
+      this.showService = false;
+    },
+    requestService(id) {
+      console.log("request service:" + id);
+      for (let item in this.orderList) {
+        if (this.orderList[item].orderId == id) {
+          console.log(this.orderList[item]);
+          this.onShowOrder = this.orderList[item];
+          this.showList = false;
+          this.showOrder = false;
+          this.showService = false;
+          return;
+        }
+      }
+    },
     async lookServiceDetail(id) {
       let query = {
         query: "getOneAfterService",
         data: {
-          adminId: Cookies.get("adminId"),
+          adminId: Cookies.get("userId"),
           sessionId: Cookies.get("sessionId"),
-          afterServiceId: afterServiceId + ""
+          afterServiceId: id + ""
         }
       };
       let response = await this.$axios.send(query);
@@ -105,11 +143,18 @@ export default {
         this.service = response.data.service;
         this.showList = false;
         this.showOrder = false;
+        this.showService = true;
       } else if (response.status == 0) {
         this.$message.error("发生错误" + response.err);
       } else {
         this.signout();
       }
+    },
+    signout(){
+      Cookies.remove('userId');
+      Cookies.remove('sessionId');
+      Cookies.remove('userName');
+      this.$router.push({paht:'/'})
     },
     async getOrder() {
       this.onShowList = [];
@@ -165,6 +210,7 @@ export default {
     goBack() {
       this.showList = true;
       this.showOrder = false;
+      this.showService = false;
       this.updateShowList();
     },
     lookDetail(id) {
