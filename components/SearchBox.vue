@@ -213,6 +213,13 @@ export default {
     search() {
       let text = this.searchText;
       let tag = this.tag;
+      if (text==''){
+        this.$message({
+          message:'搜索内容不能为空！',
+          type:'info'
+        })
+        return ;
+      }
       if (text != "") {
         this.$router.push({
           path: "search",
