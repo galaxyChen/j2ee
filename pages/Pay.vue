@@ -34,7 +34,7 @@
                     </el-radio-group>
 
                      <el-button type="primary" class="confirmBtn" @click="PayConfirm">支付</el-button>
-                     <el-button @click="cancelPay">取消</el-button>
+                     <!-- <el-button @click="cancelPay">取消</el-button> -->
                 </div>
             </div>
         </el-main>
