@@ -1,5 +1,5 @@
 <template>
-    <div>
+    <div v-loading='loading' element-loading-text='申请中，请稍后'>
       <div class="Apply-box"> 
             <h1 style="margin-top:5px;margin-left:10px;">申请退货</h1>
             <div class="orderMsg">
@@ -57,16 +57,16 @@
                         </el-row>
                         <el-form-item label="上传凭证：">
                             <el-upload class="upload-pic" 
-                            action=""  
-                            :show-file-list="true"
-                            ref='upload'
-                            :before-remove="beforeRemove" 
-                            :limit="3"
-                            :on-exceed="handleExceed"
-                            :auto-upload="false"
-                            list-type="picture">
+                                action=""  
+                                :show-file-list="true"
+                                ref='upload'
+                                :before-remove="beforeRemove" 
+                                :limit="1"
+                                :on-exceed="handleExceed"
+                                :auto-upload="false"
+                                list-type="picture">
                             <el-button slot='trigger' size="small" type="primary">选择文件</el-button>
-                            <div slot="tip" class="el-upload__tip">只能上传jpg/png文件，且不超过1M。最多可上传3张。</div>
+                            <div slot="tip" class="el-upload__tip">只能上传jpg/png文件，且不超过1M</div>
                             </el-upload>
                         </el-form-item>
                             </el-form>
@@ -112,13 +112,13 @@
 <script>
 import NavTop from "~/components/NavTop";
 import NavLeft from "~/components/home/NavLeft";
-import Cookies from 'js-cookie'
+import Cookies from "js-cookie";
 export default {
   components: {
     NavTop,
     NavLeft
   },
-  props :["order"],
+  props: ["order"],
   data() {
     var checkContacts = (rule, value, callback) => {
       if (!value) {
@@ -153,7 +153,7 @@ export default {
         contacts: "",
         phone: ""
       },
-
+      loading:false,
       options: [
         {
           value: "质量问题",
@@ -182,76 +182,134 @@ export default {
           { required: true, message: "请选择退货原因", trigger: "blur" }
         ],
         dsc: [
-          { required: true, message: "请输入问题描述！", trigger: "blur" , trigger: "change"},
-          { max: 300, message: "问题描述不能超过300字" , trigger: "blur" , trigger: "change"}
+          {
+            required: true,
+            message: "请输入问题描述！",
+            trigger: "blur",
+            trigger: "change"
+          },
+          {
+            max: 300,
+            message: "问题描述不能超过300字",
+            trigger: "blur",
+            trigger: "change"
+          }
         ],
         contacts: [
-          { required: true, validator: checkContacts, trigger: "blur", trigger: "change" },
+          {
+            required: true,
+            validator: checkContacts,
+            trigger: "blur",
+            trigger: "change"
+          }
         ],
         phone: [
-          {   validator: (rule,value,callback)=>{
-                  if(value==""){
-                      callback(new Error("请输入手机号"));
-                  }
-                  else{
-                      let p = /^1[3|4|5|7|8][0-9]\d{8}$/;
-                      if(!p.test(value)){
-                          callback(new Error("请输入正确的手机号"));
-                      }
-                      else{
-                          callback();
-                      }
-                  }
-              },
-              trigger: 'blur',trigger:'change'
+          {
+            validator: (rule, value, callback) => {
+              if (value == "") {
+                callback(new Error("请输入手机号"));
+              } else {
+                let p = /^1[3|4|5|7|8][0-9]\d{8}$/;
+                if (!p.test(value)) {
+                  callback(new Error("请输入正确的手机号"));
+                } else {
+                  callback();
+                }
+              }
+            },
+            trigger: "blur",
+            trigger: "change"
           }
         ]
       }
     };
   },
   methods: {
-    async applyReturn(){
-      this.$refs['ApplyForm'].validate(async valid => {
-        if(valid){
+    async commitImg() {
+      if (this.$refs.upload.uploadFiles.length == 0) return "";
+      let file = this.$refs.upload.uploadFiles[0];
+      file = this.$refs.upload.getFile(file);
+      let fileName = file.name.split(".");
+      if (fileName.length != 2) {
+        this.$message.error("上传图片文件名有误!");
+        return false;
+      }
+      console.log(fileName)
+      if (fileName[1] != "jpg" && fileName[1] != "png") {
+        this.$message.error("只支持jpg或者png文件!");
+        return false;
+      }
+      let size = file.size;
+      if (size / 1024 / 1024 > 1) {
+        this.$message.error("图片大小不能超过1M!");
+        return false;
+      }
+      // console.log(file.raw instanceof File)
+      // console.log(this.$refs.upload.$refs['upload-inner'].upload)
+      let data = new FormData();
+      data.append("file", file.raw);
+      data.append("query", "uploadImg");
+      data.append("userId", Cookies.get("userId"));
+      data.append("sessionId", Cookies.get("sessionId"));
+      let header = { "Content-Type": "multipart/form-data" };
+      let response = await this.$axios.send(data, "/BookStore/upload/", header);
+      if (response.status == 1) {
+        return response.data.pictureAddress;
+      } else if (response.status == 0) {
+        this.$message.error("发生错误:" + response.err);
+        return false;
+      } else {
+        Cookies.remove("userId");
+        Cookies.remove("sessionId");
+        Cookies.remove("userName");
+        this.$router.push({ path: "/" });
+      }
+    },
+    async applyReturn() {
+      this.$refs["ApplyForm"].validate(async valid => {
+        if (valid) {
+          this.loading = true;
+          //上传图片
+          let url = await this.commitImg();
+          console.log(url);
+          if (url === false) {
+            this.loading = false;
+            return;
+          }
           let data = {
-              query : 'applyReturn',
-              data : {
-                  userId : Cookies.get("userId"),
-                  sessionId : Cookies.get("sessionId"),
-                  orderId : this.order.orderId+"",
-                  returnReason : this.ApplyForm.reason,
-                  returnVoucher : [
-                    'http://193.112.63.219.8080/BookStore/image/1.jpg',
-                    'http://193.112.63.219.8080/BookStore/image/1.jpg'
-                  ], 
-                  description : this.ApplyForm.dsc , 
-                  buyerPhoneNumber : this.ApplyForm.phone,
-                  buyerName : this.ApplyForm.contacts,
-                  
-              }
-          }
-          let response = await this.$axios.send(data)
-          if(response.status===1){
-              this.$message.success("您已成功申请退货，请等待审核")
-              this.$emit("applyReturnSuccess")
-          }
-          else if (response.status == -1) {
-              this.$message.error("登录超时！");
-              Cookies.remove("userId");
-              Cookies.remove("sessionId");
-              Cookies.remove("userName");
-              this.$router.push({ path: "/" });
+            query: "applyReturn",
+            data: {
+              userId: Cookies.get("userId"),
+              sessionId: Cookies.get("sessionId"),
+              orderId: this.order.orderId + "",
+              returnReason: this.ApplyForm.reason,
+              returnVoucher: [url],
+              description: this.ApplyForm.dsc,
+              buyerPhoneNumber: this.ApplyForm.phone,
+              buyerName: this.ApplyForm.contacts
+            }
+          };
+          let response = await this.$axios.send(data);
+          this.loading = false;
+          if (response.status === 1) {
+          
+            this.$message.success("您已成功申请退货，请等待审核");
+            this.$emit("applyReturnSuccess");
+          } else if (response.status == -1) {
+            this.$message.error("登录超时！");
+            Cookies.remove("userId");
+            Cookies.remove("sessionId");
+            Cookies.remove("userName");
+            this.$router.push({ path: "/" });
           } else {
-              this.$message.error("发生错误：" + response.err);
+            this.$message.error("发生错误：" + response.err);
           }
         }
       });
-      
-
     },
     handleExceed(files, fileList) {
       this.$message.warning(
-        `当前限制选择 3 个文件，本次选择了 ${
+        `当前限制选择 1 个文件，本次选择了 ${
           files.length
         } 个文件，共选择了 ${files.length + fileList.length} 个文件`
       );
@@ -269,7 +327,6 @@ export default {
   border-color: #cccccc;
 
   margin-top: 10px;
-
 }
 .ContactMsg {
   margin-top: 50px;
