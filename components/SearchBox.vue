@@ -206,12 +206,14 @@ export default {
   methods: {
     changeValue(value) {
       console.log(this.tag);
+      if (value.length == 1 && value[0] == '其它'){
+        this.tag.push('全部')
+      }
     },
     search() {
       let text = this.searchText;
       let tag = this.tag;
-      if (text != "") {
-        this.$router.push({
+      this.$router.push({
           path: "search",
           query: {
             text: text,
@@ -219,7 +221,6 @@ export default {
             time_stamp:new Date()-0
           }
         });
-      }
       this.$emit('doSearch',text,tag)
     }
   }

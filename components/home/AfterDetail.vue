@@ -1,6 +1,6 @@
 <template>
     <!--买家角度： 查看单笔订单的退货详情 -->
-    <el-main style="border-style: solid;border-color: rgb(238, 238, 238);">    
+    <div style="border-style: solid;border-color: rgb(238, 238, 238);">    
         <el-row class="row1 status" >
             <el-col :span="6" style="color:red">售后服务状态：{{afterService.afterServiceState}}</el-col>
             <el-col :span="6" :offset="2">服务单号：{{afterService.afterServiceId}}</el-col>
@@ -49,15 +49,18 @@
             <h3 style="color:#cccccc;">审核留言</h3>
             <div style="border-style:solid;border-color:rgb(238, 238, 238);margin-top:10px;padding:20px;line-height:25px;">
                 <p style="margin-bottom:30px;">{{afterService.sellerMessage}}</p>
-                <li>收货地址： {{afterService.addressDetail}}</li>
-                <li>联系姓名： {{afterService.sellerName}}</li>
-                <li>联系电话： {{afterService.sellerPhoneNumber}}</li>
+                <div v-if="afterService.afterServiceState!='审核不通过'">
+                    <li>收货地址： {{afterService.addressDetail}}</li>
+                    <li>联系姓名： {{afterService.sellerName}}</li>
+                    <li>联系电话： {{afterService.sellerPhoneNumber}}</li>
+                </div>
+
             </div>
         </div>
 
         <!-- 未想好 点击取消之后，页面如何变化 -->
-        <el-button type="primary" class="cancelBtn" @click="confirmCancel">取消</el-button>
-    </el-main>
+        <!-- <el-button  type="primary" class="cancelBtn" @click="confirmCancel">取消</el-button> -->
+    </div>
 </template>
 
 <style scope>
@@ -105,27 +108,6 @@
 <script>
 export default {
     props:["afterService"],
-    methods:{
-       confirmCancel() {
-            this.$confirm('是否取消申请售后?', '提示', {
-            confirmButtonText: '确定',
-            cancelButtonText: '取消',
-            type: 'warning'
-            }).then( async () => {
-            this.$message({
-                type: 'success',
-                message: '取消成功!'
-            });
-            
-            // 接口未写
-            // let response = await this.$send();
-            }).catch(() => {
-            this.$message({
-                // type: 'info',
-                // message: ''
-            });          
-            });
-        }
-    }
+
 }
 </script>

@@ -123,10 +123,11 @@
     </el-container>
 
      <el-container v-else>
-        <el-header>
+        <el-main>
             <el-button @click="goBack" class="back-button" size="medium" type='text' icon="el-icon-back">返回</el-button>
-        </el-header>
-        <AfterSellerDetail :afterSellerService=" afterSellerServiceList[detailIndex]"></AfterSellerDetail>
+            <AfterSellerDetail :afterSellerService=" afterSellerServiceList[detailIndex]"></AfterSellerDetail>
+        </el-main>
+        
     </el-container>
 </template>
 

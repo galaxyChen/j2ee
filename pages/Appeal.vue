@@ -112,7 +112,7 @@ export default {
         this.$message.error("上传图片文件名有误!");
         return false;
       }
-      if (fileName[1] != "jpg" || fileName[1] != "png") {
+      if (fileName[1] != "jpg" && fileName[1] != "png") {
         this.$message.error("只支持jpg或者png文件!");
         return false;
       }

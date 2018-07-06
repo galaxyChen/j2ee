@@ -17,12 +17,13 @@
     </el-container>
 
     <el-container v-else>
-        <el-header>
-            <el-button @click="goBack" class="back-button" size="medium" type='text' icon="el-icon-back">返回</el-button>
-        </el-header>
-        
-            <ApplyReturn v-if="service=='first'" @applyReturnSuccess="applyReturnSuccess" :order="orderList[firstOrderIndex]" style="margin-top:50px;margin-left:-100px;"></ApplyReturn>
+        <el-main>
+            <div>
+                <el-button @click="goBack" class="back-button" size="medium" type='text' icon="el-icon-back">返回</el-button>
+            </div>
+            <ApplyReturn v-if="service=='first'" @applyReturnSuccess="applyReturnSuccess" :order="orderList[firstOrderIndex]" ></ApplyReturn>
             <AfterDetail v-if="service=='second'" :afterService="afterServiceList[secondDetailIndex]"></AfterDetail>
+        </el-main>
     </el-container>
 
 

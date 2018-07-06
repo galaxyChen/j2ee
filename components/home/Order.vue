@@ -327,7 +327,9 @@ export default {
         }
       });
     },
-    requestService() {},
+    requestService() {
+      this.$emit('requestService',this.order.orderId)
+    },
     finishOrder() {
       this.$confirm("确认完成订单吗?", "完成确认", {
         confirmButtonText: "确定",
