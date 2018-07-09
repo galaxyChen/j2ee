@@ -41,7 +41,9 @@
             <h3 style="color:#cccccc;">问题描述</h3>
             <p style="border-style:solid;border-color:rgb(238, 238, 238);margin-top:10px;margin-bottom:40px;padding:20px;">{{afterService.description}}</p>
             <!-- 加入照片凭证 -->
-            
+            <div>
+                <img :src="afterService.pictureAddress">
+            </div>
         </el-row>
 
         <div class="check" v-if="afterService.afterServiceState!='等待审核'">

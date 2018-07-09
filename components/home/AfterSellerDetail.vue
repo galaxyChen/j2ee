@@ -42,9 +42,9 @@
             <div style="border-style:solid;border-color:rgb(238, 238, 238);margin-top:10px;margin-bottom:40px;padding:20px;">{{afterSellerService.description}}
             <!-- 加入照片凭证 -->
             <h5 style="color:#cccccc;margin-top:10px;margin-bottom:20px;">照片凭证：</h5>
-                <div>
-                    <img :src="afterSellerService.pictureAddress">
-                </div>
+            <div>
+                <img :src="afterSellerService.pictureAddress">
+            </div>
             </div>
         </el-row>
 
