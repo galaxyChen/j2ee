@@ -22,7 +22,7 @@
             </el-row>
 
             <el-row class="el-row1">
-                ￥{{totalList.pay}}
+                ￥{{totalList.pay.toFixed(2) }}
             </el-row>
 
             <el-row class="el-row1">
@@ -30,7 +30,7 @@
             </el-row>
 
             <el-row class="el-row1">
-                ￥{{totalList.postage+totalList.pay }}
+                ￥{{ (totalList.postage+totalList.pay).toFixed(2) }}
             </el-row>
         </el-col>
     </el-row>

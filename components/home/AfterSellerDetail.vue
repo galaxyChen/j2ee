@@ -48,7 +48,7 @@
             </div>
         </el-row>
 
-        <div class="check" v-if="afterSellerService.afterServiceState=='等待退货'">
+        <div class="check" v-if="ifShow(afterSellerService.afterServiceState)">
             <h3 style="color:#cccccc;">审核信息</h3>
             <div style="border-style:solid;border-color:rgb(238, 238, 238);margin-top:10px;padding:20px;line-height:25px;">
                 <p style="margin-bottom:30px;">{{afterSellerService.sellerMessage}}</p>
@@ -127,6 +127,13 @@ export default {
                 // message: ''
             });          
             });
+        },
+        ifShow(state){
+            console.log(state)
+            if(state=='等待退货' || state=='等待售后收货' ||state=='售后已签收'||state=='完成售后'||state=='卖家申诉中')
+                return true
+            console.log("???")
+            return false
         }
     }
 }

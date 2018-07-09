@@ -94,15 +94,23 @@ export default {
       }).then(async () => {
         let userId = Cookies.get("userId");
         let sessionId = Cookies.get("sessionId");
-        let data = {
-          query: "payForOrder",
-          data: {
-            userId: userId,
-            sessionId: sessionId,
-            orderId: orderId+""
-          }
-        };
-        let response = await this.$axios.send(data);
+        let orderList = JSON.parse(orderId)
+        let response = {
+          status : 1,
+        }
+        for(let i in orderList){
+          let data = {
+            query: "payForOrder",
+            data: {
+              userId: userId,
+              sessionId: sessionId,
+              orderId: orderList[i]+"",  
+            }
+          };
+          
+          response = await this.$axios.send(data);
+        }
+
 
         if (response.status == 1) {
           

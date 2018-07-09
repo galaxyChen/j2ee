@@ -32,7 +32,7 @@
     </el-table-column>
     <el-table-column label="小计" align="center">
         <template slot-scope="scope">
-            <p style="color:red">￥{{scope.row.price*scope.row.nums}}</p>
+            <p style="color:red">￥{{ (scope.row.price*scope.row.nums).toFixed(2) }}</p>
         </template>
     </el-table-column>
 
@@ -204,8 +204,9 @@ import Cookies from "js-cookie";
                 tmp1 += element.nums
               }
             });
-          this.totalPay = tmp
+          this.totalPay = tmp.toFixed(2)
           this.chosenNum = tmp1
+
         },
 
         // 获取购物车列表
