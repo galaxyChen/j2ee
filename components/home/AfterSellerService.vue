@@ -102,7 +102,7 @@
                     </el-form-item>
 
                     <div v-if="reviewGood.flag">
-                        <el-form-item label="联系人" prop="name">
+                        <el-form-item label="联系人" prop="sellerName">
                             <el-input v-model="reviewGood.sellerName" ></el-input>
                         </el-form-item>
                         <el-form-item label="联系手机" prop="phoneNumber">
@@ -232,7 +232,7 @@ export default {
         phoneNumber: ""
       },
       reviewRules: {
-        name: [
+        sellerName: [
           {
             required: true,
             message: "请输入联系人名称",
