@@ -28,9 +28,9 @@
 
                                         <el-button size="small" v-if="item.afterServiceState=='等待售后收货'" @click="checkReceive(index)" class="buttons">售后收货</el-button>
 
-                                        <el-button size="small" v-if="item.afterServiceState=='卖家已签收'" @click="completeAfterService(index)" class="buttons">完成售后</el-button>
+                                        <el-button size="small" v-if="item.afterServiceState=='售后已签收'" @click="completeAfterService(index)" class="buttons">完成售后</el-button>
 
-                                        <el-button size="small" v-if="item.afterServiceState=='卖家已签收'" @click="requestService(index) " class="buttons">申请介入</el-button>
+                                        <el-button size="small" v-if="item.afterServiceState=='售后已签收'" @click="requestService(index) " class="buttons">申请介入</el-button>
 
                                         <el-button type="text" size="small" class="buttons-text" @click="seeDetail(index)">查看详情</el-button>
                                 </el-col>
@@ -394,7 +394,9 @@ export default {
           this.$message({ type: "info", message: "已取消收货" });
         });
     },
-    requestService(index) {},
+    requestService(id) {
+      this.$router.push({path:'/Appeal',query:{'id':id,'type':1}})
+    },
     completeAfterService(index) {
       this.$confirm("是否确认完成售后？", "提示", {
         confirmButtonText: "确定",
@@ -407,7 +409,7 @@ export default {
             data: {
               userId: Cookies.get("userId"),
               sessionId: Cookies.get("sessionId"),
-              afterServiceId: this.afterSellerServiceList[index].afterServiceId
+              afterServiceId: this.afterSellerServiceList[index].afterServiceId +""
             }
           };
 

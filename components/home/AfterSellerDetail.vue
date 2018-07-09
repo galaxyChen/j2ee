@@ -48,7 +48,7 @@
             </div>
         </el-row>
 
-        <div class="check" v-if="afterSellerService.afterServiceState!='等待审核'">
+        <div class="check" v-if="afterSellerService.afterServiceState=='等待退货'">
             <h3 style="color:#cccccc;">审核信息</h3>
             <div style="border-style:solid;border-color:rgb(238, 238, 238);margin-top:10px;padding:20px;line-height:25px;">
                 <p style="margin-bottom:30px;">{{afterSellerService.sellerMessage}}</p>

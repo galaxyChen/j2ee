@@ -120,7 +120,7 @@ export default {
       if (value == "") {
         callback(new Error("请输入快递单号"));
       } else {
-        let p = /^[1-9a-zA-Z]+$/;
+        let p = /^[0-9a-zA-Z]+$/;
         if (!p.test(value)) {
           callback(new Error("请输入快递单号"));
         } else {

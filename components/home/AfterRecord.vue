@@ -33,36 +33,42 @@
                <!-- 拒绝退货状态 对应按钮 -->
                <el-button @click="requestService(item.afterServiceId)" v-if='service(index)'  type="text warning" class="stateBtn" size='small'>申诉</el-button>
             </el-col>
+            
 
-            <!-- 填写退货物流相关信息 -->
-            <el-dialog title="发货" :visible.sync="returnFormVisible">
-                <el-form :model="returnGood">
-                    <el-form-item label="快递公司" >
-                        <el-cascader :options="options" v-model="returnGood.sender" placeholder="请选择快递公司"></el-cascader>
-                    </el-form-item>
-                    <el-form-item label="快递单号" >
-                        <el-input v-model="returnGood.code" placeholder="请输入快递单号"></el-input>
-                    </el-form-item>
-                    <!-- 确认提交退货物流信息  -->
-                    <el-button @click="doReturn(item.afterServiceId)" type="primary" style="margin-left:85%;margin-top:20px;">确认</el-button>
-                </el-form>
-            </el-dialog>
-
-            <!-- 填写申诉相关信息 -->
-            <el-dialog title="买家申诉" :visible.sync="appealFormVisible">
-                <el-form :model="appealGood">
-                    <el-form-item label="申诉理由" >
-                        <el-input v-model="appealGood.reason" placeholder="请输入请输入申诉理由"></el-input>
-                    </el-form-item>
-                    <!-- 确认提交申诉信息  -->
-                    <el-button @click="doReturn(item.afterServiceId)" type="primary" style="margin-left:85%;margin-top:20px;">确认</el-button>
-                </el-form>
-            </el-dialog>
 
 
         </el-row>
         
     </el-card>
+
+    <!-- 填写退货物流相关信息 -->
+    <el-dialog title="发货" :visible.sync="returnFormVisible">
+        <el-form :model="returnGood">
+            <el-form-item label="快递公司" >
+                <el-cascader :options="options" v-model="returnGood.sender" placeholder="请选择快递公司"></el-cascader>
+            </el-form-item>
+            <el-form-item label="快递单号" >
+                <el-input v-model="returnGood.code" placeholder="请输入快递单号"></el-input>
+            </el-form-item>
+            <!-- 确认提交退货物流信息  -->
+            <el-button @click="doReturn" type="primary" style="margin-left:85%;margin-top:20px;">确认</el-button>
+        </el-form>
+    </el-dialog>
+
+
+    <!-- 因需求变更 这一块采用跳转到别的地方进行处理 -->
+    <!-- 填写申诉相关信息 -->
+    <!-- <el-dialog title="买家申诉" :visible.sync="appealFormVisible">
+        <el-form :model="appealGood">
+            <el-form-item label="申诉理由" >
+                <el-input v-model="appealGood.reason" placeholder="请输入请输入申诉理由"></el-input>
+            </el-form-item> -->
+            <!-- 确认提交申诉信息  -->
+            <!-- <el-button @click="doReturn" type="primary" style="margin-left:85%;margin-top:20px;">确认</el-button>
+        </el-form>
+    </el-dialog> -->
+
+
 </div>
 </template>
 
@@ -120,6 +126,7 @@ export default {
     props:["afterServiceList"],
     data(){
         return {
+            returnServiceId : 0,
             afterService: {
                 afterServiceId : '',
                 launchTime : '',
@@ -203,7 +210,7 @@ export default {
             if(this.afterServiceList[index].afterServiceState == "等待审核") return true;
             else return false;
         },
-         returnGoods(index){
+        returnGoods(index){
             if(this.afterServiceList[index].afterServiceState == "等待退货") return true;
             else return false;
         },
@@ -244,23 +251,24 @@ export default {
                 this.$message.error("发生错误：" + response.err);
             }
         },
-        returnOfGoods(){
+        returnOfGoods(servinceId){
             console.log("现在点击了 退货按钮，准备填写退货信息");
             this.returnFormVisible = true;
+            this.returnServiceId = servinceId
         },
         requestService(id){
             console.log("现在点击了 申请平台介入 按钮");
             // console.log(this.afterServiceList)
             this.$router.push({path:'/Appeal',query:{'id':id,'type':2}})
         },
-        async doReturn(afterServiceId){
+        async doReturn(){
 
             let data = {
                 query : 'doReturn',
                 data : {
                     userId : Cookies.get("userId"),
                     sessionId : Cookies.get("sessionId"),
-                    afterServiceId : afterServiceId+"",
+                    afterServiceId : this.returnServiceId+"",
                     expressCompany : this.returnGood.sender[0],
                     expressCode : this.returnGood.code,
                 }
