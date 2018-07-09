@@ -233,6 +233,7 @@ export default {
       while (this.orderList[index].orderId != item.orderId) index++;
       this.orderList.splice(index, 1, item);
       this.updateShowList();
+      
     }
   },
   watch: {
