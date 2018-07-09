@@ -11,7 +11,7 @@
             </el-col>
             <el-col :span='10'>
                 <el-button size='small' type='text' @click="lookItemDetail" v-if="itemDetail">查看商品详情</el-button>
-                <el-button size='small' type='text' @clizck="replyMessage" v-if="reply">回复</el-button>
+                <el-button size='small' type='text' @click="replyMessage" v-if="reply">回复</el-button>
                 <el-button size='small' type='text' @click="lookOrderDetail" v-if="orderDetail">查看订单详情</el-button>
                 <el-button size='small' type='text' @click="lookServiceDetail" v-if="service">查看售后服务详情</el-button>
                 <el-button size='small' type='text' @click="lookDealDetail" v-if="deal">查看申诉处理结果</el-button>
@@ -76,10 +76,16 @@ export default {
       if (!this.show) this.show = true;
       this.readMessage();
       this.dialogFormVisible = true;
+      
     },
     async confirmReply() {
-      if (this.answer == "") {
-        this.$message.error("回复不能为空！");
+      if(this.answer.length>200){
+          this.$message.error("留言不可超过200字")
+          return 
+      }
+      else if(this.answer==0){
+          this.$message.error("回复不可为空")
+          return 
       }
       let query = {
         query: "sendAnswer",

@@ -108,14 +108,21 @@
                         <el-form-item label="联系手机" prop="phoneNumber">
                             <el-input v-model="reviewGood.phoneNumber" ></el-input>
                         </el-form-item>
-                        <mapLinkage ref="map" :province="reviewGood.province" :city="reviewGood.city"  @updateArea="updateArea"></mapLinkage>
+                        <mapLinkage ref="map" :province="reviewGood.province" :city="reviewGood.city"  ></mapLinkage>
                         <el-form-item label="详细地址" prop="addressDetail">
                             <el-input v-model="reviewGood.addressDetail" ></el-input>
                         </el-form-item>
                     </div>
 
                     <!-- 确认提交审核信息  -->
-                    <el-button type="primary" @click="submitReview"  style="margin-left:85%;margin-top:20px;">确认</el-button>
+                    <el-row type="flex" justify="end">
+                        <el-col :span="3">
+                            <el-button type="primary" @click="submitReview"  style="margin-top:20px;">确认</el-button>
+                        </el-col>
+                        <el-col :span="3">
+                            <el-button type="danger" @click="reviewFormVisible = false"  style="margin-top:20px;">取消</el-button>
+                        </el-col>
+                    </el-row>
                 </el-form>
             </el-dialog>
 
@@ -200,218 +207,254 @@ import AfterSellerDetail from "~/components/home/AfterSellerDetail";
 import mapLinkage from "~/components/home/mapLinkage";
 import Cookies from "js-cookie";
 export default {
-    components:{
-        AfterSellerDetail,
-        mapLinkage,
-    },
-    async mounted(){
-        await this.getSellerAfterServiceList()
-    },
-    data() {
-        return {
-            reviewFormVisible:false,
-            showList:true,
-            detailIndex : 0,
-            reviewIndex : 0,
-            service : 'seeList',
-            reviewGood :{
-                flag : false,
-                message : '',
-                province:'',
-                city:'',
-                addressDetail:'',
-                sellerName : '',
-                index : '',
-                phoneNumber : '',
-            },
-            reviewRules :{
-                name : [
-                    { required: true, message: '请输入联系人名称', trigger: 'blur',trigger:'change'},
-                    { min: 1, max: 15, message: '输入不超过15个字', trigger: 'blur',trigger:'change' }
-                ],
-                phoneNumber : [
-                    {   required :true,validator: (rule,value,callback)=>{
-                            if(value==""){
-                                callback(new Error("请输入手机号"));
-                            }
-                            else{
-                                let p = /^1[3|4|5|7|8][0-9]\d{8}$/
-                                if(!p.test(value)){
-                                    callback(new Error("请输入正确的手机号"));
-                                }
-                                else{
-                                    callback();
-                                }
-                            }
-                        },
-                        trigger: 'blur',trigger:'change'
-                    }
-                ],
-                addressDetail : [
-                    { required: true, message: '请输入详细地址', trigger: 'blur',trigger:'change'},
-                    { min: 1, max: 100, message: '输入不超过15个字', trigger: 'blur',trigger:'change' }
-                ],
-                message : [
-                    { required: true, message: '请输入审核留言', trigger: 'blur',trigger:'change'},
-                    { min: 1, max: 300, message: '输入不超过300个字', trigger: 'blur',trigger:'change' }
-                ],
-            },
-            afterSellerServiceList  :[]
-        }
-    },
-    methods:{
-        seeDetail(index){
-            this.detailIndex = index;
-            this.showList = false;
-        },
-        applyReview(index){
-            this.reviewFormVisible = true;
-            this.reviewIndex = index
-            this.reviewGood.province = this.afterSellerServiceList[index].province
-            this.reviewGood.city = this.afterSellerServiceList[index].city
-            this.reviewGood.addressDetail = this.afterSellerServiceList[index].addressDetail
-            this.reviewGood.sellerName = this.afterSellerServiceList[index].sellerName   
-            this.reviewGood.phoneNumber = this.afterSellerServiceList[index].sellerPhoneNumber   
-        },
-        async submitReview(){
-            // 没想好怎么验证
-            // let flag = this.$refs.map.test()
-            let flag = true
-            this.$refs['reviewForm'].validate(async valid => {
-                if(valid && flag){
-                    let data = {
-                        query : 'Review',
-                        data : {
-                            userId:Cookies.get("userId"),
-                            sessionId: Cookies.get("sessionId"),
-                            afterServiceId:this.afterSellerServiceList[this.reviewIndex].afterServiceId+"",
-                            reviewFlag : this.reviewGood.flag,
-                            sellerMessage: this.reviewGood.message,
-                            addressDetail: this.reviewGood.addressDetail,
-                            sellerName: this.reviewGood.sellerName,
-                            province: this.reviewGood.province,
-                            city: this.reviewGood.city, 
-                            sellerPhoneNumber: this.reviewGood.phoneNumber,
-                        }
-                    }
-
-                    let response = await this.$axios.send(data);
-                    if (response.status == 1) {
-                        await this.getSellerAfterServiceList()
-                        this.reviewFormVisible = false
-                        this.$message({ message: "审核成功！",type: "success"});
-                    } else if (response.status == -1) {
-                        Cookies.remove("userId");
-                        Cookies.remove("sessionId");
-                        Cookies.remove("userName");
-                        this.$router.push({ path: "/" });
-                        
-                    } else {
-                        this.$message.error("发送错误:" + response.err);
-                    }
-                }
-
-            })
-            
-
-        },
-        checkReceive(index){
-            this.$confirm('请问是否确认收货？','提示',{
-                confirmButtonText: '确定',
-                cancelButtonText: '取消',
-                type: 'warning'
-            }).then( async() => {
-
-                let data = {
-                    query : 'afterSalesReceipt',
-                    data : {
-                        userId:Cookies.get("userId"),
-                        sessionId: Cookies.get("sessionId"),
-                        afterServiceId:this.afterSellerServiceList[index].afterServiceId+"",
-                    }
-                }
-
-                let response = await this.$axios.send(data);
-                if (response.status == 1) {
-                    await this.getSellerAfterServiceList()
-                    this.$message({ message: "发布成功！",type: "success"});
-                } else if (response.status == -1) {
-                    Cookies.remove("userId");
-                    Cookies.remove("sessionId");
-                    Cookies.remove("userName");
-                    this.$router.push({ path: "/" });
-                    
+  components: {
+    AfterSellerDetail,
+    mapLinkage
+  },
+  async mounted() {
+    await this.getSellerAfterServiceList();
+  },
+  data() {
+    return {
+      reviewFormVisible: false,
+      showList: true,
+      detailIndex: 0,
+      reviewIndex: 0,
+      service: "seeList",
+      reviewGood: {
+        flag: false,
+        message: "",
+        province: "",
+        city: "",
+        addressDetail: "",
+        sellerName: "",
+        index: "",
+        phoneNumber: ""
+      },
+      reviewRules: {
+        name: [
+          {
+            required: true,
+            message: "请输入联系人名称",
+            trigger: "blur",
+            trigger: "change"
+          },
+          {
+            min: 1,
+            max: 15,
+            message: "输入不超过15个字",
+            trigger: "blur",
+            trigger: "change"
+          }
+        ],
+        phoneNumber: [
+          {
+            required: true,
+            validator: (rule, value, callback) => {
+              if (value == "") {
+                callback(new Error("请输入手机号"));
+              } else {
+                let p = /^1[3|4|5|7|8][0-9]\d{8}$/;
+                if (!p.test(value)) {
+                  callback(new Error("请输入正确的手机号"));
                 } else {
-                    this.$message.error("发送错误:" + response.err);
+                  callback();
                 }
-                
-            }).catch(()=>{
-                this.$message({  type: 'info', message: '已取消收货'});
-            });
-        },
-        requestService(index){
-
-        },
-        completeAfterService(index){
-            this.$confirm('是否确认完成售后？','提示',{
-                confirmButtonText: '确定',
-                cancelButtonText: '取消',
-                type: 'warning'
-            }).then( async()=>{
-                let data = {
-                    query : 'finishReturn',
-                    data : {
-                        userId:Cookies.get("userId"),
-                        sessionId: Cookies.get("sessionId"),
-                        afterServiceId:this.afterSellerServiceList[index].afterServiceId,
-                    }
-                }
-
-                let response = await this.$axios.send(data);
-                if (response.status == 1) {
-                    await  this.getSellerAfterServiceList()
-                    this.$message({ message: "发布成功！",type: "success"});
-                } else if (response.status == 0) {
-                    this.$message.error("发送错误:" + response.err);
-                } else {
-                    Cookies.remove("userId");
-                    Cookies.remove("sessionId");
-                    Cookies.remove("userName");
-                    this.$router.push({ path: "/" });
-                }
-
-            }).catch(()=>{
-                this.$message({
-                    type:'info',
-                    message: '取消确认售后完成。'
-                });
-            });
-        },
-        goBack(){
-            this.showList=true;
-        },
-        async getSellerAfterServiceList(){
-            let data = {
-                query : 'getSellerAfterServiceList',
-                data : {
-                    userId:Cookies.get("userId"),
-                    sessionId: Cookies.get("sessionId"),
-                }
+              }
+            },
+            trigger: "blur",
+            trigger: "change"
+          }
+        ],
+        addressDetail: [
+          {
+            required: true,
+            message: "请输入详细地址",
+            trigger: "blur",
+            trigger: "change"
+          },
+          {
+            min: 1,
+            max: 100,
+            message: "输入不超过15个字",
+            trigger: "blur",
+            trigger: "change"
+          }
+        ],
+        message: [
+          {
+            required: true,
+            message: "请输入审核留言",
+            trigger: "blur",
+            trigger: "change"
+          },
+          {
+            min: 1,
+            max: 300,
+            message: "输入不超过300个字",
+            trigger: "blur",
+            trigger: "change"
+          }
+        ]
+      },
+      afterSellerServiceList: []
+    };
+  },
+  methods: {
+    seeDetail(index) {
+      this.detailIndex = index;
+      this.showList = false;
+    },
+    applyReview(index) {
+      this.reviewFormVisible = true;
+      this.reviewIndex = index;
+      let reviewGood = JSON.parse(JSON.stringify(this.reviewGood));
+      reviewGood.province = this.afterSellerServiceList[index].province;
+      reviewGood.city = this.afterSellerServiceList[index].city;
+      reviewGood.addressDetail = this.afterSellerServiceList[
+        index
+      ].addressDetail;
+      reviewGood.sellerName = this.afterSellerServiceList[index].sellerName;
+      reviewGood.phoneNumber = this.afterSellerServiceList[
+        index
+      ].sellerPhoneNumber;
+      this.reviewGood = reviewGood
+    },
+    async submitReview() {
+      // 没想好怎么验证
+      // let flag = this.$refs.map.test()
+      let flag = true;
+      this.$refs["reviewForm"].validate(async valid => {
+        if (valid && flag) {
+          let data = {
+            query: "Review",
+            data: {
+              userId: Cookies.get("userId"),
+              sessionId: Cookies.get("sessionId"),
+              afterServiceId:
+                this.afterSellerServiceList[this.reviewIndex].afterServiceId +
+                "",
+              reviewFlag: this.reviewGood.flag,
+              sellerMessage: this.reviewGood.message,
+              addressDetail: this.reviewGood.addressDetail,
+              sellerName: this.reviewGood.sellerName,
+              province: this.reviewGood.province,
+              city: this.reviewGood.city,
+              sellerPhoneNumber: this.reviewGood.phoneNumber
             }
+          };
 
-            let response = await this.$axios.send(data);
-            if (response.status == 1) {
-                this.afterSellerServiceList = response.data.afterServiceList
-
-            } else if (response.status == 0) {
-                this.$message.error("发送错误:" + response.err);
-            } else {
-                Cookies.remove("userId");
-                Cookies.remove("sessionId");
-                Cookies.remove("userName");
-                this.$router.push({ path: "/" });
-            }
+          let response = await this.$axios.send(data);
+          if (response.status == 1) {
+            await this.getSellerAfterServiceList();
+            this.reviewFormVisible = false;
+            this.$message({ message: "审核成功！", type: "success" });
+          } else if (response.status == -1) {
+            Cookies.remove("userId");
+            Cookies.remove("sessionId");
+            Cookies.remove("userName");
+            this.$router.push({ path: "/" });
+          } else {
+            this.$message.error("发生错误:" + response.err);
+          }
         }
+      });
+    },
+    checkReceive(index) {
+      this.$confirm("请问是否确认收货？", "提示", {
+        confirmButtonText: "确定",
+        cancelButtonText: "取消",
+        type: "warning"
+      })
+        .then(async () => {
+          let data = {
+            query: "afterSalesReceipt",
+            data: {
+              userId: Cookies.get("userId"),
+              sessionId: Cookies.get("sessionId"),
+              afterServiceId:
+                this.afterSellerServiceList[index].afterServiceId + ""
+            }
+          };
+
+          let response = await this.$axios.send(data);
+          if (response.status == 1) {
+            await this.getSellerAfterServiceList();
+            this.$message({ message: "发布成功！", type: "success" });
+          } else if (response.status == -1) {
+            Cookies.remove("userId");
+            Cookies.remove("sessionId");
+            Cookies.remove("userName");
+            this.$router.push({ path: "/" });
+          } else {
+            this.$message.error("发送错误:" + response.err);
+          }
+        })
+        .catch(() => {
+          this.$message({ type: "info", message: "已取消收货" });
+        });
+    },
+    requestService(index) {},
+    completeAfterService(index) {
+      this.$confirm("是否确认完成售后？", "提示", {
+        confirmButtonText: "确定",
+        cancelButtonText: "取消",
+        type: "warning"
+      })
+        .then(async () => {
+          let data = {
+            query: "finishReturn",
+            data: {
+              userId: Cookies.get("userId"),
+              sessionId: Cookies.get("sessionId"),
+              afterServiceId: this.afterSellerServiceList[index].afterServiceId
+            }
+          };
+
+          let response = await this.$axios.send(data);
+          if (response.status == 1) {
+            await this.getSellerAfterServiceList();
+            this.$message({ message: "发布成功！", type: "success" });
+          } else if (response.status == 0) {
+            this.$message.error("发送错误:" + response.err);
+          } else {
+            Cookies.remove("userId");
+            Cookies.remove("sessionId");
+            Cookies.remove("userName");
+            this.$router.push({ path: "/" });
+          }
+        })
+        .catch(() => {
+          this.$message({
+            type: "info",
+            message: "取消确认售后完成。"
+          });
+        });
+    },
+    goBack() {
+      this.showList = true;
+    },
+    async getSellerAfterServiceList() {
+      let data = {
+        query: "getSellerAfterServiceList",
+        data: {
+          userId: Cookies.get("userId"),
+          sessionId: Cookies.get("sessionId")
+        }
+      };
+
+      let response = await this.$axios.send(data);
+      if (response.status == 1) {
+        this.afterSellerServiceList = response.data.afterServiceList;
+      } else if (response.status == 0) {
+        this.$message.error("发送错误:" + response.err);
+      } else {
+        Cookies.remove("userId");
+        Cookies.remove("sessionId");
+        Cookies.remove("userName");
+        this.$router.push({ path: "/" });
+      }
     }
-}
+  }
+};
 </script>

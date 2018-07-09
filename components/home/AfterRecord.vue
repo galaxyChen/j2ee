@@ -35,7 +35,7 @@
             </el-col>
 
             <!-- 填写退货物流相关信息 -->
-            <el-dialog title="收货地址" :visible.sync="returnFormVisible">
+            <el-dialog title="发货" :visible.sync="returnFormVisible">
                 <el-form :model="returnGood">
                     <el-form-item label="快递公司" >
                         <el-cascader :options="options" v-model="returnGood.sender" placeholder="请选择快递公司"></el-cascader>

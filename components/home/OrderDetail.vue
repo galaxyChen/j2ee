@@ -132,7 +132,7 @@
                 </el-col>
             </el-row>       
         </el-row>
-        <el-dialog title="收货地址" :visible.sync="dialogFormVisible">
+        <el-dialog title="发货" :visible.sync="dialogFormVisible">
          <el-form :model="sendGood" :rules="rules">
             <el-form-item label="快递公司" prop='firm'>
               <!-- <el-input v-model="sendGood.sender" placeholder="请输入快递公司"></el-input> -->

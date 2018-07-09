@@ -3,7 +3,7 @@
         <el-header>
             <NavTop ></NavTop>
         </el-header>
-        <el-main>
+        <el-main v-loading='loading' element-loading-text='查询中，请稍后'>
             <el-row>
                 <SearchBox @doSearch='doSearch'></SearchBox>
             </el-row>
@@ -15,10 +15,11 @@
         <el-footer class="footer">
             <el-pagination
               class="pager"
-              :page-size="10"
+              :page-size="12"
               layout="prev, pager, next"
               :total="size"
-              :current-page.sync='current'>
+              :current-page.sync='current'
+              @current-change='changePage'>
             </el-pagination>
         </el-footer>
     </el-container>
@@ -60,9 +61,11 @@ export default {
       tag: ["全部"],
       itemList: [],
       size: 0,
-      current: 1
+      current: 1,
+      loading:false
     };
   },
+  
   computed: {
     rows() {
       let result = [];
@@ -84,7 +87,11 @@ export default {
     }
   },
   methods: {
+    changePage(page){
+      this.doSearch()
+    },
     async doSearch(searchText, searchTag) {
+      this.loading = true;
       let text = searchText || this.text;
       let tag = searchTag || this.tag;
       if (tag=='全部') tag = ['全部']
@@ -93,13 +100,15 @@ export default {
         data: {
           name: text,
           pageNo: this.current+"",
-          itemsPerPage: 10+"",
+          itemsPerPage: 12+"",
           bookCategory: tag
         }
       };
       let response = await this.$axios.send(data);
       this.itemList = response.data.item_list;
       this.size = response.data.size;
+      this.loading = false;
+      
     }
   },
   watch: {
@@ -107,6 +116,7 @@ export default {
       this.text = to.query.text;
       this.tag = to.query.tag;
       this.doSearch();
+      
     }
   }
 };
