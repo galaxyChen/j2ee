@@ -43,7 +43,7 @@
                   <el-input  v-model='Goods.phoneNumber'  placeholder='默认退货联系电话'></el-input>
                 </el-form-item>
                  <el-form-item label="商品描述: ">
-                      <el-input  type="textarea"  :rows="2"  :value='Goods.description' placeholder="请输入商品描述" ></el-input>
+                      <el-input  type="textarea"  :rows="2"  v-model='Goods.description' placeholder="请输入商品描述" ></el-input>
                 </el-form-item>
                  <el-form-item label="上传图片: ">
                     <el-upload class="upload-pic" 

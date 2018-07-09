@@ -29,7 +29,7 @@
     </el-table-column>
     <el-table-column label="小计" align="center">
         <template slot-scope="scope">
-            <p style="color:red">￥{{scope.row.price*scope.row.nums+scope.row.postage}}</p>
+            <p style="color:red">￥{{ ( scope.row.price*scope.row.nums+scope.row.postage-0 ).toFixed(2) }}</p>
         </template>
     </el-table-column>
 
@@ -49,6 +49,7 @@ export default {
     mounted(){
         
     },
+
     props: [ 
         "itemList"
     ],

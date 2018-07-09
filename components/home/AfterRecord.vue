@@ -15,7 +15,7 @@
             <el-col :span="3" class="el-row-body-text">
                 {{item.itemTitle}}
             </el-col>
-            <el-col :span="5" class="el-row-body-text">
+            <el-col :span="3" class="el-row-body-text">
                 <el-row style="margin-bottom:20px">服务单号:{{item.afterServiceId}}</el-row>
                 <el-row>申请时间:{{item.launchTime}}</el-row> 
             </el-col>
@@ -24,7 +24,7 @@
             </el-col>
         
             <!-- 所有按钮 -->
-            <el-col class='el-row-body-text ' :span="6">
+            <el-col class='el-row-body-text ' :span="3">
                 <el-button @click="seeDetail(index)">查看服务详情</el-button>
                  <!-- 等待审核状态 对应按钮 -->
                 <el-button @click="cancelApply(item.afterServiceId)" v-if="cancel(index)" type="text" class="stateBtn" size='small'>取消售后申请</el-button>  
@@ -34,7 +34,10 @@
                <el-button @click="requestService(item.afterServiceId)" v-if='service(index)'  type="text warning" class="stateBtn" size='small'>申诉</el-button>
             </el-col>
             
-
+            <el-col :span="5" class="el-row-body-text">
+                <el-row v-if="fuck(item.buyerComplaintState)" style="margin-bottom:20px">买家申诉结果: <el-button type="text" @click="showPlatformMsg(item.platfromResponseToBuyer)" >{{item.buyerComplaintState}}</el-button></el-row>
+                <el-row v-if="fuck(item.sellerComplaintState)" >卖家申诉结果: <el-button type="text" @click="showPlatformMsg(item.platfromResponseToSeller)" >{{item.sellerComplaintState}}</el-button></el-row>
+            </el-col>
 
 
         </el-row>
@@ -55,7 +58,14 @@
         </el-form>
     </el-dialog>
 
-
+    <el-dialog title="平台申诉信息" :visible.sync="appealVisible">
+        <el-row>
+            平台留言：
+        </el-row>
+        <el-row>
+            {{appealMsg}}
+        </el-row>
+    </el-dialog>
     <!-- 因需求变更 这一块采用跳转到别的地方进行处理 -->
     <!-- 填写申诉相关信息 -->
     <!-- <el-dialog title="买家申诉" :visible.sync="appealFormVisible">
@@ -200,8 +210,9 @@ export default {
             },
             appealGood : {
                 reason : '',
-
             },
+            appealMsg : '',
+            appealVisible : false,
         }
     },
 
@@ -287,6 +298,16 @@ export default {
             } else {
                 this.$message.error("发生错误：" + response.err);
             }
+        },
+        showPlatformMsg(msg){
+            this.appealMsg = msg;
+            this.appealVisible = true;
+        },
+        fuck(state){
+            // return true
+            if(state=='无' || state=='' || state==undefined )
+                return false;
+            return true
         },
 
     }

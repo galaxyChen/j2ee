@@ -146,9 +146,10 @@ export default {
             }
             this.itemList.forEach( ele => {
                  tmp.nums += ele.nums;
-                 tmp.pay += ele.nums * ele.price;
+                 tmp.pay += (ele.nums * ele.price);
                  tmp.postage += ele.postage;
             })
+            
             this.addressItem = addressItem
             this.totalList = tmp
         },
@@ -162,7 +163,8 @@ export default {
                 this.$message.error('没有购买的商品')
                 return 
             }
-            function number2StrInArr(arr){
+            function number2StrInArr(arr1){
+                let arr = arr1
                 arr.forEach(obj=>{
                     for (let term in obj) {
                         if (obj.hasOwnProperty(term)) {
@@ -182,6 +184,7 @@ export default {
                 }
 
             }
+
             let response = await this.$axios.send(data)
             if(response.status===1){
                 
@@ -190,7 +193,7 @@ export default {
                     params: { 
                         totalPay: this.totalList.pay + this.totalList.postage ,
                         time_limit :'2小时0分',
-                        orderId : response.data.ordersId,
+                        orderId : JSON.stringify(response.data.ordersId) ,
                     }  
                 });
             }
