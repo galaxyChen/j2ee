@@ -33,7 +33,7 @@
 
                                         <el-button size="small" v-if="item.afterServiceState=='售后已签收'"  @click="completeAfterService(index)" class="buttons">完成售后</el-button>
 
-                                        <el-button size="small" v-if="item.afterServiceState=='售后已签收'"  @click="requestService(index) " class="buttons">申请平台介入</el-button>
+                                        <el-button size="small" v-if="item.afterServiceState=='售后已签收'"  @click="requestService(item.afterServiceId) " class="buttons">申请平台介入</el-button>
 
                                         
                                 </el-col>
