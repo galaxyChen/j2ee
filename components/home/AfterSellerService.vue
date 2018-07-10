@@ -35,8 +35,8 @@
                                         <el-button type="text" size="small" class="buttons-text" @click="seeDetail(index)">查看详情</el-button>
                                 </el-col>
                                 <el-col :span="4" class="el-row-body-text">
-                                    <el-row style="margin-bottom:20px">买家申诉信息</el-row>
-                                    <el-row>卖家申诉信息</el-row>
+                                    <el-row style="margin-bottom:20px">买家申诉信息: {{item.buyerComplaintState}}</el-row>
+                                    <el-row>卖家申诉信息: {{item.sellerComplaintState}}</el-row>
                                 </el-col>
                             </el-row>
                         </div>
