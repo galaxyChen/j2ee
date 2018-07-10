@@ -1,6 +1,6 @@
 <template>
     <el-col style="margin-top:50px;" :span='15' :push="1">
-        <el-container v-if="showList">
+        <el-container v-if="onShow=='message'">
         <el-header>
         <el-tabs v-model="activeTab"  type="card" @tab-click="handleClick">
             <el-tab-pane label="全部信息" name="all"></el-tab-pane>
@@ -10,7 +10,9 @@
         </el-tabs>
         </el-header>
         <el-main>
-            <MessageItem @lookOrder='lookOrder' @read='readMessage' v-for="(item,index) in onShowList" 
+            <MessageItem @lookOrder='lookOrder' @read='readMessage' 
+                @lookServiceDetail='lookServiceDetail'
+                v-for="(item,index) in onShowList" 
                 :key='"message"+item.messageId'
                 :message="item"
                 :name='index'></MessageItem>           
@@ -25,7 +27,26 @@
               </el-pagination>
         </el-footer>
     </el-container>
-    <el-container v-else>
+    <el-container v-if="onShow=='order'">
+            <el-header>
+                <el-button @click="goBack" class="back-button" size="medium" type='text' icon="el-icon-back">返回</el-button>
+            </el-header>
+            <el-main>
+                <OrderDetail :type='type' :order='onShowOrder'></OrderDetail>
+            </el-main>
+    </el-container>
+
+    <el-container v-if="onShow == 'service'">
+            <el-header>
+                <el-button @click="goBack" class="back-button" size="medium" type='text' icon="el-icon-back">返回</el-button>
+            </el-header>
+            <el-main>
+                <AfterDetail v-if="type==1" :afterService='service'></AfterDetail>
+                <AfterSellerDetail v-else :afterSellerService='service'></AfterSellerDetail>
+            </el-main>
+    </el-container>
+
+    <el-container v-if="onShow=='complaint'">
             <el-header>
                 <el-button @click="goBack" class="back-button" size="medium" type='text' icon="el-icon-back">返回</el-button>
             </el-header>
@@ -43,10 +64,14 @@
 import MessageItem from "~/components/home/MessageItem";
 import OrderDetail from "~/components/home/OrderDetail";
 import Cookies from "js-cookie";
+import AfterSellerDetail from "~/components/home/AfterSellerDetail";
+import AfterDetail from "~/components/home/AfterDetail";
 export default {
   components: {
     MessageItem,
-    OrderDetail
+    OrderDetail,
+    AfterSellerDetail,
+    AfterDetail
   },
   mounted() {
     this.getMessage();
@@ -54,7 +79,7 @@ export default {
   data() {
     return {
       activeTab: "all",
-      showList: true,
+      onShow: "message",
       type: 1,
       currentPage: 1,
       totalSize: 0,
@@ -78,7 +103,7 @@ export default {
       let response = await this.$axios.send(query);
       if (response.status == 1) {
         this.onShowOrder = response.data.order;
-        this.showList = false;
+        this.onShow = "order";
       } else if (response.status == 0) {
         this.$message.error("发生错误" + response.err);
       } else {
@@ -90,7 +115,7 @@ export default {
       }
     },
     goBack() {
-      this.showList = true;
+      this.onShow = "message";
       this.updateShowList();
     },
     async readMessage(id) {
@@ -114,8 +139,33 @@ export default {
     handleClick(tab) {
       this.updateShowList();
     },
+    async lookServiceDetail(id) {
+      let query = {
+        query: "getOneAfterService",
+        data: {
+          adminId: Cookies.get("userId"),
+          sessionId: Cookies.get("sessionId"),
+          afterServiceId: id + ""
+        }
+      };
+      let response = await this.$axios.send(query);
+      if (response.status == 1) {
+        this.service = response.data.service;
+        this.onShow = 'service';
+      } else if (response.status == 0) {
+        this.$message.error("发生错误" + response.err);
+      } else {
+        this.signout();
+      }
+    },
+    signout() {
+      Cookies.remove("userId");
+      Cookies.remove("sessionId");
+      Cookies.remove("userName");
+      this.$router.push({ paht: "/" });
+    },
     updateShowList() {
-      let showList = []
+      let showList = [];
       if (this.activeTab == "all") showList = this.messageList;
       else if (this.activeTab == "item") {
         let show_list = this.messageList.filter((value, index) => {
@@ -140,12 +190,18 @@ export default {
       this.totalSize = showList.length;
       this.currentPage = 1;
       this.totalShowList = showList;
-      this.onShowList = JSON.parse(JSON.stringify(this.totalShowList)).splice(0, 10);
+      this.onShowList = JSON.parse(JSON.stringify(this.totalShowList)).splice(
+        0,
+        10
+      );
     },
-    handleCurrentChange(page){
-      console.log(page)
-      let begin = 10*(page-1);
-      this.onShowList = JSON.parse(JSON.stringify(this.totalShowList)).splice(begin,10);
+    handleCurrentChange(page) {
+      console.log(page);
+      let begin = 10 * (page - 1);
+      this.onShowList = JSON.parse(JSON.stringify(this.totalShowList)).splice(
+        begin,
+        10
+      );
     },
     async getMessage() {
       let query = {

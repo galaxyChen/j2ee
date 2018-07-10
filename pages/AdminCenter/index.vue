@@ -76,7 +76,7 @@ export default {
     },
     updateShowList() {
       let type = 1;
-      if (this.activeTab != "buyerComplain") type = 2;
+      if (this.activeTab == "buyerComplain") type = 2;
       let temp = this.complaints.filter((value, index) => {
         if (value.complaintType == type) return true;
         else return false;

@@ -14,7 +14,7 @@
                 <el-button size='small' type='text' @click="replyMessage" v-if="reply">回复</el-button>
                 <el-button size='small' type='text' @click="lookOrderDetail" v-if="orderDetail">查看订单详情</el-button>
                 <el-button size='small' type='text' @click="lookServiceDetail" v-if="service">查看售后服务详情</el-button>
-                <el-button size='small' type='text' @click="lookDealDetail" v-if="deal">查看申诉处理结果</el-button>
+                <!-- <el-button size='small' type='text' @click="lookDealDetail" v-if="deal">查看申诉处理结果</el-button> -->
                 <el-button size='small' type="text" @click="show = !show"><i class="el-icon-sort"></i></el-button>
             </el-col>
         </el-row>
@@ -31,6 +31,7 @@
             <el-button type="primary" @click="confirmReply">确 定</el-button>
           </div>
         </el-dialog>
+        
     </div>
 </template>
 
@@ -62,7 +63,7 @@ export default {
     return {
       show: false,
       dialogFormVisible: false,
-      answer: ""
+      answer: "",
     };
   },
   props: ["message"],
@@ -122,9 +123,11 @@ export default {
     },
     lookServiceDetail() {
       this.readMessage();
+      this.$emit('lookServiceDetail',this.message.afterServiceId)
     },
     lookDealDetail() {
       this.readMessage();
+      this.$emit('lookDealDetail',this.message.afterServiceId)
     },
     readMessage() {
       if (this.message.unread == 1) this.$emit("read", this.message.messageId);
