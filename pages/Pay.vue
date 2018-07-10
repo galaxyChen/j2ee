@@ -96,7 +96,7 @@ export default {
         let sessionId = Cookies.get("sessionId");
         let orderList = JSON.parse(orderId)
         let response = {
-          status : 1,
+          status : 0,
         }
         for(let i in orderList){
           let data = {
@@ -107,7 +107,7 @@ export default {
               orderId: orderList[i]+"",  
             }
           };
-          
+          console.log(data)
           response = await this.$axios.send(data);
         }
 

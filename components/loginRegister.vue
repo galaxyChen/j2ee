@@ -84,7 +84,7 @@ export default {
   },
   data() {
     var validatePw = (rule, value, callback) => {
-      let p = /^(?=.*\d)(?=.*[a-zA-Z])(?=.*[_])[\da-zA-Z_]+/;
+      let p = /^(?=.*\d)(?=.*[a-zA-Z])(?=.*[_])[\da-zA-Z_]+$/;
       let p1 = /^[\da-zA-Z_]+$/;
       if (value == "") {
         callback(new Error("请输入密码"));
