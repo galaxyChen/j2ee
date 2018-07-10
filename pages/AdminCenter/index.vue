@@ -1,10 +1,10 @@
 <template>
 
-    <el-container style="min-height:600px;">
+    <el-container style="min-height:800px;">
         <el-header>
             <AdminNavTop></AdminNavTop>
         </el-header>
-        <el-main>
+        <el-main >
             <el-col :span="4">
                     <AdminNavLeft :active='currentMainIndex' @changeTab='changeTab'></AdminNavLeft>
             </el-col>
