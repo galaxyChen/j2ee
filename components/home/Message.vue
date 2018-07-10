@@ -188,10 +188,10 @@ export default {
       }
 
       this.totalSize = showList.length;
-      this.currentPage = 1;
+      // this.currentPage = 1;
       this.totalShowList = showList;
       this.onShowList = JSON.parse(JSON.stringify(this.totalShowList)).splice(
-        0,
+        10*(this.currentPage-1),
         10
       );
     },
