@@ -60,7 +60,7 @@
                     </el-upload>
                 </el-form-item>
                 <div style="float:right"> 
-                    <el-button type="primary" @click="submitForm('Goods')">发布商品</el-button>
+                    <el-button :disabled="added" type="primary" @click="submitForm('Goods')">发布商品</el-button>
                     <!-- <el-button>取消</el-button> -->
                 </div>
             </el-form>
@@ -92,6 +92,7 @@ export default {
       radio: "1",
       loading: false,
       type:[],
+      added:false,
       Goods: {
         itemTitle: "",
         bookName: "",
@@ -447,6 +448,7 @@ export default {
                 type: "success"
               });
               this.loading = false;
+              this.added = true;
               let userId = Cookies.get('userId')
               this.$router.push({path:`/home/${userId}`,query:{index:'4-2'}})
             } else if (response.status == 0) {
