@@ -264,6 +264,7 @@ import Cookies from "js-cookie";
                     itemTitle : ele.itemTitle,
                     province : ele.province,
                     itemId : ele.itemId,
+                    freePostage:ele.freePostage
                   }
                   toBuyList.push(newItem)
                 }
