@@ -48,16 +48,17 @@
             </div>
         </el-row>
 
-        <div class="check" v-if="ifShow(afterSellerService.afterServiceState)">
+        <div class="check" >
             <h3 style="color:#cccccc;">审核信息</h3>
-            <div style="border-style:solid;border-color:rgb(238, 238, 238);margin-top:10px;padding:20px;line-height:25px;">
+            <div style="border-style:solid;border-color:rgb(238, 238, 238);margin-top:10px;padding:20px;line-height:25px;" >
                 <p style="margin-bottom:30px;">{{afterSellerService.sellerMessage}}</p>
-                <el-row >收货地址： {{afterSellerService.addressDetail}}</el-row>
-                <el-row >联系姓名： {{afterSellerService.sellerName}}</el-row>
-                <el-row >联系电话：{{afterSellerService.sellerPhoneNumber}}</el-row>
+                <div v-if="ifShow(afterSellerService.afterServiceState)">
+                    <el-row >收货地址： {{afterSellerService.addressDetail}}</el-row>
+                    <el-row >联系姓名： {{afterSellerService.sellerName}}</el-row>
+                    <el-row >联系电话：{{afterSellerService.sellerPhoneNumber}}</el-row>
+                </div>
             </div>
         </div>
-
         <!-- 未想好 点击取消之后，页面如何变化 -->
         <!-- <el-button type="primary" class="cancelBtn" @click="confirmCancel">取消</el-button> -->
     </div>
@@ -129,7 +130,7 @@ export default {
             });
         },
         ifShow(state){
-            console.log(state)
+            
             if(state=='等待退货' || state=='等待售后收货' ||state=='售后已签收'||state=='完成售后'||state=='卖家申诉中')
                 return true
             console.log("???")

@@ -41,17 +41,18 @@
             <h3 style="color:#cccccc;">问题描述</h3>
             <p style="border-style:solid;border-color:rgb(238, 238, 238);margin-top:10px;margin-bottom:40px;padding:20px;">{{afterService.description}}</p>
             <!-- 加入照片凭证 -->
+            <h5 style="color:#cccccc;margin-top:10px;margin-bottom:20px;">照片凭证：</h5>
             <div>
                 <img :src="afterService.pictureAddress">
             </div>
         </el-row>
 
-        <div class="check" v-if="ifShow(afterService.afterServiceState)">
+        <div class="check" >
             <!-- 状态为 已审核 才显示这个框 -->
             <h3 style="color:#cccccc;">审核留言</h3>
             <div style="border-style:solid;border-color:rgb(238, 238, 238);margin-top:10px;padding:20px;line-height:25px;">
                 <p style="margin-bottom:30px;">{{afterService.sellerMessage}}</p>
-                <div v-if="afterService.afterServiceState!='审核不通过'">
+                <div v-if="ifShow(afterService.afterServiceState)">
                     <li>收货地址： {{afterService.addressDetail}}</li>
                     <li>联系姓名： {{afterService.sellerName}}</li>
                     <li>联系电话： {{afterService.sellerPhoneNumber}}</li>

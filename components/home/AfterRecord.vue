@@ -25,13 +25,13 @@
         
             <!-- 所有按钮 -->
             <el-col class='el-row-body-text ' :span="3">
-                <el-button @click="seeDetail(index)">查看服务详情</el-button>
+                <el-button @click="seeDetail(index)" type="text">查看服务详情</el-button>
                  <!-- 等待审核状态 对应按钮 -->
-                <el-button @click="cancelApply(item.afterServiceId)" v-if="cancel(index)" type="text" class="stateBtn" size='small'>取消售后申请</el-button>  
+                <el-button @click="cancelApply(item.afterServiceId)" v-if="item.afterServiceState=='等待审核'"  class="stateBtn" size='small'>取消售后申请</el-button>  
                 <!-- 等待退货状态 对应按钮 -->
-                <el-button @click="returnOfGoods(item.afterServiceId)" v-if='returnGoods(index)' type="text" class="stateBtn" size="small">退货</el-button>
+                <el-button @click="returnOfGoods(item.afterServiceId)" v-if="item.afterServiceState=='等待退货'"  class="stateBtn" size="small">退货</el-button>
                <!-- 拒绝退货状态 对应按钮 -->
-               <el-button @click="requestService(item.afterServiceId)" v-if='service(index)'  type="text warning" class="stateBtn" size='small'>申诉</el-button>
+               <el-button @click="requestService(item.afterServiceId)" v-if="item.afterServiceState=='审核不通过'"  class="stateBtn" size='small'>申请平台介入</el-button>
             </el-col>
             
             <el-col :span="5" class="el-row-body-text">
@@ -217,24 +217,9 @@ export default {
     },
 
     methods :{
-        cancel(index){
-            if(this.afterServiceList[index].afterServiceState == "等待审核") return true;
-            else return false;
-        },
-        returnGoods(index){
-            if(this.afterServiceList[index].afterServiceState == "等待退货") return true;
-            else return false;
-        },
-        service(index){
-            if(this.afterServiceList[index].afterServiceState == "审核不通过") return true;
-            else return false;
-        },
         seeDetail(index){
             // this.afterService = this.afterServiceList[index]
             this.$emit("seeDetail",index)
-        },
-        returnAfterRecord(){
-            this.visible = true
         },
         
         async cancelApply(afterServiceId){
