@@ -131,7 +131,7 @@
                 </el-form>
             </el-dialog>
 
-          <el-dialog title="平台申诉信息" :visible.sync="appealVisible">
+          <el-dialog title="平台申诉结果" :visible.sync="appealVisible">
             <el-row>
                 平台留言：
             </el-row>
