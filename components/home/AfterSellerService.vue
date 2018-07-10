@@ -402,7 +402,7 @@ export default {
           let response = await this.$axios.send(data);
           if (response.status == 1) {
             await this.getSellerAfterServiceList();
-            this.$message({ message: "发布成功！", type: "success" });
+            this.$message({ message: "操作成功！", type: "success" });
           } else if (response.status == -1) {
             Cookies.remove("userId");
             Cookies.remove("sessionId");
@@ -438,7 +438,7 @@ export default {
           let response = await this.$axios.send(data);
           if (response.status == 1) {
             await this.getSellerAfterServiceList();
-            this.$message({ message: "发布成功！", type: "success" });
+            this.$message({ message: "操作成功！", type: "success" });
           } else if (response.status == 0) {
             this.$message.error("发送错误:" + response.err);
           } else {
