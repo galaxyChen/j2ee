@@ -24,20 +24,23 @@
                                 <!-- 按钮合集 -->
                                 <el-col :span="3" class="el-row-body-text">{{item.afterServiceState}}</el-col>
                                 <el-col :span="3" >
-                                        <el-button size="small" v-if="item.afterServiceState=='等待审核'" @click="applyReview(index)" class="buttons">审核</el-button>
 
-                                        <el-button size="small" v-if="item.afterServiceState=='等待售后收货'" @click="checkReceive(index)" class="buttons">售后收货</el-button>
+                                        <el-button  size="small" class="buttons-text" type="text" @click="seeDetail(index)">查看详情</el-button>
 
-                                        <el-button size="small" v-if="item.afterServiceState=='售后已签收'" @click="completeAfterService(index)" class="buttons">完成售后</el-button>
+                                        <el-button size="small" v-if="item.afterServiceState=='等待审核'"  @click="applyReview(index)" class="buttons">审核</el-button>
 
-                                        <el-button size="small" v-if="item.afterServiceState=='售后已签收'" @click="requestService(item.afterServiceId) " class="buttons">申请介入</el-button>
+                                        <el-button size="small" v-if="item.afterServiceState=='等待售后收货'"  @click="checkReceive(index)" class="buttons">售后收货</el-button>
 
-                                        <el-button type="text" size="small" class="buttons-text" @click="seeDetail(index)">查看详情</el-button>
+                                        <el-button size="small" v-if="item.afterServiceState=='售后已签收'"  @click="completeAfterService(index)" class="buttons">完成售后</el-button>
+
+                                        <el-button size="small" v-if="item.afterServiceState=='售后已签收'"  @click="requestService(index) " class="buttons">申请平台介入</el-button>
+
+                                        
                                 </el-col>
                                 
                                 <el-col :span="5" class="el-row-body-text">
-                                  <el-row v-if="fuck(item.buyerComplaintState)" style="margin-bottom:20px">买家申诉结果: <el-button type="text" @click="showPlatformMsg(item.platfromResponseToBuyer)" >{{item.buyerComplaintState}}</el-button></el-row>
-                                  <el-row v-if="fuck(item.sellerComplaintState)" >卖家申诉结果: <el-button type="text" @click="showPlatformMsg(item.platfromResponseToSeller)" >{{item.sellerComplaintState}}</el-button></el-row>
+                                  <el-row v-if="fuck(item.buyerComplaintState)" style="margin-bottom:20px">买家申诉结果: <el-button type="text" @click="showPlatformMsg(item.platformResponseToBuyer)" >{{item.buyerComplaintState}}</el-button></el-row>
+                                  <el-row v-if="fuck(item.sellerComplaintState)" >卖家申诉结果: <el-button type="text" @click="showPlatformMsg(item.platformResponseToSeller)" >{{item.sellerComplaintState}}</el-button></el-row>
                               </el-col>
 
                             </el-row>
@@ -128,7 +131,7 @@
                 </el-form>
             </el-dialog>
 
-          <el-dialog title="平台申诉信息" :visible.sync="appealVisible">
+          <el-dialog title="平台申诉结果" :visible.sync="appealVisible">
             <el-row>
                 平台留言：
             </el-row>
@@ -246,14 +249,14 @@ export default {
         sellerName: [
           {
             validator:(rule,value,callback)=>{
-              if(value==''){
+              if(value=='' || value==undefined){
                 callback(new Error('联系人不能为空'))
               }
               else if(value.length>15){
                 callback(new Error("联系人长度不能超过15"))
               }
               else{
-                let p = /[0-9]+/;
+                let p = /^[0-9]+$/;
                 if(p.test(value)){
                   callback(new Error("联系人不能为纯数字"))
                 }
@@ -477,8 +480,9 @@ export default {
       }
     },
     showPlatformMsg(msg){
-        this.appealMsg = msg;
-        this.appealVisible = true;
+      console.log(msg)
+      this.appealMsg = msg;
+      this.appealVisible = true;
     },
     fuck(state){
         if(state=='无' || state=='' || state==undefined )
