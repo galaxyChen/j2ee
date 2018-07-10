@@ -135,16 +135,26 @@ export default {
   opacity: 0.75;
   line-height: 400px;
 }
-.el-carousel__item:nth-child(2n) {
+.el-carousel__item:nth-child(3n) {
   background-color: white;
   background-image: url("../assets/6.jpg");
+  background-size: 100% 100%;
   height: 430px;
 }
-.el-carousel__item:nth-child(2n + 1) {
+.el-carousel__item:nth-child(3n + 1) {
   background-color: #d3dce6;
   background-image: url("../assets/7.jpg");
+
   height: 430px;
 }
+.el-carousel__item:nth-child(3n + 2) {
+  background-color: #d3dce6;
+  background-image: url("../assets/8.jpg");
+  
+  height: 430px;
+  
+}
+
 .goods {
   float: left;
   margin: 15px 1%;
