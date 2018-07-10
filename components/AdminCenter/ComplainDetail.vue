@@ -33,6 +33,7 @@
                 <p>申诉凭证：</p>
                 <li>联系姓名:{{complaint.name}}</li>
                 <li>联系电话:{{complaint.phoneNumber}}</li>
+                <img style="width:240px;height:320px;" :src='complaint.pictureAddress'/>
             </div>
         </el-row>
         <el-row class = "row1">
