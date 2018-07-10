@@ -28,7 +28,7 @@
                         <a class="order-title-text">{{order.price}}</a>
                     </el-col>
                     <el-col  class='order-box' :span="6">
-                        <a class="order-title-text">{{order.pay}}</a>
+                        <a class="order-title-text">{{order.totalprice}}</a>
                     </el-col>
                 </el-row>
             </div>
