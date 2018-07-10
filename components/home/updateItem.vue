@@ -67,7 +67,7 @@
                 </el-form-item>
                 <div style="float:right"> 
                     <el-button type="primary" @click="submitForm('Goods')">发布商品</el-button>
-                    <el-button>取消</el-button>
+                    <!-- <el-button>取消</el-button> -->
                 </div>
             </el-form>
         </div>
