@@ -43,7 +43,7 @@
             <!-- 加入照片凭证 -->
             <h5 style="color:#cccccc;margin-top:10px;margin-bottom:20px;">照片凭证：</h5>
             <div>
-                <img :src="afterSellerService.pictureAddress">
+                <img :src="afterSellerService.returnVoucher">
             </div>
             </div>
         </el-row>

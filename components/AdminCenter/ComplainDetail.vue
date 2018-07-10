@@ -30,9 +30,9 @@
             <div style="border-style:solid;border-color:rgb(238, 238, 238);margin-top:10px;padding:20px;line-height:25px;">
                 <p >申诉理由</p>
                 <p style="border-style:solid;border-color:rgb(238, 238, 238);margin-top:10px;padding:20px;">{{complaint.description}}</p>
-                <p>申诉凭证：</p>
                 <li>联系姓名:{{complaint.name}}</li>
                 <li>联系电话:{{complaint.phoneNumber}}</li>
+                <p>申诉凭证：</p>
                 <img style="width:240px;height:320px;" :src='complaint.pictureAddress'/>
             </div>
         </el-row>
