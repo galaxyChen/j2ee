@@ -292,7 +292,7 @@ export default {
         name: "Pay",
         params: {
           totalPay: this.order.price + this.order.postage,
-          orderId: orderId,
+          orderId:  JSON.stringify(orderId),
           time_limit: "2小时0分"
         }
       });
