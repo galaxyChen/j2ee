@@ -39,8 +39,8 @@
                                 </el-col>
                                 
                                 <el-col :span="5" class="el-row-body-text">
-                                  <el-row v-if="fuck(item.buyerComplaintState)" style="margin-bottom:20px">买家申诉结果: <el-button type="text" @click="showPlatformMsg(item.platfromResponseToBuyer)" >{{item.buyerComplaintState}}</el-button></el-row>
-                                  <el-row v-if="fuck(item.sellerComplaintState)" >卖家申诉结果: <el-button type="text" @click="showPlatformMsg(item.platfromResponseToSeller)" >{{item.sellerComplaintState}}</el-button></el-row>
+                                  <el-row v-if="fuck(item.buyerComplaintState)" style="margin-bottom:20px">买家申诉结果: <el-button type="text" @click="showPlatformMsg(item.platformResponseToBuyer)" >{{item.buyerComplaintState}}</el-button></el-row>
+                                  <el-row v-if="fuck(item.sellerComplaintState)" >卖家申诉结果: <el-button type="text" @click="showPlatformMsg(item.platformResponseToSeller)" >{{item.sellerComplaintState}}</el-button></el-row>
                               </el-col>
 
                             </el-row>
@@ -480,8 +480,9 @@ export default {
       }
     },
     showPlatformMsg(msg){
-        this.appealMsg = msg;
-        this.appealVisible = true;
+      console.log(msg)
+      this.appealMsg = msg;
+      this.appealVisible = true;
     },
     fuck(state){
         if(state=='无' || state=='' || state==undefined )
