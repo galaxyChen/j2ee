@@ -52,11 +52,6 @@
                     <el-input  type="textarea" maxlength=50 v-model="regForm.securityAnswer" placeholder="不超过50个字符"></el-input>
                 </el-form-item>
 
-                <el-form-item label="密保回答" prop="securityAnswer">
-                    
-                    <el-input  type="textarea" maxlength=50 v-model="regForm.securityAnswer" placeholder="不超过50个字符"></el-input>
-                </el-form-item>
-
                 <el-form-item>
                     <el-button type="primary" @click="submitForm('regForm')">确定</el-button>
                     <el-button @click="resetForm('regForm')">重置</el-button>
@@ -269,7 +264,7 @@ export default {
           let data = {
             query: this.query
           };
-          if (this.codeStr!=this.checkcode){
+          if (this.codeStr!=this.checkcode && data.query == "login"){
             this.$message.error("验证码填写错误！")
             this.codeStr = this.getCode()
             return ;
