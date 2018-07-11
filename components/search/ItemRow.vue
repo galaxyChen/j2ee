@@ -1,5 +1,5 @@
 <template>
-    <el-row class="row" :gutter="40">
+    <el-row type="flex" class="row" :gutter="40">
         <Item v-for="item in row" :item='item' :key='item.id'></Item>
     </el-row>
 </template>

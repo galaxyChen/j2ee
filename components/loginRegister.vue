@@ -6,7 +6,7 @@
             <el-tab-pane label="登录" name="login"></el-tab-pane>
             <el-tab-pane label="注册" name="register"></el-tab-pane>
 
-            <el-form  ref="loginForm" status-icon :model="loginForm" :rules="loginRules"  label-width="80px" v-show="query=='login'">
+            <el-form  ref="loginForm" status-icon :model="loginForm" :rules="loginRules"  label-width="100px" v-show="query=='login'">
                 <el-form-item label="登录邮箱" prop="email">
                     <el-input   v-model="loginForm.email"></el-input>
                 </el-form-item>
@@ -16,7 +16,7 @@
               
                 <el-form-item label="验证码">
                     <el-input v-model="checkcode" placeholder="区分大小写"></el-input>
-                    <div @click="changeCode" style="background-color:#999;font-size:24px;text-align:center;margin-top:10px;color:red;width:60px;height:40px;">{{codeStr}}</div>
+                    <div @click="changeCode" style="background-color:#999;font-size:24px;text-align:center;margin-top:10px;color:red;width:80px;height:40px;">{{codeStr}}</div>
                 </el-form-item>
                 
                 <el-form-item>
@@ -271,6 +271,7 @@ export default {
           };
           if (this.codeStr!=this.checkcode){
             this.$message.error("验证码填写错误！")
+            this.codeStr = this.getCode()
             return ;
           }
           if (data.query == "login") data.data = serialize(this.loginForm);
@@ -308,6 +309,7 @@ export default {
         this.visible = false;
       } else {
         console.log("error");
+        this.codeStr = this.getCode()
         // this.$message.error("发生错误：" + response.err);
         this.$message.error("用户名或密码错误");
       }

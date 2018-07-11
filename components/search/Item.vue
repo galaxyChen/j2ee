@@ -1,5 +1,5 @@
 <template>
-    <el-col :span='5' :push="2">
+    <el-col :xs="5" :sm="5" :md="5" :lg="5" :xl="4" :push="2">
       <el-card :body-style="{ padding: '5px' }">
         <img @click="goDetail" class="search-img" :src="item.pictureAddress"/>
         <div @click="goDetail" class="search-text-box">
@@ -17,6 +17,9 @@
 .search-img {
   height: 320px;
   width:  240px;
+  position: relative;
+  left: 50%;
+  transform: translateX(-120px);
 }
 .search-img:hover {
   cursor: pointer;
