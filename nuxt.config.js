@@ -3,7 +3,7 @@ module.exports = {
   ** Headers of the page
   */
   head: {
-    title: 'j2ee',
+    title: '二手书交易平台',
     meta: [
       {
         charset: 'utf-8'

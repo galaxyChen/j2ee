@@ -16,7 +16,7 @@
 <style scoped>
 .search-img {
   height: 320px;
-  width: 100%;
+  width:  240px;
 }
 .search-img:hover {
   cursor: pointer;
